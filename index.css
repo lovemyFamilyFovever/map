@@ -9,7 +9,11 @@ ul {
     list-style: none
 }
 
-div, h3, li, span, ul {
+div,
+h3,
+li,
+span,
+ul {
     margin: 0;
     padding: 0
 }
@@ -18,7 +22,8 @@ a {
     text-decoration: none
 }
 
-a:active, a:hover {
+a:active,
+a:hover {
     outline: 0
 }
 
@@ -82,7 +87,8 @@ header {
     line-height: 36px;
 }
 
-.clearfix:after, .clearfix:before {
+.clearfix:after,
+.clearfix:before {
     clear: both;
     display: table;
     content: ""
@@ -134,7 +140,11 @@ div#down-up {
     width: 60px;
     border-right: 1px solid #efefef;
 }
-.classify-box.content{width: 250px;;}
+
+.classify-box.content {
+    width: 250px;
+    ;
+}
 
 .classify {
     display: flex;
@@ -145,18 +155,61 @@ li.classify-list {
     height: 60px;
     cursor: pointer;
 }
+
 li.classify-list.active {
     background: #b3dbff;
 }
-li.classify-list div{
+
+li.classify-list div {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 60px;
 }
-li.classify-list img{
+
+li.classify-list img {
     height: 30px;
-    width:  30px;
+    width: 30px;
 }
-.content-item{display: none;}
-.content-item.active{display: block;}
+
+.content-item {
+    display: none;
+}
+
+.content-item.active {
+    display: block;
+}
+
+.layer-content-title {
+    font-size: 20px;
+    line-height: 39px;
+    padding-left: 10px;
+    margin-top: 10px;
+}
+
+.layer-content-title .resetBtn {
+    position: absolute;
+    right: 10px;
+}
+
+.layer-content-list.mdui-panel {
+    width: 92%;
+    margin-left: 4%;
+    margin-top: 10px;
+}
+
+.layer-content-list .mdui-list-item {
+    min-height: unset;
+}
+
+.layer-content-list .mdui-list-item::after {
+    height: unset;
+}
+
+.layer-content-list .mdui-checkbox {
+    line-height: unset;
+}
+
+.layer-content-list .mdui-list-item-content {
+    padding: unset;
+}

@@ -1,5 +1,5 @@
-InitMap()//初始化地图
-initEvent()//注册事件
+InitMap() //初始化地图
+initEvent() //注册事件
 
 function InitMap() {
     //初始化地图对象
@@ -48,21 +48,11 @@ function initEvent() {
 
     //切换专题、地名搜索
     $('.classify-list').on('click', function () {
-        if ($(this).hasClass('special')) {
-            $('.classify-list.active').removeClass('active')
-            $(this).addClass('active')
+        $('.special').toggleClass('active')
+        $('.place').toggleClass('active')
 
-            $('.content-item.active').removeClass('active')
-        } else {
-
-        }
-
-
-
+        $('.layer-content').toggleClass('active')
+        $('.search-content').toggleClass('active')
     })
 
-
-
-
 }
-

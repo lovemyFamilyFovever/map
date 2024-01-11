@@ -9,6 +9,9 @@
     <script type="text/javascript"
         src="http://api.tianditu.gov.cn/api?v=4.0&tk=94062428027398766a1d0f3000b5dc6c"></script>
     <script src="libs/jquery_3.0.0.js"></script>
+
+    <link rel="stylesheet" href="libs/mdui-v1.0.2/css/mdui.min.css">
+    <script src="libs/mdui-v1.0.2/js/mdui.min.js"></script>
 </head>
 
 <body>
@@ -47,7 +50,7 @@
         <header class="clearfix">
             <div class="img icon_pre"><img src="imgs/layers_icon.png" alt=""></div>
             <div class="header-logo">专题图层</div>
-            <div class="menu_display" title="菜单"></div>
+            <div class="menu_display" mdui-tooltip="{content: '菜单'}"></div>
         </header>
 
         <div class="left-down">
@@ -73,7 +76,58 @@
                 <div class="layer-content content-item active">
                     <div class="layer-content-title">
                         <span>专题</span>
-                        <div class="resetBtn">重置</div>
+                        <button class="mdui-btn mdui-btn-raised resetBtn">重置</button>
+                    </div>
+                    <div class="mdui-panel layer-content-list" mdui-panel>
+                        <div class="mdui-panel-item">
+                            <div class="mdui-panel-item-header" style="height: 50px;">低效用地</div>
+                            <div class="mdui-panel-item-body">
+
+                                <div class="mdui-list">
+                                    <label class="mdui-list-item mdui-ripple">
+                                        <div class="mdui-checkbox">
+                                            <input type="checkbox" />
+                                            <i class="mdui-checkbox-icon"></i>
+                                        </div>
+                                        <div class="mdui-list-item-content">水体</div>
+                                    </label>
+
+                                    <label class="mdui-list-item mdui-ripple">
+                                        <div class="mdui-checkbox">
+                                            <input type="checkbox" />
+                                            <i class="mdui-checkbox-icon"></i>
+                                        </div>
+                                        <div class="mdui-list-item-content">湿地</div>
+                                    </label>
+
+                                    <label class="mdui-list-item mdui-ripple">
+                                        <div class="mdui-checkbox">
+                                            <input type="checkbox" />
+                                            <i class="mdui-checkbox-icon"></i>
+                                        </div>
+                                        <div class="mdui-list-item-content">耕地</div>
+                                    </label>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="mdui-panel-item">
+                            <div class="mdui-panel-item-header">图层2</div>
+                            <div class="mdui-panel-item-body">
+                                <p>Second content</p>
+                                <p>Second content</p>
+                            </div>
+                        </div>
+
+                        <div class="mdui-panel-item">
+                            <div class="mdui-panel-item-header">图层3</div>
+                            <div class="mdui-panel-item-body">
+                                <p>Third content</p>
+                                <p>Third content</p>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
                 <!--搜索-->
