@@ -8,16 +8,14 @@
     <link rel="stylesheet" href="index.css">
     <script type="text/javascript"
         src="https://api.tianditu.gov.cn/api?v=4.0&tk=94062428027398766a1d0f3000b5dc6c"></script>
-    <script src="libs/jquery/jquery_3.0.0.js"></script>
     <!-- 
     <script src="libs/leaflet/leaflet-0.7.js"></script>
     <script src="libs/leaflet/leaflet.css"></script> -->
 
     <link rel="stylesheet" href="libs/dialog/dialog.css">
-    <script src="libs/dialog/dialog.js"></script>
 
     <link rel="stylesheet" href="libs/mdui-v1.0.2/css/mdui.min.css">
-    <script src="libs/mdui-v1.0.2/js/mdui.min.js"></script>
+
 </head>
 
 <body>
@@ -270,23 +268,29 @@
     <div class="right-tool">
         <div class="right-tool-title">
 
+            <!-- 切换地图服务 -->
+            <div class="right-tool-item showChangeMapService" mdui-dialog="{target: '#change-service'}"
+                mdui-tooltip="{content: '切换地图服务', position: 'left'}">
+                <img src="imgs/service.png" alt="">
+            </div>
+
             <!-- 切换地图 -->
             <div class="right-tool-item switchmap-container" mdui-tooltip="{content: '底图', position: 'left'}">
-                <div class="icon"> <img src="imgs/global.png" alt=""></div>
+                <img src="imgs/global.png" alt="">
             </div>
-
-            <!-- 统计 -->
-            <div class="right-tool-item statistics-container" mdui-tooltip="{content: '统计', position: 'left'}">
+            <!-- 统计图 -->
+            <div class="right-tool-item statistics-container" mdui-tooltip="{content: '统计图', position: 'left'}">
                 <img src="imgs/statistics.png" alt="">
             </div>
-
-            <!-- 图表 -->
-            <div class="right-tool-item table-container" mdui-tooltip="{content: '图表', position: 'left'}">
+            <!-- 统计表 -->
+            <div class="right-tool-item table-container" mdui-tooltip="{content: '统计表', position: 'left'}">
                 <img src="imgs/table.png" alt="">
             </div>
         </div>
 
         <div class="right-tool-content">
+
+
 
             <div class="common-panel layer-pop">
                 <a href="javascript:void(0);" class="close"></a>
@@ -304,7 +308,7 @@
                 </div>
             </div>
 
-            <div class="dialog statistics-content">
+            <div class="dialog table-content">
                 <div class="title">统计图</div>
                 <i class="mdui-icon material-icons">close</i>
                 <div class="mdui-table-fluid dialog-content">
@@ -327,19 +331,19 @@
                             <tr>
                                 <td>2</td>
                                 <td>B区</td>
-                                <td>4019.2</td>
+                                <td>1544.2</td>
                                 <td>商业用地</td>
                             </tr>
                             <tr>
                                 <td>3</td>
                                 <td>C区</td>
-                                <td>52.52</td>
+                                <td>52.59</td>
                                 <td>建筑用地</td>
                             </tr>
                             <tr>
                                 <td>4</td>
                                 <td>D区</td>
-                                <td>45.52</td>
+                                <td>45.32</td>
                                 <td>建筑用地</td>
                             </tr>
                             <tr>
@@ -360,11 +364,51 @@
 
             </div>
 
+            <div class="dialog statistics-content">
+                <div class="title">统计表</div>
+                <i class="mdui-icon material-icons">close</i>
+                <div class="mdui-table-fluid dialog-content">
+                    <div id="main-echart" style="width: 370px;height:480px;"></div>
+                </div>
+            </div>
+
         </div>
 
     </div>
 
+    <div class="mdui-dialog" id="change-service">
+        <div class="mdui-dialog-title">切换地图服务</div>
+        <div class="mdui-dialog-content">
+            <div class="service-item service-name">
+                <span>服务名称：</span>
+                <select class="mdui-select" mdui-select>
+                    <option value="1">WMS OGC Web服务</option>
+                    <option value="2">WMTS OGC Web服务</option>
+                </select>
+            </div>
+
+            <div class="service-item service-url">
+                <span>服务地址(url)：</span>
+                <div class="mdui-textfield">
+                    <input class="mdui-textfield-input" type="text" placeholder="请填入服务地址" />
+                </div>
+            </div>
+        </div>
+        <div class="mdui-dialog-actions">
+            <button class="mdui-btn mdui-ripple" mdui-dialog-close>取消</button>
+            <button class="mdui-btn mdui-ripple" mdui-dialog-confirm>确定</button>
+        </div>
+    </div>
+    </div>
+
 </body>
+
+<script src="libs/jquery/jquery_3.0.0.js"></script>
+<script src="libs/dialog/dialog.js"></script>
+<script src="libs/mdui-v1.0.2/js/mdui.min.js"></script>
+
+<script src="libs/echart/echarts.min.js"></script>
+
 <script src="index.js"></script>
 
 </html>

@@ -127,18 +127,59 @@ function initEvent() {
         }
     });
 
-    //统计 展开悬浮窗
+    //统计图 展开悬浮窗
     $('.statistics-container').on('click', function () {
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main-echart'));
+
+        // 指定图表的配置项和数据
+        var option = {
+            grid: {
+                left: '45px'
+            },
+            title: {
+                text: '某地区面积图表'
+            },
+            tooltip: {},
+            xAxis: {
+                type: 'category',
+                data: ['A', 'B', 'C', 'D', 'E', 'F']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    data: [4019.2, 1544.2, 52.59, 45.32, 145.2, 1370],
+                    type: 'bar',
+                    showBackground: true,
+                    backgroundStyle: {
+                        color: 'rgba(180, 180, 180, 0.2)'
+                    }
+                }
+            ]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
         $('.statistics-content').show()
     })
-    //统计 关闭悬浮窗
+    //统计图 关闭悬浮窗
     $('.statistics-content .material-icons').on('click', function () {
         $('.statistics-content').hide()
     })
 
-    //图表
+    //统计表 关闭悬浮窗
     $('.table-container').on('click', function () {
 
+        $('.table-content').show()
     })
+    //统计表 关闭悬浮窗
+    $('.table-content .material-icons').on('click', function () {
+        $('.table-content').hide()
+    })
+
+    //切换地图服务
+
 
 }

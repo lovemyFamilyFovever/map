@@ -410,3 +410,25 @@ li.classify-list img {
     border-left: 8px solid transparent;
 }
 
+.mdui-textfield {
+    display: inline-block;
+    padding: 0;
+    height: 36px;
+}
+.service-item span{
+    width: 130px;
+    display: inline-block;
+}
+
+.service-url {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.service-item  .mdui-select,.service-item  .mdui-select-selected{
+    width: 300px;
+}
+.service-item  .mdui-textfield-input{
+    width: 500px;
+}
