@@ -154,8 +154,8 @@ li.classify-list div {
 }
 
 li.classify-list img {
-    height: 30px;
-    width: 30px;
+    height: 26px;
+    width: 26px;
 }
 
 .content-item {
@@ -175,7 +175,7 @@ li.classify-list img {
 }
 
 .layer-content-title {
-    font-size: 20px;
+    font-size: 17px;
     line-height: 39px;
     padding-left: 10px;
     margin-top: 10px;
@@ -229,6 +229,7 @@ li.classify-list img {
     margin-left: 4%;
     margin-top: 10px;
 }
+.layer-content-list .mdui-panel-item-header{font-size: 14px;}
 
 .search-content .mdui-textfield{
     padding-top: 0%;
