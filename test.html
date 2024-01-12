@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.12.0/css/ol.css"
+        type="text/css" />
+    <style>
+        html,
+        body,
+        .map {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .tool {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+
+            margin: 0;
+            padding: 0;
+        }
+
+        .tool-toggle {
+            display: flex;
+        }
+
+        .tool-toggle__item {
+            width: 100px;
+            height: 100px;
+            margin: 0 5px;
+        }
+
+        .tool-toggle__item>img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: solid 1px #2fb0f9;
+        }
+
+        .tool-toggle__item:hover img {
+            cursor: pointer;
+            transform: scale(1.1);
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.12.0/build/ol.js"></script>
+    <title>GeoJson预览</title>
+</head>
+
+<body>
+    <!-- 底图 -->
+    <div id="map" class="map"></div>
+    <!-- 工具 -->
+    <div class="tool">
+        <div class="tool-toggle" id="toggle">
+            <div class="tool-toggle__item">
+                <img src="http://lbs.tianditu.gov.cn/images/vec_c.png" name="vec" />
+            </div>
+            <div class="tool-toggle__item">
+                <img src="http://lbs.tianditu.gov.cn/images/img_c.png" name="img" />
+            </div>
+
+            <div class="tool-toggle__item">
+                <img src="http://lbs.tianditu.gov.cn/images/ter_c.png" name="ter" />
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        var map = new ol.Map({
+            target: 'map',
+            view: new ol.View({
+                center: ol.proj.fromLonLat([119, 37]),
+                zoom: 4,
+            }),
+        });
+        let currentBaseMap = '';
+        let basemaps = new Map();
+        // 矢量图
+        let vec_w = createVec_w();
+        // 中文注记
+        let cva_w = createCva_w();
+        // 影像图
+        let img_w = createImg_w();
+        // 地形图
+        let ter_w = createTer_w();
+
+        map.addLayer(vec_w);
+        map.addLayer(cva_w);
+        currentBaseMap = 'vec_w';
+        // 将图层全部用Map存储起来
+        basemaps.set('vec_w', vec_w);
+        basemaps.set('img_w', img_w);
+        basemaps.set('ter_w', ter_w);
+
+        // 底图切换事件
+        var toggleDom = document.getElementById('toggle');
+        toggleDom.onclick = function (evt) {
+            var ev = ev || window.event;
+            var target = ev.target || ev.srcElement;
+            if (target.nodeName.toLocaleLowerCase() == 'img') {
+                switch (target.name) {
+                    case 'vec':
+                        handleLayer('vec_w');
+                        break;
+                    case 'img':
+                        handleLayer('img_w');
+                        break;
+                    case 'ter':
+                        handleLayer('ter_w');
+                        break;
+                    default:
+                        break;
+                }
+            }
+        };
+        // 移除上个图层，添加要切换的图层
+        function handleLayer(type) {
+            if (currentBaseMap === type) {
+                return;
+            }
+            map.removeLayer(basemaps.get(currentBaseMap));
+            map.addLayer(basemaps.get(type));
+            currentBaseMap = type;
+        }
+        // 创建矢量底图
+        function createVec_w() {
+            var source = new ol.source.XYZ({
+                url: 'http://t4.tianditu.com/DataServer?T=vec_w&tk=81b9a9cf3e4be1df181e7bf54c5949fc&x={x}&y={y}&l={z}',
+            });
+            var layer = new ol.layer.Tile({
+                id: 'tileLayer',
+                title: '矢量底图',
+                layerName: 'baseMap',
+                source: source,
+                zIndex: 0,
+            });
+            return layer;
+        }
+        // 创建标注图层
+        function createCva_w() {
+            var source = new ol.source.XYZ({
+                url: 'http://t4.tianditu.com/DataServer?T=cva_w&tk=81b9a9cf3e4be1df181e7bf54c5949fc&x={x}&y={y}&l={z}',
+            });
+            var layer = new ol.layer.Tile({
+                id: 'tileLayer',
+                title: '标注图层',
+                layerName: 'baseMap',
+                source: source,
+                zIndex: 1,
+            });
+            return layer;
+        }
+        // 创建影像底图
+        function createImg_w() {
+            var source = new ol.source.XYZ({
+                url: 'http://t4.tianditu.com/DataServer?T=img_w&tk=81b9a9cf3e4be1df181e7bf54c5949fc&x={x}&y={y}&l={z}',
+            });
+            var layer = new ol.layer.Tile({
+                id: 'tileLayer',
+                title: '影像底图',
+                layerName: 'baseMap',
+                source: source,
+                zIndex: 0,
+            });
+            return layer;
+        }
+        // 创建地形底图
+        function createTer_w() {
+            var source = new ol.source.XYZ({
+                url: 'http://t4.tianditu.com/DataServer?T=ter_w&tk=81b9a9cf3e4be1df181e7bf54c5949fc&x={x}&y={y}&l={z}',
+            });
+            var layer = new ol.layer.Tile({
+                id: 'tileLayer',
+                title: '地形',
+                layerName: 'baseMap',
+                source: source,
+                zIndex: 0,
+            });
+            return layer;
+        }
+    </script>
+</body>
+
+</html>

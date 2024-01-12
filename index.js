@@ -1,17 +1,18 @@
 InitMap() //初始化地图
 initEvent() //注册事件
 
+
+var map, zoom = 12, handler
+
 function InitMap() {
     //初始化地图对象
     map = new T.Map('map');
     //设置显示地图的中心点和级别
-    map.centerAndZoom(new T.LngLat(116.40769, 39.89945), 12);
+    map.centerAndZoom(new T.LngLat(117.28274, 34.203), 12);
 
     //创建缩放平移控件对象
     control = new T.Control.Zoom();
     control.setPosition(T_ANCHOR_BOTTOM_RIGHT)
-    //添加缩放平移控件
-    map.addControl(control);
 
     //允许鼠标滚轮缩放地图
     map.enableScrollWheelZoom();
@@ -19,18 +20,6 @@ function InitMap() {
     var scale = new T.Control.Scale();
     //添加比例尺控件
     map.addControl(scale);
-
-    //创建对象
-    var ctrl = new T.Control.MapType();
-    //添加控件
-    map.addControl(ctrl);
-
-    //添加鼠标在地图划过时触发的事件
-    // map.addEventListener("mousemove", function () {
-    //     document.getElementById("info").value = e.lnglat.getLng().toFixed(6) + "," + e.lnglat.getLat().toFixed(6)
-    // });
-
-    map.clearOverLays()
 }
 
 // 首屏页面的事件注册
@@ -45,7 +34,6 @@ function initEvent() {
             $('.left-down.show-status').removeClass('show-status')
         }
     });
-
     //切换专题、地名搜索
     $('.classify-list').on('click', function () {
         $('.special').toggleClass('active')
@@ -53,6 +41,90 @@ function initEvent() {
 
         $('.layer-content').toggleClass('active')
         $('.search-content').toggleClass('active')
+    })
+
+    //放大
+    $('.zoomInTool').on('click', function () {
+        map.zoomIn()
+    })
+    //缩小
+    $('.zoomOutTool').on('click', function () {
+        map.zoomOut()
+    })
+    //增加标注
+    $('.markerTool').on('click', function () {
+        if (handler) handler.close();
+        handler = new T.MarkTool(map, { follow: true });
+        handler.open();
+    })
+    // 多边形工具
+    $('.polygonTool').on('click', function () {
+        if (handler) handler.close();
+        handler = new T.PolygonTool(map);
+        handler.open();
+    })
+    // 线段工具
+    $('.polylineTool').on('click', function () {
+        if (handler) handler.close();
+        handler = new T.PolylineTool(map);
+        handler.open();
+    })
+    // 方形工具
+    $('.rectangleTool').on('click', function () {
+        if (handler) handler.close();
+        handler = new T.RectangleTool(map, { follow: true });
+        handler.open();
+    })
+    // 圆形工具
+    $('.circleTool').on('click', function () {
+        if (handler) handler.close();
+        handler = new T.CircleTool(map, { follow: true });
+        handler.open();
+    })
+    // 清除所有
+    $('.clearTool').on('click', function () {
+        map.clearOverLays()
+    })
+
+
+    //底图切换
+    $('.switchmap-container').on('click', function () {
+        $('.common-panel.layer-pop').show()
+    })
+    // 阻止图层面板点击事件冒泡
+    $('.layer-pop').on('click', function () {
+        return false;
+    }).on('mouseover', function () {
+        return false;
+    });
+
+    // 图层面板关闭事件
+    $('.layer-pop .close').on('click', function () {
+        $(this).parent().hide();
+    })
+    // 图层底图选择
+    $('.layer-items a').on('click', function () {
+        var $this = $(this);
+        $this.siblings().removeClass('active');
+        $this.addClass('active');
+        // 切换地图类型
+        if ($this.attr('id') == 'vec_type') {//矢量
+            map.setMapType(window.TMAP_NORMAL_MAP);
+        } else if ($this.attr('id') == 'img_type') {//卫星
+            map.setMapType(window.TMAP_HYBRID_MAP);
+        } else {//地形
+            map.setMapType(window.TMAP_TERRAIN_HYBRID_MAP);
+        }
+    });
+
+    //统计
+    $('.statistics-container').on('click', function () {
+
+    })
+
+    //图表
+    $('.table-container').on('click', function () {
+
     })
 
 }
