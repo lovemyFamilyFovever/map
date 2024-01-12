@@ -13,6 +13,9 @@
     <script src="libs/leaflet/leaflet-0.7.js"></script>
     <script src="libs/leaflet/leaflet.css"></script> -->
 
+    <link rel="stylesheet" href="libs/dialog/dialog.css">
+    <script src="libs/dialog/dialog.js"></script>
+
     <link rel="stylesheet" href="libs/mdui-v1.0.2/css/mdui.min.css">
     <script src="libs/mdui-v1.0.2/js/mdui.min.js"></script>
 </head>
@@ -216,45 +219,14 @@
                 </div>
                 <!--搜索-->
                 <div class="search-content content-item">
-                    <div class="classify-tool clearfix">
-                        <h3 class="classify-title">地名搜索</h3>
-                        <a href="javascript:void(0);" class="clear-search"><span></span>清除搜索结果</a>
+                    <div class="classify-tool clearfix layer-content-title">
+                        <span>地名搜索</span>
+                        <button class="mdui-btn mdui-btn-raised resetBtn">重置</button>
                     </div>
                     <div class="s-box">
                         <!--搜索框-->
-                        <div class="s-input-box">
-                            <div class="s-input-out clearfix">
-                                <input id="place_search" type="text" class="search-input s-input" placeholder="请输入地名">
-                                <div class="s-btn s-btn-search"><span class="s-btn-icon"></span></div>
-                            </div>
-                            <div class="senior clearfix">
-                                <a href="javascript:void(0);" class="btn-color senior-btn ">高级</a>
-                            </div>
-                        </div>
-                        <!--高级-->
-                        <div class="senior-s-box" style="display: none">
-                            <div class="senior-s clearfix">
-                                <div class="senior-s-input clearfix">
-                                    <label for="on-here">在：</label>
-                                    <div class="s-input-out clearfix">
-                                        <input id="on-here" type="text" class="search-input s-input" readonly="readonly"
-                                            placeholder="请选择">
-                                        <div class="s-btn s-btn-down"><span class="s-btn-select"></span></div>
-                                        <div class="place-box">
-                                            <ul id="city_list_box"></ul>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="senior-s-input clearfix">
-                                    <label for="on-h">搜：</label>
-                                    <div class="s-input-out clearfix">
-                                        <input id="on-h" type="text" disabled="disabled"
-                                            class="search-input s-input ss-input" placeholder="请输入地名">
-                                        <div class="s-btn s-btn-search"><span class="s-btn-icon"></span></div>
-                                    </div>
-                                </div>
-                                <a class="btn-color back-common" href="javascript:;">返回</a>
-                            </div>
+                        <div class="mdui-textfield">
+                            <input class="mdui-textfield-input" type="text" placeholder="请输入地名" />
                         </div>
                     </div>
                 </div>
@@ -329,6 +301,61 @@
                     <a href="javascript:void(0);" id="ter_type"><img
                             src="data:image/jpg;base64,/9j/4QAYRXhpZgAASUkqAAgAAAAAAAAAAAAAAP/sABFEdWNreQABAAQAAABkAAD/4QN6aHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLwA8P3hwYWNrZXQgYmVnaW49Iu+7vyIgaWQ9Ilc1TTBNcENlaGlIenJlU3pOVGN6a2M5ZCI/PiA8eDp4bXBtZXRhIHhtbG5zOng9ImFkb2JlOm5zOm1ldGEvIiB4OnhtcHRrPSJBZG9iZSBYTVAgQ29yZSA1LjAtYzA2MCA2MS4xMzQ3NzcsIDIwMTAvMDIvMTItMTc6MzI6MDAgICAgICAgICI+IDxyZGY6UkRGIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyI+IDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSIiIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bXBNTTpPcmlnaW5hbERvY3VtZW50SUQ9InhtcC5kaWQ6ZmQ3YzFkY2ItN2ZkNC1kZDQ1LTk2MGItN2QyODdhN2MxNTU2IiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjgxMDUzRkNDNzY3QzExRTNCRUFDRkE5NjhFNjNGNEUzIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjgxMDUzRkNCNzY3QzExRTNCRUFDRkE5NjhFNjNGNEUzIiB4bXA6Q3JlYXRvclRvb2w9IkFkb2JlIFBob3Rvc2hvcCBDQyAoV2luZG93cykiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo5ZGJmNjY2ZS0wMmZjLTI0NGItODIzMC04Y2RmZDg3ZDk1MWQiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6ZmQ3YzFkY2ItN2ZkNC1kZDQ1LTk2MGItN2QyODdhN2MxNTU2Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3Jk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">地形
                     </a>
+                </div>
+            </div>
+
+            <div class="dialog statistics-content">
+                <div class="title">统计图</div>
+                <i class="mdui-icon material-icons">close</i>
+                <div class="mdui-table-fluid dialog-content">
+                    <table class="mdui-table mdui-table-hoverable">
+                        <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>名称</th>
+                                <th>面积(m²)</th>
+                                <th>属性</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>A区</td>
+                                <td>4019.2</td>
+                                <td>居民用地</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>B区</td>
+                                <td>4019.2</td>
+                                <td>商业用地</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>C区</td>
+                                <td>52.52</td>
+                                <td>建筑用地</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>D区</td>
+                                <td>45.52</td>
+                                <td>建筑用地</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>E区</td>
+                                <td>145.5</td>
+                                <td>居民用地</td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td>F区</td>
+                                <td>1370</td>
+                                <td>商业用地</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
 
             </div>

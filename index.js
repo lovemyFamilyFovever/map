@@ -43,6 +43,16 @@ function initEvent() {
         $('.search-content').toggleClass('active')
     })
 
+    //重置按钮
+    $('.layer-content .resetBtn').on('click', function () {
+        $('.layer-content  input[type="checkbox"]').prop('checked', false);
+    })
+
+    //关闭左侧面板
+    $('.down-up').on('click', function () {
+        $('.left-down.show-status').removeClass('show-status')
+    })
+
     //放大
     $('.zoomInTool').on('click', function () {
         map.zoomIn()
@@ -117,9 +127,13 @@ function initEvent() {
         }
     });
 
-    //统计
+    //统计 展开悬浮窗
     $('.statistics-container').on('click', function () {
-
+        $('.statistics-content').show()
+    })
+    //统计 关闭悬浮窗
+    $('.statistics-content .material-icons').on('click', function () {
+        $('.statistics-content').hide()
     })
 
     //图表
