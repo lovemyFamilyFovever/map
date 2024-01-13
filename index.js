@@ -48,6 +48,10 @@ function initEvent() {
         $('.layer-content  input[type="checkbox"]').prop('checked', false);
     })
 
+    $('.search-content .resetBtn').on('click', function () {
+        $('.search-content .mdui-textfield-input').val("")
+    })
+
     //关闭左侧面板
     $('.down-up').on('click', function () {
         $('.left-down.show-status').removeClass('show-status')
