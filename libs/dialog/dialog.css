@@ -62,3 +62,23 @@
     height: 320px;
     overflow-y: scroll;
 }
+#change-service{
+    width: 600px;
+    overflow: unset;
+}
+#change-service .mdui-dialog-content{
+    padding-top: 20px;
+}
+#change-service  .mdui-select{
+    font-size: 14px;
+}
+.mdui-select-menu{
+    margin-top: unset!important;
+}
+
+#change-service  .mdui-textfield-input{
+    width: 400px;
+}
+#change-service .mdui-dialog-content{
+    overflow: unset;
+}
