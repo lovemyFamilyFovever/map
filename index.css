@@ -175,7 +175,7 @@ li.classify-list img {
 }
 
 .layer-content-title {
-    font-size: 17px;
+    font-size: 15px;
     line-height: 39px;
     padding-left: 10px;
     margin-top: 10px;
@@ -228,6 +228,8 @@ li.classify-list img {
     margin-left: 4%;
     margin-top: 10px;
 }
+
+.layer-content-list .mdui-panel-item-header{font-size: 13px;}
 
 .layer-content-list .mdui-panel-item-header {
     font-size: 14px;
