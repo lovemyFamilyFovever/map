@@ -208,7 +208,6 @@ li.classify-list img {
 
 .layer-content-list .mdui-list-item-content {
     padding: unset;
-
 }
 
 .layer-content-list .mdui-checkbox~.mdui-list-item-content {
@@ -224,19 +223,22 @@ li.classify-list img {
     padding: 0%;
 }
 
-.layer-content-list,.s-box{
+.layer-content-list, .s-box {
     width: 92%;
     margin-left: 4%;
     margin-top: 10px;
 }
-.layer-content-list .mdui-panel-item-header{font-size: 14px;}
 
-.search-content .mdui-textfield{
+.layer-content-list .mdui-panel-item-header {
+    font-size: 14px;
+}
+
+.search-content .mdui-textfield {
     padding-top: 0%;
     width: 100%;
 }
 
-.search-content{
+.search-content {
     overflow-y: scroll;
 }
 
@@ -417,7 +419,8 @@ li.classify-list img {
     padding: 0;
     height: 36px;
 }
-.service-item span{
+
+.service-item span {
     width: 130px;
     display: inline-block;
 }
@@ -428,9 +431,10 @@ li.classify-list img {
     align-items: center;
 }
 
-.service-item  .mdui-select,.service-item  .mdui-select-selected{
+.service-item .mdui-select, .service-item .mdui-select-selected {
     width: 300px;
 }
-.service-item  .mdui-textfield-input{
+
+.service-item .mdui-textfield-input {
     width: 500px;
 }

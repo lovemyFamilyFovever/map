@@ -1,0 +1,107 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>ArcGIS API for JavaScript Tutorials: Add layers to a map</title>
+    <style>
+        html,
+        body,
+        #viewDiv {
+            padding: 0;
+            margin: 0;
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.18/esri/themes/light/main.css">
+    <script src="https://js.arcgis.com/4.18/"></script>
+
+    <script>
+        require([
+            "esri/Map",
+            "esri/views/MapView",
+            "esri/layers/FeatureLayer",
+            "esri/geometry/geometryEngine"
+        ], function (Map, MapView, FeatureLayer, geometryEngine) {
+
+            var map = new Map({
+                basemap: "topo-vector"
+            });
+
+            var view = new MapView({
+                container: "viewDiv",
+                map: map,
+                center: [-122.44, 37.75],
+                zoom: 13
+            });
+
+            var neight = new FeatureLayer({
+                // url: "https://services3.arcgis.com/GVgbJbqm8hXASVYi/ArcGIS/rest/services/SF_Boundary/FeatureServer/0",
+                url: "https://services.arcgisonline.com/arcgis/rest/services/USA_Topo_Maps/MapServer/0"
+            });
+            map.add(neight, 0);
+
+            view.on('click', handleMapClick)
+            function handleMapClick(event) {
+                const { mapPoint } = event; // 获取点击位置的地理坐标 
+                const latitude = mapPoint.latitude; // 获取纬度 
+                const longitude = mapPoint.longitude; // 获取经度 
+                // 在控制台打印经纬度信息 
+                console.log("Latitude:", latitude);
+                console.log("Longitude:", longitude);
+
+                // 获取被点击位置的几何信息
+                const geometry = event.mapPoint;
+                console.log(geometry);
+
+                // 创建一个包含查询的几何对象
+                const queryGeometry = geometryEngine.buffer(geometry, 500); // 在点击位置创建一个500米的缓冲区
+
+                // 查询要素图层中与缓冲区重合的要素
+                neight.queryFeatures({
+                    geometry: queryGeometry,
+                    spatialRelationship: "intersects"
+                }).then(function (results) {
+                    if (results && results.features.length > 0) {
+                        console.log(results.features[0].attributes);
+                    } else {
+                        console.log("未找到任何符合条件的要素");
+                    }
+                }).catch(function (error) {
+                    console.error(error);
+                });
+            }
+
+            // // Trailheads feature layer (points)
+            // var trailheadsLayer = new FeatureLayer({
+            //     url: "https://services3.arcgis.com/GVgbJbqm8hXASVYi/arcgis/rest/services/Trailheads/FeatureServer/0"
+            // });
+
+            // map.add(trailheadsLayer);
+
+            // // Trails feature layer (lines)
+            // var trailsLayer = new FeatureLayer({
+            //     url: "https://services3.arcgis.com/GVgbJbqm8hXASVYi/arcgis/rest/services/Trails/FeatureServer/0"
+            // });
+
+            // map.add(trailsLayer, 0);
+
+            // // Parks and open spaces (polygons)
+            // var parksLayer = new FeatureLayer({
+            //     url: "https://services3.arcgis.com/GVgbJbqm8hXASVYi/arcgis/rest/services/Parks_and_Open_Space/FeatureServer/0"
+            // });
+
+            // map.add(parksLayer, 0);
+
+
+
+        });
+    </script>
+</head>
+
+<body>
+    <div id="viewDiv"></div>
+</body>
+
+</html>
