@@ -15,28 +15,39 @@
 </body>
 <script>
 
-    // var map = L.map('map').setView([51.505, -0.09], 13);
-    // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    //     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    // }).addTo(map);
+    const MapKey = '9e1c398b1948ff41648fbad789166ca0'
+
+    // 添加底图 
+    const imageURL = "http://t0.tianditu.gov.cn/vec_c/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=vec&STYLE=default&TILEMATRIXSET=c&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=94062428027398766a1d0f3000b5dc6c";
+
+    let osm = L.tileLayer(imageURL)
 
 
-    // 创建地图对象
-    var map = L.map('map').setView([51.505, -0.09], 13);
+    // 创建地图
+    let map = L.map("map", {
+        minZoom: 1, //最小缩放值
+        maxZoom: 18, //最大缩放值
+        zoom: 17, //初始缩放值
+        zoomControl: true, //是否启用地图缩放控件
+        attributionControl: false, //是否启用地图属性控件
+    }).setView([37.75, -122.44], 13).addLayer(osm);
+
 
     // 创建 ArcGIS Tiled Map Layer
-    var hillshade = L.esri.tiledMapLayer({
-        url: 'https://services.arcgisonline.com/arcgis/rest/services/Elevation/World_Hillshade/MapServer'
+    var hillshade = L.esri.featureLayer({
+        url: 'https://services3.arcgis.com/GVgbJbqm8hXASVYi/ArcGIS/rest/services/SF_Boundary/FeatureServer/0'
     });
 
-    // 添加底图层
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
-
-    // 添加 Hillshade 图层  
+    // 添加到地图
     hillshade.addTo(map);
 
+    map.on('click', function (e) {
+        // 获取点击位置的坐标
+        var latlng = e.latlng;
+        var lat = latlng.lat;
+        var lng = latlng.lng;
+        console.log(lat, lng)
+    })
 </script>
 
 </html>
