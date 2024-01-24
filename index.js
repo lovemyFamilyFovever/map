@@ -133,6 +133,8 @@ function initEvent() {
 
     //统计图 展开悬浮窗
     $('.statistics-container').on('click', function () {
+        $('.statistics-content .title').html('某地区面积图表')
+
         // 基于准备好的dom，初始化echarts实例
         var myChart = echarts.init(document.getElementById('main-echart'));
 
@@ -141,10 +143,24 @@ function initEvent() {
             grid: {
                 left: '45px',
                 top: '40px',
-                right: '10px'
+                right: '10px',
+                bottom: '100px'
+            },
+            legend: {
+                position: "bottom"
+            },
+            toolbox: {
+                show: true,
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                },
+                feature: {
+                    saveAsImage: {}
+                }
             },
             title: {
-                text: '某地区面积图表'
+                text: ''
             },
             xAxis: {
                 type: 'category',
@@ -153,15 +169,18 @@ function initEvent() {
             yAxis: {
                 type: 'value'
             },
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: {
-                    type: 'shadow'
-                }
-            },
-            legend: {},
             series: [
                 {
+                    name: "面积",
+                    data: [4019.2, 1544.2, 52.59, 45.32, 145.2, 1370],
+                    type: 'bar',
+                    showBackground: true,
+                    backgroundStyle: {
+                        color: 'rgba(180, 180, 180, 0.2)'
+                    }
+                },
+                {
+                    name: "数量",
                     data: [4019.2, 1544.2, 52.59, 45.32, 145.2, 1370],
                     type: 'bar',
                     showBackground: true,
