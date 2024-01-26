@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://unpkg.com/esri-leaflet@3.0.2/dist/esri-leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 </head>
 
 <body>
@@ -15,38 +16,59 @@
 </body>
 <script>
 
-    const MapKey = '9e1c398b1948ff41648fbad789166ca0'
-
-    // 添加底图 
-    const imageURL = "http://t0.tianditu.gov.cn/vec_c/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=vec&STYLE=default&TILEMATRIXSET=c&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=94062428027398766a1d0f3000b5dc6c";
-
-    let osm = L.tileLayer(imageURL)
-
+    // 添加底图
+    const imageURL = 'http://t0.tianditu.gov.cn/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=94062428027398766a1d0f3000b5dc6c'
+    let osm = L.tileLayer(imageURL, { crs: L.CRS.EPSG3857, maxZoom: 18 });
 
     // 创建地图
     let map = L.map("map", {
         minZoom: 1, //最小缩放值
         maxZoom: 18, //最大缩放值
-        zoom: 17, //初始缩放值
+        zoom: 10, //初始缩放值
         zoomControl: true, //是否启用地图缩放控件
         attributionControl: false, //是否启用地图属性控件
-    }).setView([37.75, -122.44], 13).addLayer(osm);
+    }).setView([33.523079, 116.477051], 13).addLayer(osm);
 
 
-    // 创建 ArcGIS Tiled Map Layer
-    var hillshade = L.esri.featureLayer({
-        url: 'https://services3.arcgis.com/GVgbJbqm8hXASVYi/ArcGIS/rest/services/SF_Boundary/FeatureServer/0'
-    });
+    //添加矢量标记
+    var url1 = 'http://t0.tianditu.gov.cn/DataServer?T=cva_w&x={x}&y={y}&l={z}&tk=94062428027398766a1d0f3000b5dc6c'
+    L.tileLayer(url1, {
+        maxZoom: 18,
+        interactive: true
+    }).addTo(map)
 
-    // 添加到地图
-    hillshade.addTo(map);
+    //添加省界arcgis server图层
+    let featureLayer = L.esri.featureLayer({
+        url: 'https://mapservice.tdtah.cn/server1/rest/services/2022ZHUANTI/1DZGY/MapServer/0',
+        interactive: true,
+        geometryField: 'shape',
+        fields: ['name'] // 指定name作为属性字段
+    }, {
+        oldestOnTop: true // 将图层绘制在最上方
+    }).addTo(map);
 
     map.on('click', function (e) {
+        let layer = e.target;
+        if (layer) {
+            // 访问图层属性
+            let props = layer.feature.properties;
+            let name = props.name;
+
+            console.log(props);
+            console.log(name);
+        }
+
         // 获取点击位置的坐标
-        var latlng = e.latlng;
-        var lat = latlng.lat;
-        var lng = latlng.lng;
-        console.log(lat, lng)
+        console.log(e.latlng)
+
+        var marker = L.marker(e.latlng).addTo(map);
+        marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
+
+        var popup = L.popup();
+        popup
+            .setLatLng(e.latlng)
+            .setContent("You clicked the map at " + e.latlng.toString())
+            .openOn(map);
     })
 </script>
 
