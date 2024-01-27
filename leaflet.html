@@ -9,6 +9,8 @@
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://unpkg.com/esri-leaflet@3.0.2/dist/esri-leaflet.js"></script>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.18/esri/themes/light/main.css">
+    <script src="https://js.arcgis.com/4.25/"></script>
 </head>
 
 <body>
@@ -38,25 +40,45 @@
     }).addTo(map)
 
     //添加省界arcgis server图层
-    let featureLayer = L.esri.featureLayer({
-        url: 'https://mapservice.tdtah.cn/server1/rest/services/2022ZHUANTI/1DZGY/MapServer/0',
+    let featureLayer = L.esri.dynamicMapLayer({
+        url: 'https://mapservice.tdtah.cn/server1/rest/services/AHSZJZ/MapServer/2',
+        // url: 'https://mapservice.tdtah.cn/server1/rest/services/2022ZHUANTI/1DZGY/MapServer/0',
         interactive: true,
         geometryField: 'shape',
-        fields: ['name'] // 指定name作为属性字段
-    }, {
-        oldestOnTop: true // 将图层绘制在最上方
+        fields: ['NAME'] // 指定name作为属性字段
     }).addTo(map);
 
+
+    //地图点击事件
     map.on('click', function (e) {
         let layer = e.target;
-        if (layer) {
-            // 访问图层属性
-            let props = layer.feature.properties;
-            let name = props.name;
 
-            console.log(props);
-            console.log(name);
+        var x = e.latlng.lng;
+        var y = e.latlng.lat;
+        if (x < -180.0 || x > 180.0 || y < -90 || y > 90) {
+            return;
         }
+        point = new L.circleMarker([y, x]);
+        var geometryParam = new L.supermap.GetFeaturesByGeometryParameters({
+            // datasetNames: ["China:China_Province_pg_1"],
+            geometry: point,
+            spatialQueryMode: "INTERSECT"
+        });
+        new L.supermap
+            .FeatureService(url)
+            .getFeaturesByGeometry(geometryParam, function (serviceResult) {
+
+            });
+
+        // L.esri.query({
+        //     url: "https://mapservice.tdtah.cn/server1/rest/services/shidi/MapServer/0"
+        // }).where("1=1")
+        //     .run(function (error, result) {
+        //         console.log(result.features);
+        //         result.features.forEach(function (result) {
+        //             //后续处理result 为 geojson
+        //         })
+        //     })
 
         // 获取点击位置的坐标
         console.log(e.latlng)
