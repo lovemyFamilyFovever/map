@@ -9,27 +9,28 @@
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://unpkg.com/esri-leaflet@3.0.2/dist/esri-leaflet.js"></script>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-    <link rel="stylesheet" href="https://js.arcgis.com/4.18/esri/themes/light/main.css">
-    <script src="https://js.arcgis.com/4.25/"></script>
 </head>
 
 <body>
     <div id="map" style="height: 1080px"></div>
 </body>
 <script>
-
+    // 官网地址： https://developers.arcgis.com/esri-leaflet/api-reference/layers/feature-layer/
     // 添加底图
     const imageURL = 'http://t0.tianditu.gov.cn/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=94062428027398766a1d0f3000b5dc6c'
-    let osm = L.tileLayer(imageURL, { crs: L.CRS.EPSG3857, maxZoom: 18 });
+
+
+    let osm = L.tileLayer(imageURL, { crs: L.CRS.EPSG3857 });
 
     // 创建地图
     let map = L.map("map", {
         minZoom: 1, //最小缩放值
         maxZoom: 18, //最大缩放值
-        zoom: 10, //初始缩放值
+        zoom: 9, //初始缩放值
+
         zoomControl: true, //是否启用地图缩放控件
         attributionControl: false, //是否启用地图属性控件
-    }).setView([33.523079, 116.477051], 13).addLayer(osm);
+    }).setView([33.523079, 116.477051]).addLayer(osm);
 
 
     //添加矢量标记
@@ -39,58 +40,53 @@
         interactive: true
     }).addTo(map)
 
-    //添加省界arcgis server图层
-    let featureLayer = L.esri.dynamicMapLayer({
-        url: 'https://mapservice.tdtah.cn/server1/rest/services/AHSZJZ/MapServer/2',
-        // url: 'https://mapservice.tdtah.cn/server1/rest/services/2022ZHUANTI/1DZGY/MapServer/0',
+    var featureLayer = L.esri.featureLayer({
+        url: "https://mapservice.tdtah.cn/server1/rest/services/AHDISA/MapServer/0",
+        // url: "https://mapservice.tdtah.cn/server1/rest/services/2022ZHUANTI/1DZGY/MapServer/0",
+        // layers: [0],
+        useCors: false,
+        zIndex: 999,
         interactive: true,
-        geometryField: 'shape',
-        fields: ['NAME'] // 指定name作为属性字段
-    }).addTo(map);
+        //提供了一个机会来内省层中的单个GeoON特征。
+        onEachFeature: function (feature, layer) {
+            // 这里设置要处理的点击事件
+            console.log(123)
+            console.log(feature.properties.NAME);
+        }
+    });
+    map.addLayer(featureLayer)
+
+    //当新功能开始加载时触发。
+    featureLayer.on('load', iterateFeatures);
+    function iterateFeatures() {
+        //针对每个特征调用传递的函数。该函数将被传递代表该特征的层。
+        // featureLayer.eachFeature(function (layer) {
+        //     console.log(layer.feature);
+        // });
+
+        //请求关于此功能层的元数据。回调将被调用error和metadata。
+        featureLayer.metadata(function (error, metadata) {
+            console.log(metadata);
+        });
+
+    }
+    //返回一个新的L.esri.Query  可用于查询此层的对象。您的回调函数将被传递一个带有结果或错误的GeoJSON FeatureCollection。
+    featureLayer.query()
+        .where("NAME = '滁州市'")
+        .run(function (error, featureCollection) {
+            console.log(featureCollection);
+        });
 
 
     //地图点击事件
     map.on('click', function (e) {
-        let layer = e.target;
-
-        var x = e.latlng.lng;
-        var y = e.latlng.lat;
-        if (x < -180.0 || x > 180.0 || y < -90 || y > 90) {
-            return;
-        }
-        point = new L.circleMarker([y, x]);
-        var geometryParam = new L.supermap.GetFeaturesByGeometryParameters({
-            // datasetNames: ["China:China_Province_pg_1"],
-            geometry: point,
-            spatialQueryMode: "INTERSECT"
+        featureLayer.eachFeature(function (layer) {
+            console.log(layer.feature.properties.NAME);
         });
-        new L.supermap
-            .FeatureService(url)
-            .getFeaturesByGeometry(geometryParam, function (serviceResult) {
 
-            });
-
-        // L.esri.query({
-        //     url: "https://mapservice.tdtah.cn/server1/rest/services/shidi/MapServer/0"
-        // }).where("1=1")
-        //     .run(function (error, result) {
-        //         console.log(result.features);
-        //         result.features.forEach(function (result) {
-        //             //后续处理result 为 geojson
-        //         })
-        //     })
-
+        var a = featureLayer.getFeature()
         // 获取点击位置的坐标
         console.log(e.latlng)
-
-        var marker = L.marker(e.latlng).addTo(map);
-        marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
-
-        var popup = L.popup();
-        popup
-            .setLatLng(e.latlng)
-            .setContent("You clicked the map at " + e.latlng.toString())
-            .openOn(map);
     })
 </script>
 
