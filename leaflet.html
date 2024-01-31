@@ -9,8 +9,9 @@
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://unpkg.com/esri-leaflet@3.0.2/dist/esri-leaflet.js"></script>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-    <link rel="stylesheet" href="https://js.arcgis.com/4.18/esri/themes/light/main.css">
-    <script src="https://js.arcgis.com/4.25/"></script>
+
+    <link rel="stylesheet" href="libs/search/leaflet-search.css">
+    <script src="libs/search/leaflet-search.js"></script>
 </head>
 
 <body>
@@ -26,10 +27,10 @@
     let map = L.map("map", {
         minZoom: 1, //最小缩放值
         maxZoom: 18, //最大缩放值
-        zoom: 10, //初始缩放值
+        zoom: 7, //初始缩放值
         zoomControl: true, //是否启用地图缩放控件
         attributionControl: false, //是否启用地图属性控件
-    }).setView([33.523079, 116.477051], 13).addLayer(osm);
+    }).setView([33.523079, 116.477051]).addLayer(osm);
 
 
     //添加矢量标记
@@ -39,13 +40,10 @@
         interactive: true
     }).addTo(map)
 
-    //添加省界arcgis server图层
-    let featureLayer = L.esri.dynamicMapLayer({
-        url: 'https://mapservice.tdtah.cn/server1/rest/services/AHSZJZ/MapServer/2',
-        // url: 'https://mapservice.tdtah.cn/server1/rest/services/2022ZHUANTI/1DZGY/MapServer/0',
-        interactive: true,
-        geometryField: 'shape',
-        fields: ['NAME'] // 指定name作为属性字段
+    //添加arcgis server图层
+    let dynamicMapLayer = L.esri.dynamicMapLayer({
+        url: 'https://mapservice.tdtah.cn/server1/rest/services/AHDISA/MapServer',
+        layer: [0]
     }).addTo(map);
 
 
@@ -53,22 +51,10 @@
     map.on('click', function (e) {
         let layer = e.target;
 
-        var x = e.latlng.lng;
-        var y = e.latlng.lat;
-        if (x < -180.0 || x > 180.0 || y < -90 || y > 90) {
-            return;
-        }
-        point = new L.circleMarker([y, x]);
-        var geometryParam = new L.supermap.GetFeaturesByGeometryParameters({
-            // datasetNames: ["China:China_Province_pg_1"],
-            geometry: point,
-            spatialQueryMode: "INTERSECT"
+        dynamicMapLayer.bindPopup(function (err, featureCollection, response) {
+            var count = featureCollection.features.length;
+            return (count) ? count + ' features' : false;
         });
-        new L.supermap
-            .FeatureService(url)
-            .getFeaturesByGeometry(geometryParam, function (serviceResult) {
-
-            });
 
         // L.esri.query({
         //     url: "https://mapservice.tdtah.cn/server1/rest/services/shidi/MapServer/0"
