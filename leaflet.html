@@ -18,10 +18,12 @@
     <div id="map" style="height: 1080px"></div>
 </body>
 <script>
-
+    // 官网地址： https://developers.arcgis.com/esri-leaflet/api-reference/layers/feature-layer/
     // 添加底图
     const imageURL = 'http://t0.tianditu.gov.cn/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=94062428027398766a1d0f3000b5dc6c'
-    let osm = L.tileLayer(imageURL, { crs: L.CRS.EPSG3857, maxZoom: 18 });
+
+
+    let osm = L.tileLayer(imageURL, { crs: L.CRS.EPSG3857 });
 
     // 创建地图
     let map = L.map("map", {
@@ -66,17 +68,9 @@
         //         })
         //     })
 
+        var a = featureLayer.getFeature()
         // 获取点击位置的坐标
         console.log(e.latlng)
-
-        var marker = L.marker(e.latlng).addTo(map);
-        marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
-
-        var popup = L.popup();
-        popup
-            .setLatLng(e.latlng)
-            .setContent("You clicked the map at " + e.latlng.toString())
-            .openOn(map);
     })
 </script>
 
