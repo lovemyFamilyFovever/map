@@ -1,0 +1,278 @@
+.marker-icon,
+.marker-icon:focus {
+    background-color: #ffffff;
+    border: 1px solid #3388ff;
+    border-radius: 50%;
+    margin: -8px 0 0 -8px !important;
+    width: 14px !important;
+    height: 14px !important;
+    outline: 0;
+    transition: opacity ease 0.3s;
+}
+
+.marker-icon-middle,
+.marker-icon-middle:focus {
+    opacity: 0.7;
+    margin: -6px 0 0 -6px !important;
+    width: 10px !important;
+    height: 10px !important;
+}
+
+.leaflet-pm-draggable {
+    cursor: move !important;
+}
+
+.cursor-marker {
+    cursor: crosshair;
+    pointer-events: none;
+    opacity: 0;
+}
+
+.cursor-marker.visible {
+    opacity: 1 !important;
+}
+
+.geoman-draw-cursor {
+    cursor: crosshair;
+}
+
+.rect-style-marker,
+.rect-start-marker {
+    opacity: 0;
+}
+
+.rect-style-marker.visible,
+.rect-start-marker.visible {
+    opacity: 1 !important;
+}
+
+.vertexmarker-disabled {
+    opacity: 0.7;
+}
+
+.pm-text-marker {
+    width: 0;
+    height: 0;
+}
+
+.pm-textarea {
+    background-color: #fff;
+    color: #000;
+    resize: none;
+    border: none;
+    outline: 0;
+    cursor: pointer;
+    border-radius: 3px;
+    padding-left: 7px;
+    padding-bottom: 0;
+    padding-top: 4px;
+}
+
+.leaflet-pm-draggable .pm-textarea {
+    cursor: move;
+}
+
+.pm-textarea:focus,
+.pm-textarea:focus-within,
+.pm-textarea:focus-visible,
+.pm-textarea:active {
+    border: 2px solid #000;
+    outline: 0;
+}
+
+.pm-textarea.pm-disabled {
+    border: none;
+    user-select: none;
+}
+
+.pm-textarea.pm-hasfocus {
+    cursor: auto;
+}
+
+.leaflet-pm-toolbar {}
+
+.leaflet-pm-toolbar .leaflet-buttons-control-button {
+    padding: 5px;
+    box-sizing: border-box;
+    position: relative;
+    z-index: 3;
+}
+
+.leaflet-pm-toolbar .leaflet-pm-actions-container a.leaflet-pm-action:first-child:not(.pos-right),
+.leaflet-pm-toolbar .leaflet-pm-actions-container a.leaflet-pm-action:last-child.pos-right {
+    border-radius: 0;
+}
+
+.leaflet-pm-toolbar .button-container a.leaflet-buttons-control-button {
+    border-radius: 0;
+}
+
+.leaflet-pm-toolbar .button-container:last-child a.leaflet-buttons-control-button {
+    border-radius: 0 0 2px 2px;
+}
+
+.leaflet-pm-toolbar .button-container:first-child a.leaflet-buttons-control-button {
+    border-radius: 2px 2px 0 0;
+}
+
+.leaflet-pm-toolbar .button-container:last-child a.leaflet-buttons-control-button {
+    border-bottom: none;
+}
+
+.leaflet-pm-toolbar .control-fa-icon {
+    font-size: 19px;
+    line-height: 24px;
+}
+
+.leaflet-pm-toolbar .control-icon {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+
+.leaflet-pm-toolbar .leaflet-pm-icon-marker {
+    background-image: url(../../../imgs/marker.png);
+}
+
+
+.leaflet-pm-toolbar .leaflet-pm-icon-polyline {
+    background-image: url(../../../imgs/polyline.png);
+}
+
+.leaflet-pm-toolbar .leaflet-pm-icon-polygon {
+    background-image: url(../../../imgs/polygon.png);
+}
+
+.leaflet-pm-toolbar .leaflet-pm-icon-rectangle {
+    background-image: url(../../../imgs/rectangle.png);
+}
+
+.leaflet-pm-toolbar .leaflet-pm-icon-circle {
+    background-image: url(../../../imgs/circle.png);
+}
+
+.leaflet-pm-toolbar .leaflet-pm-icon-text {
+    background-image: url(../../../imgs/text.svg);
+}
+
+.leaflet-pm-toolbar .leaflet-pm-icon-edit {
+    background-image: url(../../../imgs/edit.svg);
+}
+
+.leaflet-pm-toolbar .leaflet-pm-icon-drag {
+    background-image: url(../../../imgs/move.svg);
+}
+
+.leaflet-pm-toolbar .leaflet-pm-icon-cut {
+    background-image: url(../../../imgs/cut.svg);
+}
+
+.leaflet-pm-toolbar .leaflet-pm-icon-delete {
+    background-image: url(../../../imgs/clear.png);
+}
+
+.leaflet-pm-toolbar .leaflet-pm-icon-circle-marker {
+    background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KCjxzdmcgdmlld0JveD0iMCAwIDEwMCAxMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgc3Ryb2tlPSIjNUI1QjVCIiBzdHJva2Utd2lkdGg9IjgiCiAgICAgZmlsbD0ibm9uZSI+CjxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjM1Ii8+CiAgPGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iMyIgZmlsbD0iIzVCNUI1QiIvPgo8L3N2Zz4=);
+}
+
+.leaflet-pm-toolbar .leaflet-pm-icon-snapping {
+    background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iMjRweCIgaGVpZ2h0PSIyNHB4IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiAgICA8IS0tIEdlbmVyYXRvcjogU2tldGNoIDU3LjEgKDgzMDg4KSAtIGh0dHBzOi8vc2tldGNoLmNvbSAtLT4KICAgIDx0aXRsZT5BdG9tcy9JY29ucy9Ub29scy9NYWduZXQ8L3RpdGxlPgogICAgPGRlc2M+Q3JlYXRlZCB3aXRoIFNrZXRjaC48L2Rlc2M+CiAgICA8ZGVmcz4KICAgICAgICA8cGF0aCBkPSJNMjEuOTk5NDc1OSwxMC45NDI4MTgzIEwyMS45OTk5OTg1LDE2LjM3MTA0MTcgQzIyLDE2LjY4NzIwMDcgMjIsMTcuMDA1ODI3OCAyMiwxNy4zMjY5NDExIEMyMiwyMS41NjQ2NTQ1IDE4LjY0MjEzNTYsMjUgMTQuNSwyNSBDMTAuMzU3ODY0NCwyNSA3LDIxLjU2NDY1NDUgNywxNy4zMjY5NDExIEw3LjAwMDg3NTA4LDEwLjk5MDc1MDcgTDExLjAwMjI4MDgsMTAuOTk4NDEyNSBDMTEuMDAxNzAzMywxMS42OTgwMTE0IDExLjAwMTI0NywxMi40MTY4MjQ4IDExLjAwMDg5OTIsMTMuMTU1NDg4NyBMMTEsMTcuMzI2OTQxMSBDMTEsMTkuMzc1NjgwOSAxMi41ODc2ODQxLDIxIDE0LjUsMjEgQzE2LjQxMjMxNTksMjEgMTgsMTkuMzc1NjgwOSAxOCwxNy4zMjY5NDExIEMxOCwxNS4wNzAyMDMyIDE3Ljk5OTU2OTYsMTIuOTYxOTY2OCAxNy45OTg1MzksMTAuOTkxMDAzMiBMMjEuOTk5NDc1OSwxMC45NDI4MTgzIFogTTEwLDcgQzEwLjU1MjI4NDcsNyAxMSw3LjQ0NzcxNTI1IDExLDggTDExLDEwIEw3LDEwIEw3LDggQzcsNy40NDc3MTUyNSA3LjQ0NzcxNTI1LDcgOCw3IEwxMCw3IFogTTIxLDcgQzIxLjU1MjI4NDcsNyAyMiw3LjQ0NzcxNTI1IDIyLDggTDIyLDEwIEwxOCwxMCBMMTgsOCBDMTgsNy40NDc3MTUyNSAxOC40NDc3MTUzLDcgMTksNyBMMjEsNyBaIiBpZD0icGF0aC0xIj48L3BhdGg+CiAgICA8L2RlZnM+CiAgICA8ZyBpZD0iU3ltYm9scyIgc3Ryb2tlPSJub25lIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCI+CiAgICAgICAgPGcgaWQ9IkF0b21zL0ljb25zL1Rvb2xzL01hZ25ldCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTMuMDAwMDAwLCAtMy4wMDAwMDApIj4KICAgICAgICAgICAgPG1hc2sgaWQ9Im1hc2stMiIgZmlsbD0id2hpdGUiPgogICAgICAgICAgICAgICAgPHVzZSB4bGluazpocmVmPSIjcGF0aC0xIj48L3VzZT4KICAgICAgICAgICAgPC9tYXNrPgogICAgICAgICAgICA8dXNlIGlkPSJNYXNrIiBmaWxsPSIjNUI1QjVCIiBmaWxsLXJ1bGU9Im5vbnplcm8iIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE0LjUwMDAwMCwgMTYuMDAwMDAwKSByb3RhdGUoNDUuMDAwMDAwKSB0cmFuc2xhdGUoLTE0LjUwMDAwMCwgLTE2LjAwMDAwMCkgIiB4bGluazpocmVmPSIjcGF0aC0xIj48L3VzZT4KICAgICAgICA8L2c+CiAgICA8L2c+Cjwvc3ZnPg==);
+}
+
+.leaflet-pm-toolbar .leaflet-pm-icon-rotate {
+    background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCI+CiAgICA8ZGVmcz4KICAgICAgICA8cGF0aCBpZD0icm90YXRlIiBkPSJNMjEuMiw1LjhjLTAuMS0wLjItMC4yLTAuMy0wLjMtMC41bC0wLjEtMC4yYy0wLjEtMC4yLTAuMi0wLjMtMC4zLTAuNWwtMC4xLTAuMmMtMC4xLTAuMi0wLjItMC4zLTAuNC0wLjVsLTAuMi0wLjNsMi44LTMuMUwxOCwwLjZsLTQuNiwwLjFsMC41LDQuNWwwLjUsNC41bDMuMi0zLjZ2MC4xbDAuMSwwLjJjMC4xLDAuMSwwLjEsMC4yLDAuMiwwLjJsMC4xLDAuMkMxOCw3LDE4LDcuMSwxOC4xLDcuMmMwLjMsMC43LDAuNiwxLjQsMC43LDIuMWMwLjIsMS40LDAsMi45LTAuNiw0LjJMMTgsMTMuOUwxNy45LDE0bC0wLjMsMC41bC0wLjEsMC4yYy0wLjIsMC4yLTAuNCwwLjUtMC42LDAuN2MtMC41LDAuNS0xLjEsMS0xLjcsMS4zYy0wLjYsMC40LTEuMywwLjYtMi4xLDAuOGMtMC43LDAuMS0xLjUsMC4yLTIuMiwwLjFjLTAuOC0wLjEtMS41LTAuMy0yLjItMC41Yy0wLjctMC4zLTEuMy0wLjctMS45LTEuMmwtMC40LTAuNGwtMC4yLTAuM0w2LDE1Yy0wLjEtMC4xLTAuMi0wLjItMC4yLTAuM2wtMC4zLTAuNGwtMC4xLTAuMWwtMC4yLTAuNGMwLTAuMS0wLjEtMC4xLTAuMS0wLjJsLTAuMy0wLjVsLTAuMS0wLjJjLTAuMS0wLjMtMC4yLTAuNi0wLjMtMC45Yy0wLjItMC44LTAuMy0xLjYtMC4zLTIuNGMwLTAuMiwwLTAuMywwLTAuNVY4LjljMC0wLjIsMC0wLjMsMC4xLTAuNGwwLjEtMC42bDAuMi0wLjZjMC4zLTAuOCwwLjctMS41LDEuMi0yLjJjMC41LTAuNywxLjEtMS4zLDEuOC0xLjhjMC4yLTAuMSwwLjMtMC40LDAuMS0wLjZDNy41LDIuNiw3LjQsMi41LDcuMywyLjVINy4xTDcsMi42QzYuMSwzLDUuNCwzLjYsNC43LDQuMkM0LDQuOSwzLjUsNS43LDMsNi42Yy0wLjksMS44LTEuMiwzLjgtMC44LDUuOGMwLjEsMC41LDAuMiwwLjksMC4zLDEuNGwwLjMsMC44QzIuOSwxNC43LDMsMTQuOCwzLDE1bDAuMiwwLjRjMCwwLjEsMC4xLDAuMiwwLjEsMC4ybDAuMywwLjVjMC4xLDAuMiwwLjIsMC4zLDAuMywwLjVsMC4xLDAuMmMwLjEsMC4xLDAuMiwwLjMsMC4zLDAuNEw1LDE3LjhjMC43LDAuNywxLjYsMS4zLDIuNSwxLjhjMC45LDAuNSwxLjksMC44LDMsMC45YzAuNSwwLjEsMSwwLjEsMS41LDAuMWMwLjYsMCwxLjEsMCwxLjYtMC4xYzEtMC4yLDIuMS0wLjUsMy0xbDAuMi0wLjFjMC4yLTAuMSwwLjMtMC4yLDAuNS0wLjNsMC43LTAuNGMwLjItMC4xLDAuMy0wLjIsMC40LTAuM2wwLjItMC4yYzAuMi0wLjEsMC40LTAuMywwLjUtMC41bDAuMS0wLjFjMC4zLTAuMywwLjctMC43LDAuOS0xbDAuNi0wLjlsMC40LTAuNmMxLTEuOSwxLjQtNC4xLDEuMS02LjJDMjIsNy44LDIxLjcsNi43LDIxLjIsNS44eiIvPgogICAgPC9kZWZzPgogICAgPGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwIDIpIj4KICAgICAgICA8bWFzayBpZD0icm90YXRlLWIiIGZpbGw9IiNmZmYiPgogICAgICAgICAgICA8dXNlIHhsaW5rOmhyZWY9IiNyb3RhdGUiLz4KICAgICAgICA8L21hc2s+CiAgICAgICAgPHVzZSBmaWxsPSIjNUI1QjVCIiBmaWxsLXJ1bGU9Im5vbnplcm8iIHhsaW5rOmhyZWY9IiNyb3RhdGUiLz4KICAgICAgICA8ZyBmaWxsPSIjNUI1QjVCIiBtYXNrPSJ1cmwoI3JvdGF0ZS1iKSI+CiAgICAgICAgICAgIDxyZWN0IHdpZHRoPSIzMCIgaGVpZ2h0PSIzMCIvPgogICAgICAgIDwvZz4KICAgIDwvZz4KPC9zdmc+Cg==);
+}
+
+.leaflet-buttons-control-button:hover,
+.leaflet-buttons-control-button:focus {
+    cursor: pointer;
+    background-color: #f4f4f4;
+}
+
+.active>.leaflet-buttons-control-button {
+    box-shadow: inset 0 -1px 5px 2px rgba(81, 77, 77, 0.31);
+}
+
+.leaflet-buttons-control-text-hide {
+    display: none;
+}
+
+.button-container {
+    position: relative;
+}
+
+.button-container .leaflet-pm-actions-container {
+    z-index: 2;
+    position: absolute;
+    top: 0;
+    left: 100%;
+    display: none;
+    white-space: nowrap;
+    direction: ltr;
+}
+
+.leaflet-right .leaflet-pm-toolbar .button-container .leaflet-pm-actions-container {
+    right: 100%;
+    left: auto;
+}
+
+.button-container.active .leaflet-pm-actions-container {
+    display: block;
+}
+
+.button-container .leaflet-pm-actions-container:not(.pos-right) a.leaflet-pm-action:last-child {
+    border-radius: 0 3px 3px 0;
+    border-right: 0;
+}
+
+.button-container .leaflet-pm-actions-container.pos-right a.leaflet-pm-action:first-child {
+    border-radius: 3px 0 0 3px;
+}
+
+.button-container .leaflet-pm-actions-container.pos-right a.leaflet-pm-action:last-child {
+    border-right: 0;
+}
+
+.button-container .leaflet-pm-actions-container .leaflet-pm-action {
+    padding: 0 10px;
+    background-color: #666;
+    color: #fff;
+    display: inline-block;
+    width: auto;
+    border-right: 1px solid #eee;
+    user-select: none;
+    border-bottom: none;
+    height: 29px;
+    line-height: 29px;
+}
+
+.leaflet-pm-toolbar .button-container:first-child.pos-right.active a.leaflet-buttons-control-button {
+    border-top-left-radius: 0;
+}
+
+.leaflet-pm-toolbar .button-container:first-child.active:not(.pos-right) a.leaflet-buttons-control-button {
+    border-top-right-radius: 0;
+}
+
+.button-container .leaflet-pm-actions-container .leaflet-pm-action:hover,
+.button-container .leaflet-pm-actions-container .leaflet-pm-action:focus {
+    cursor: pointer;
+    background-color: #777;
+}
+
+/* That the active control is always over the other controls */
+.leaflet-pm-toolbar.activeChild {
+    z-index: 801;
+}
+
+.leaflet-buttons-control-button.pm-disabled {
+    background-color: #f4f4f4;
+}
+
+.leaflet-buttons-control-button.pm-disabled>.control-icon {
+    filter: opacity(0.6);
+}

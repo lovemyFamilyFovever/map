@@ -1,85 +1,67 @@
-InitMap() //初始化地图
-initEvent() //注册事件
 
-var map, zoom = 12, handler
+const mapObj = {
 
-function InitMap() {
+    InitMap: function () {
+        // 创建地图
+        let osm = L.tileLayer(config.defaultService + "&tk=" + config.token, config.mapOptions);
+        let map = L.map("map", config.mapOptions).setView(config.center).addLayer(osm);
 
+        //添加矢量标记
+        L.tileLayer(config.mapbox_Vector_label + "&tk=" + config.token, config.tileLayerOptions).addTo(map)
 
-    const imageURL = 'http://t0.tianditu.gov.cn/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=94062428027398766a1d0f3000b5dc6c'
-    let osm = L.tileLayer(imageURL, { crs: L.CRS.EPSG3857, maxZoom: 18 });
+        //添加右下角放大缩小控件
+        zoomControl = L.control.zoom({
+            position: 'bottomright',
+            // 自定义title
+            zoomInTitle: '放大',
+            zoomOutTitle: '缩小'
+        }).addTo(map);
 
-    // 创建地图
-    let map = L.map("map", {
-        minZoom: 1, //最小缩放值
-        maxZoom: 18, //最大缩放值
-        zoom: 7, //初始缩放值
-        zoomControl: true, //是否启用地图缩放控件
-        attributionControl: false, //是否启用地图属性控件
-    }).setView([33.523079, 116.477051]).addLayer(osm);
-    //添加矢量标记
-    var textMap = 'http://t0.tianditu.gov.cn/DataServer?T=cva_w&x={x}&y={y}&l={z}&tk=94062428027398766a1d0f3000b5dc6c'
-    L.tileLayer(textMap, {
-        maxZoom: 18,
-        interactive: true
-    }).addTo(map)
+        //初始化比例尺控件对象
+        scale = L.control.scale().addTo(map);
 
+        //初始化右上角绘制测量工具栏
+        map.pm.addControls({
+            position: 'topright',
+            drawCircleMarker: false,
+            rotateMode: false,
+        });
+        //设置中文
+        map.pm.setLang("zh");
 
+        $('.control-icon').attr('title', "")
+        new mdui.Tooltip('.leaflet-pm-icon-marker', { content: '绘制标记', position: 'left' });
+        new mdui.Tooltip('.leaflet-pm-icon-polyline', { content: '绘制线段', position: 'left' });
+        new mdui.Tooltip('.leaflet-pm-icon-rectangle', { content: '绘制长方形', position: 'left' });
+        new mdui.Tooltip('.leaflet-pm-icon-polygon', { content: '绘制多边形', position: 'left' });
+        new mdui.Tooltip('.leaflet-pm-icon-circle', { content: '绘制圆形', position: 'left' });
+        new mdui.Tooltip('.leaflet-pm-icon-text', { content: '添加文本', position: 'left' });
 
+        new mdui.Tooltip('.leaflet-pm-icon-edit', { content: '编辑图层', position: 'left' });
+        new mdui.Tooltip('.leaflet-pm-icon-drag', { content: '拖拽图层', position: 'left' });
+        new mdui.Tooltip('.leaflet-pm-icon-cut', { content: '剪切图层', position: 'left' });
+        new mdui.Tooltip('.leaflet-pm-icon-delete', { content: '删除图层', position: 'left' });
 
-
-    //初始化地图对象
-    map = new T.Map('map');
-    //设置显示地图的中心点和级别
-    map.centerAndZoom(new T.LngLat(117.28274, 34.203), 12);
-
-    //创建缩放平移控件对象
-    control = new T.Control.Zoom();
-    control.setPosition(T_ANCHOR_BOTTOM_RIGHT)
-
-    //允许鼠标滚轮缩放地图
-    map.enableScrollWheelZoom();
-    //创建比例尺控件对象
-    var scale = new T.Control.Scale();
-    //添加比例尺控件
-    map.addControl(scale);
+        return map
+    }
 }
+const map = mapObj.InitMap() //初始化地图
+initEvent(map) //注册事件
+
+console.log(map);
 
 // 首屏页面的事件注册
 function initEvent() {
-    // 点击左侧面板
-    $('.left-tool .menu_display').on('click', function () {
-        if ($('.show-status').length == 0) {
-            // 点击的是菜单按钮,展开树形菜单
-            $('.left-down').addClass('show-status')
-        } else {
-            // 点击的是向上收缩按钮，收缩左侧面板树
-            $('.left-down.show-status').removeClass('show-status')
-        }
+
+    // 添加定位按钮点击事件
+    $('.located_btn').on('click', function () {
+        // 使用 Leaflet 的 locate 方法获取用户当前位置
+        map.locate({ setView: true });
     });
-    //切换专题、地名搜索
-    $('.classify-list').on('click', function () {
-        $('.special').toggleClass('active')
-        $('.place').toggleClass('active')
 
-        $('.layer-content').toggleClass('active')
-        $('.search-content').toggleClass('active')
-    })
-
-    //重置按钮
-    $('.layer-content .resetBtn').on('click', function () {
-        $('.layer-content  input[type="checkbox"]').prop('checked', false);
-    })
-
-    $('.search-content .resetBtn').on('click', function () {
-        $('.search-content .mdui-textfield-input').val("")
-    })
-
-    //关闭左侧面板
-    $('.down-up').on('click', function () {
-        $('.left-down.show-status').removeClass('show-status')
-    })
-
+    //实例化右下角的放大缩小组件
+    new mdui.Tooltip('.leaflet-control-zoom-in', { content: '放大', position: 'left' });
+    new mdui.Tooltip('.leaflet-control-zoom-out', { content: '缩小', position: 'left' });
     //放大
     $('.zoomInTool').on('click', function () {
         map.zoomIn()
@@ -123,9 +105,8 @@ function initEvent() {
         map.clearOverLays()
     })
 
-
     //底图切换
-    $('.switchmap-container').on('click', function () {
+    $('.baselayer_btn').on('click', function () {
         $('.common-panel.layer-pop').show()
     })
     // 阻止图层面板点击事件冒泡
@@ -144,15 +125,41 @@ function initEvent() {
         var $this = $(this);
         $this.siblings().removeClass('active');
         $this.addClass('active');
+
+
+
+        // 默认矢量底图
+        var normalMap = L.tileLayer(config.mapbox_Vector + '&tk=' + config.token, { subdomains: ['0', '1', '2', '3', '4', '5', '6', '7'] });
+
+        // 地形底图
+        var terrainMap = L.tileLayer(config.SYS_DEM_MAPSERVER_PATH + '&tk=' + config.token, { subdomains: ['0', '1', '2', '3', '4', '5', '6', '7'] });
+
+        // 卫星底图  
+        var satelliteMap = L.tileLayer(config.SYS_IMG_MAPSERVER_PATH + '&tk=' + config.token, { subdomains: ['0', '1', '2', '3', '4', '5', '6', '7'] });
+
+
         // 切换地图类型
         if ($this.attr('id') == 'vec_type') {//矢量
-            map.setMapType(window.TMAP_NORMAL_MAP);
+            map.removeLayer(terrainMap);
+            map.removeLayer(satelliteMap);
+            map.addLayer(normalMap);
+
         } else if ($this.attr('id') == 'img_type') {//卫星
-            map.setMapType(window.TMAP_HYBRID_MAP);
+            map.removeLayer(terrainMap);
+            map.addLayer(satelliteMap);
+            map.removeLayer(normalMap);
         } else {//地形
-            map.setMapType(window.TMAP_TERRAIN_HYBRID_MAP);
+            map.addLayer(terrainMap);
+            map.removeLayer(satelliteMap);
+            map.removeLayer(normalMap);
         }
     });
+
+    //打开图层弹窗
+    $('.switchmlayer-container').on('click', function () {
+
+    })
+
 
     //统计图 展开悬浮窗
     $('.statistics-container').on('click', function () {

@@ -1,0 +1,2 @@
+var tableData = []
+var echartData = []

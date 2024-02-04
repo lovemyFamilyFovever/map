@@ -10,8 +10,6 @@
     <script src="https://unpkg.com/esri-leaflet@3.0.2/dist/esri-leaflet.js"></script>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 
-    <link rel="stylesheet" href="libs/search/leaflet-search.css">
-    <script src="libs/search/leaflet-search.js"></script>
 </head>
 
 <body>
@@ -21,7 +19,6 @@
     // 官网地址： https://developers.arcgis.com/esri-leaflet/api-reference/layers/feature-layer/
     // 添加底图
     const imageURL = 'http://t0.tianditu.gov.cn/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=94062428027398766a1d0f3000b5dc6c'
-
 
     let osm = L.tileLayer(imageURL, { crs: L.CRS.EPSG3857 });
 
