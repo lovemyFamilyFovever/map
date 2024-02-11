@@ -135,44 +135,44 @@
 
 
 .leaflet-pm-toolbar .leaflet-pm-icon-marker {
-    background-image: url(../../../imgs/marker.png);
+    background-image: url(../../imgs/marker.png);
 }
 
 
 .leaflet-pm-toolbar .leaflet-pm-icon-polyline {
-    background-image: url(../../../imgs/polyline.png);
+    background-image: url(../../imgs/polyline.png);
 }
 
 .leaflet-pm-toolbar .leaflet-pm-icon-polygon {
-    background-image: url(../../../imgs/polygon.png);
+    background-image: url(../../imgs/polygon.png);
 }
 
 .leaflet-pm-toolbar .leaflet-pm-icon-rectangle {
-    background-image: url(../../../imgs/rectangle.png);
+    background-image: url(../../imgs/rectangle.png);
 }
 
 .leaflet-pm-toolbar .leaflet-pm-icon-circle {
-    background-image: url(../../../imgs/circle.png);
+    background-image: url(../../imgs/circle.png);
 }
 
 .leaflet-pm-toolbar .leaflet-pm-icon-text {
-    background-image: url(../../../imgs/text.svg);
+    background-image: url(../../imgs/text.svg);
 }
 
 .leaflet-pm-toolbar .leaflet-pm-icon-edit {
-    background-image: url(../../../imgs/edit.svg);
+    background-image: url(../../imgs/edit.svg);
 }
 
 .leaflet-pm-toolbar .leaflet-pm-icon-drag {
-    background-image: url(../../../imgs/move.svg);
+    background-image: url(../../imgs/move.svg);
 }
 
 .leaflet-pm-toolbar .leaflet-pm-icon-cut {
-    background-image: url(../../../imgs/cut.svg);
+    background-image: url(../../imgs/cut.svg);
 }
 
 .leaflet-pm-toolbar .leaflet-pm-icon-delete {
-    background-image: url(../../../imgs/clear.png);
+    background-image: url(../../imgs/clear.png);
 }
 
 .leaflet-pm-toolbar .leaflet-pm-icon-circle-marker {

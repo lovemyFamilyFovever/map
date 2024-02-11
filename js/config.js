@@ -1,39 +1,95 @@
 var config = {
     defaultCatalog: '移动端',
     version: "Leaflet-1.7.1",
-    defaultService: "http://t0.tianditu.gov.cn/DataServer?T=vec_w&x={x}&y={y}&l={z}",
-    token: "94062428027398766a1d0f3000b5dc6c",
 
-    //矢量底图	
-    mapbox_Vector: 'http://t0.tianditu.gov.cn/DataServer?T=vec_w&x={x}&y={y}&l={z}',
-    //矢量注记
-    mapbox_Vector_label: 'http://t0.tianditu.gov.cn/DataServer?T=cva_w&x={x}&y={y}&l={z}',
+    defaultDomin: 'https://mapservice.tdtah.cn/server1/rest/services',
 
-    // 卫星地图
-    SYS_IMG_MAPSERVER_PATH: 'http://t0.tianditu.gov.cn/DataServer?T=cva_w&x={x}&y={y}&l={z}',
-    // 卫星注记
-    SYS_IMG_LABEL_MAPSERVER_PATH: 'http://t0.tianditu.gov.cn/DataServer?T=cia_w&x={x}&y={y}&l={z}',
+    "矢量底图": 'http://t0.tianditu.gov.cn/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=94062428027398766a1d0f3000b5dc6c',
+    "矢量底图注记": 'http://t0.tianditu.gov.cn/DataServer?T=cva_w&x={x}&y={y}&l={z}&tk=94062428027398766a1d0f3000b5dc6c',
 
+    "影像地图": 'http://t{s}.tianditu.gov.cn/DataServer?T=img_w&x={x}&y={y}&l={z}&tk=94062428027398766a1d0f3000b5dc6c',
+    "影像地图注记": 'http://t0.tianditu.gov.cn/DataServer?T=cia_w&x={x}&y={y}&l={z}&tk=94062428027398766a1d0f3000b5dc6c',
 
-    // 地形地图
-    SYS_DEM_MAPSERVER_PATH: 'http://t0.tianditu.gov.cn/DataServer?T=ter_w&x={x}&y={y}&l={z}',
-    // 地形注记
-    SYS_DEM_LABELS_MAPSERVER_PATH: 'http://t0.tianditu.gov.cn/DataServer?T=cta_w&x={x}&y={y}&l={z}',
+    "地形地图": 'http://t0.tianditu.gov.cn/DataServer?T=ter_w&x={x}&y={y}&l={z}&tk=94062428027398766a1d0f3000b5dc6c',
+    "地形地图注记": 'http://t0.tianditu.gov.cn/DataServer?T=cta_w&x={x}&y={y}&l={z}&tk=94062428027398766a1d0f3000b5dc6c',
 
-    tileLayerOptions: {
+    layerList: [{
+        url: "https://mapservice.tdtah.cn/server1/rest/services/shidi/MapServer",
+        layers: [0],
+        name: "湿地tm",
+        type: "Feature Layer",
+        description: "这是一个图层描述",
+        tags: ["湿地", "郊区"],
+        thumbnail: "/info/thumbnail/thumbnail.png"
+    }, {
+        url: "https://mapservice.tdtah.cn/server1/rest/services/AHDISA/MapServer",
+        layers: [0],
+        name: "行政区划_市",
+        type: "Feature Layer",
+        description: "",
+        tags: ["郊区", "城市"],
+        thumbnail: "/info/thumbnail/thumbnail.png"
+    }, {
+        url: "https://mapservice.tdtah.cn/server1/rest/services/rootline/MapServer",
+        layers: [0],
+        name: "rootline",
+        type: "Feature Layer",
+        description: "这是一个图层描述",
+        tags: ["水体", "郊区", "道路"],
+        thumbnail: "/info/thumbnail/thumbnail.png"
+    }, {
+        url: "https://mapservice.tdtah.cn/server1/rest/services/Water07/MapServer",
+        layers: [0],
+        name: "水体202007",
+        type: "Feature Layer",
+        description: "",
+        tags: ["水体", "郊区"],
+        thumbnail: "/info/thumbnail/thumbnail.png"
+    }, {
+        url: "https://mapservice.tdtah.cn/server1/rest/services/HF2012/MapServer",
+        layers: [0],
+        name: "范围2000",
+        type: "Feature Layer",
+        description: "",
+        tags: ["城市", "建筑"],
+        thumbnail: "/info/thumbnail/thumbnail.png"
+    }, {
+        url: "https://mapservice.tdtah.cn/server1/rest/services/AHSZJZ/MapServer",
+        layers: [0],
+        name: "1万图幅号",
+        type: "Feature Layer",
+        description: "",
+        tags: ["城市", "建筑"],
+        thumbnail: "/info/thumbnail/thumbnail.png"
+    }, {
+        url: "https://mapservice.tdtah.cn/server1/rest/services/AHSZJZ/MapServer",
+        layers: [1],
+        name: "县（安徽）",
+        type: "Feature Layer",
+        description: "",
+        tags: ["城市", "建筑"],
+        thumbnail: "/info/thumbnail/thumbnail.png"
+    }, {
+        url: "https://mapservice.tdtah.cn/server1/rest/services/AHSZJZ/MapServer",
+        layers: [2],
+        name: "市（安徽）",
+        type: "Feature Layer",
+        description: "",
+        tags: ["城市", "建筑"],
+        thumbnail: "/info/thumbnail/thumbnail.png"
+    }],
+
+    mapOptions: {
         minZoom: 1, //最小缩放值
         maxZoom: 18, //最大缩放值
-    },
-    mapOptions: {
         zoom: 7, //初始缩放值
-        zoomControl: false, //是否启用地图缩放控件
         attributionControl: false, //是否启用地图属性控件
+        zoomControl: true, //是否启用地图缩放控件
+        scaleControl: true,//是否启用比例尺控件 
+        toolListControl: true, //是否启用地图测量工具
+        initTooltips: true,//是否初始化右上角的工具栏
     },
     center: [33.523079, 116.477051],
 
-    //地图工具初始化
-    toolLIst: {
-
-    }
-
 }
+

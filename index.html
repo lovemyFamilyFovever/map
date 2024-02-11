@@ -7,7 +7,7 @@
     <title>地图演示系统</title>
 
     <link rel="stylesheet" href="libs/leaflet@1.7.1/leaflet.css">
-    <link rel="stylesheet" href="libs/leaflet@1.7.1/Leaflet Measure/leaflet-geoman.css" />
+    <link rel="stylesheet" href="libs/LeafletMeasure/leaflet-geoman.css" />
     <link rel="stylesheet" href="libs/mdui-v1.0.2/css/mdui.min.css">
     <link rel="stylesheet" href="css/index.css">
 
@@ -19,44 +19,6 @@
         地图演示系统
     </div>
     <div id="map"></div>
-
-    <div class="layer_container">
-        <!-- 头部搜索 -->
-        <header class="clearfix">
-            <div class="img icon_pre"><img src="imgs/layers_icon.png" alt=""></div>
-            <div class="header-logo">专题图层</div>
-            <div class="menu_display" mdui-tooltip="{content: '菜单'}"></div>
-        </header>
-
-    </div>
-
-    <!-- 地图工具合集 -->
-    <!-- <div class="right-top-tool">
-        <div class="zoomInTool tool-item" mdui-tooltip="{content: '放大', position: 'bottom'}">
-            <img src="imgs/zoomIn.png" alt="">
-        </div>
-        <div class="zoomOutTool tool-item" mdui-tooltip="{content: '缩小', position: 'bottom'}">
-            <img src="imgs/zoomOut.png" alt="">
-        </div>
-        <div class="markerTool tool-item" mdui-tooltip="{content: '标注点工具', position: 'bottom'}">
-            <img src="imgs/marker.png" alt="">
-        </div>
-        <div class="polygonTool tool-item" mdui-tooltip="{content: '多边形工具', position: 'bottom'}">
-            <img src="imgs/polygon.png" alt="">
-        </div>
-        <div class="polylineTool tool-item" mdui-tooltip="{content: '线段工具', position: 'bottom'}">
-            <img src="imgs/polyline.png" alt="">
-        </div>
-        <div class="rectangleTool tool-item" mdui-tooltip="{content: '方形工具', position: 'bottom'}">
-            <img src="imgs/rectangle.png" alt="">
-        </div>
-        <div class="circleTool tool-item" mdui-tooltip="{content: '圆形工具', position: 'bottom'}">
-            <img src="imgs/circle.png" alt="">
-        </div>
-        <div class="clearTool tool-item" mdui-tooltip="{content: '清除所有', position: 'bottom'}">
-            <img src="imgs/clear.png" alt="">
-        </div>
-    </div> -->
 
     <div class="right-tool">
         <div class="right-tool-title">
@@ -77,7 +39,23 @@
 
         <div class="right-tool-content">
 
-            <div class="table-content">
+            <!-- 图层容器 -->
+            <div class="layer_content">
+                <div class="layer_title">低效用地</div>
+
+                <div class="layer_tool">
+                    <div class="layer_search">
+                        <img src="imgs/search.svg" alt="">
+                        <input class="layer_seatch_input" placeholder="共加载四个图层">
+                        <div class="search_btn">查询</div>
+                    </div>
+                </div>
+
+                <div class="layer_wrap">
+                </div>
+            </div>
+
+            <div class="table-content" style="display: none;">
                 <div class="title">统计表</div>
                 <i class="mdui-icon material-icons">close</i>
                 <div class="mdui-table-fluid">
@@ -132,15 +110,13 @@
                 </div>
 
             </div>
-
-            <div class="statistics-content">
+            <div class="statistics-content" style="display: none;">
                 <div class="title"></div>
                 <i class="mdui-icon material-icons">close</i>
                 <div class="mdui-table-fluid">
                     <div id="main-echart" style="width: 470px;height:460px;"></div>
                 </div>
             </div>
-
         </div>
 
     </div>
@@ -171,15 +147,19 @@
 </body>
 <script src="js/config.js"></script>
 
+<!-- 加载leaflet.esri插件 -->
 <script src="libs/leaflet@1.7.1/leaflet.js"></script>
-<!-- <script src="libs/leaflet@1.7.1/esri-leaflet-3.0.2.js"></script> -->
+<script src="libs/esri-leaflet/esri-leaflet-2.5.0.js"></script>
+
 <script src="libs/jquery/jquery_3.0.0.js"></script>
 
-<script src="libs/leaflet@1.7.1/Leaflet Measure/leaflet-geoman.min.js"></script>
+<script src="libs/LeafletMeasure/leaflet-geoman.min.js"></script>
 <script src="libs/mdui-v1.0.2/js/mdui.min.js"></script>
 
 <script src="libs/echart/echarts.min.js"></script>
 
+<script src="js/map.js"></script>
+<script src="js/util.js"></script>
 <script src="js/index.js"></script>
 
 </html>

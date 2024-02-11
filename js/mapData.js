@@ -1,2 +1,0 @@
-var tableData = []
-var echartData = []
