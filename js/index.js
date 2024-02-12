@@ -20,8 +20,7 @@ const mapC_T = L.tileLayer(config["地形地图注记"], { subdomains: ["0", "1"
 let terrain = L.layerGroup([mapC, mapC_T]);
 
 loadBaseMap(satellite);// 加载底图
-loadLayers()
-loadLayerThumbnail()//加载缩略图
+loadMapLayers()//加载图层
 initEvent()// 首屏页面的事件注册
 
 // 加载底图
@@ -33,67 +32,8 @@ function loadBaseMap(layer) {
 }
 
 //加载图层
-function loadLayers() {
-    var html = '';
-    let layer = config.layerList;
-    for (let i = 0; i < layer.length; i++) {
-        html += '<div class="layer_item">';
-        html += '    <div class="layer_thumbnail">';
-
-        var url = `${layer[i].url}/export?bbox=${map.getBounds().toBBoxString()}&size=512,512&format=png&f=image`
-
-        html += `        <img src="${url}" alt="" class="thumbImg" />`
-        html += `        <p class="layer_type" title="地块类型">${layer[i].type}</p>`;
-        html += '    </div>';
-        html += '    <div class="layer_info">';
-        html += `        <p class="layer_name" title="地块名称">${layer[i].name}</p>`;
-        html += '        <p class="layer_desc" title="这是一个展示城市地图的服务,包含了道路、建筑和公共设施的信息。">';
-        html += `            ${layer[i].description}`;
-        html += '        </p>';
-        html += '        <div class="layer_info_line">';
-        html += '            <div class="layer_tags" title="地块标签">';
-        for (var j = 0; j < layer[i].tags.length; j++) {
-            html += `        <label>${layer[i].tags[j].tag}</label>`;
-        }
-        html += '            </div>';
-        html += `            <div class="layer_type" title="地块数量">${layer[i].layers.length}</div>`;
-        html += `            <div class="layer_area" title="地块面积">123123</div>`;
-        html += '        </div>';
-        html += '        <div class="layer_switch">';
-        html += '            <label class="switch">';
-        html += '                <input type="checkbox" />';
-        html += '                <span class="slider"></span>';
-        html += '            </label>';
-        html += '        </div>';
-        html += '    </div>';
-        html += '</div>';
-    }
-    $('.layer_wrap').html(html)
-}
-
-//加载缩略图
-function loadLayerThumbnail() {
-
-    // var layer = L.esri.featureLayer({
-    //     url: "https://mapservice.tdtah.cn/server1/rest/services/shidi/MapServer/0",
-    // });
-    // layer.addTo(map)
-
-    // $.ajax({
-    //     url: 'https://mapservice.tdtah.cn/server1/rest/services/rootline/MapServer/export',
-    //     data: {
-    //         bbox: map.getBounds().toBBoxString(),
-    //         size: '512,512',
-    //         format: 'png',
-    //         f: 'json'
-    //     },
-    //     success: function (data) {
-    //         // 将缩略图添加到地图上
-    //         $('.thumbImg').attr('src', data.href);
-
-    //     }
-    // });
-
+function loadMapLayers() {
+    $(".layer_wrap").html(template('layers-html', config))
 }
 
 
@@ -104,14 +44,7 @@ function initEvent() {
         // 使用 Leaflet 的 locate 方法获取用户当前位置
         map.locate({ setView: true });
     });
-    //底图面板打开事件
-    $('.baselayer_btn').on('click', function () {
-        $('.common-panel.layer-pop').show()
-    })
-    // 底图面板关闭事件
-    $('.layer-pop .close').on('click', function () {
-        $('.common-panel.layer-pop').hide()
-    })
+
     // 阻止图层面板点击事件冒泡
     $('.layer-pop').on('click', function () {
         return false;
@@ -133,10 +66,6 @@ function initEvent() {
             loadBaseMap(terrain)
         }
     });
-    //打开图层弹窗
-    $('.switchmlayer-container').on('click', function () {
-
-    })
 
 
     //统计表 关闭悬浮窗
