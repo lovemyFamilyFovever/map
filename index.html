@@ -171,7 +171,7 @@
                         <div class="layer_type" title="地块数量">{{item.layers.length}}</div>
                         <div class="layer_area" title="地块面积">1254.62m2</div>
                     </div>
-                    <div class="layer_switch">
+                    <div class="layer_switch" data-index="{{i}}">
                         <label class="switch">
                             <input type="checkbox">
                             <span class="slider"></span>
@@ -181,6 +181,17 @@
             </div>
             {{/each}}
     </script>
+
+    <script id="popupForm" type="text/html">
+        <div class="popup_container">
+            <div class="popup_title">{{NAME}}</div>
+            <div class="popup_container">
+                <p>类型：{{TYPE}}</p>
+                <p>面积：{{GB}}</p>
+            </div>
+        </div>
+    </script>
+
 
 </body>
 <script src="js/config.js"></script>

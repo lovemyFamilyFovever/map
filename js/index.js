@@ -19,6 +19,10 @@ const mapC = L.tileLayer(config["地形地图"], { subdomains: ["0", "1", "2", "
 const mapC_T = L.tileLayer(config["地形地图注记"], { subdomains: ["0", "1", "2", "3", "4", "5", "6", "7"] })
 let terrain = L.layerGroup([mapC, mapC_T]);
 
+var layerGroup = L.layerGroup().addTo(map);
+var addedLayers = {};//自定义存储已添加的图层
+
+
 loadBaseMap(satellite);// 加载底图
 loadMapLayers()//加载图层
 initEvent()// 首屏页面的事件注册
@@ -31,10 +35,36 @@ function loadBaseMap(layer) {
     map.addLayer(layer);
 }
 
-//加载图层
+//加载图层html模板
 function loadMapLayers() {
     $(".layer_wrap").html(template('layers-html', config))
 }
+
+// 绑定change事件  切换图层的显示和隐藏
+$('.layer_switch input[type="checkbox"]').on('click', function () {
+
+    let index = $(this).parent().parent().attr('data-index')
+    let url = config.layerList[index].url + '/' + config.layerList[index].layers[0]
+
+    if ($(this).prop('checked')) {
+        // 添加图层到layerGroup
+        let selectLayer = L.esri.featureLayer({ url: url }).addTo(layerGroup);
+        selectLayer.bindPopup(function (layer) {
+            return L.Util.template(
+                template('popupForm', layer.feature.properties),
+                layer.feature.properties
+            );
+        });
+        addedLayers[index] = selectLayer; // 存储图层
+    } else {
+        // 从layerGroup中查找并删除图层
+        let layerToRemove = addedLayers[index];
+        if (layerToRemove) {
+            layerGroup.removeLayer(layerToRemove);
+            delete addedLayers[index]; // 从对象中移除图层
+        }
+    }
+});
 
 
 // 首屏页面的事件注册
