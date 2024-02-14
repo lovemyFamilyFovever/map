@@ -343,6 +343,22 @@ a:hover {
     margin-left: 60px;
 }
 
+.empty_search_list {
+    display: none;
+    margin: 0 auto;
+    text-align: center;
+    padding-bottom: 50px;
+}
+
+.empty_search_list img {
+    width: 200px;
+}
+
+.empty_search_list p {
+    font-size: 17px;
+    color: #cccccc;
+}
+
 .layer_title {
     font-size: 20px;
     padding-bottom: 15px;
@@ -359,6 +375,7 @@ a:hover {
     padding-bottom: 10px;
     overflow: hidden;
     box-shadow: 0 2px 6px rgb(0 0 0 / 31%);
+    width: 520px;
 }
 
 .layer_content_close {
@@ -440,13 +457,13 @@ p.layer_desc {
     text-overflow: ellipsis;
 }
 
-p.layer_type {
-    background: #efebfd;
+.layer_type {
+    background: #f7f8fa;
     border-radius: 3px;
     height: 25px;
     line-height: 25px;
     text-align: center;
-    color: #623cea;
+    color: #8b9ca8;
     font-weight: bolder;
 }
 
@@ -468,7 +485,13 @@ p.layer_type {
     padding: 0 7px;
     border-radius: 3px;
     color: #ff7d00;
-    font-weight: bolder;
+}
+
+.layer_count {
+    color: #623cea;
+    background: #efebfd;
+    padding: 0 7px;
+    border-radius: 3px;
 }
 
 .layer_switch {

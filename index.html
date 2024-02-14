@@ -5,12 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>地图演示系统</title>
-
+    <link rel="stylesheet" href="libs/tabulator-tables@5.6.0/tabulator.min.css">
     <link rel="stylesheet" href="libs/leaflet@1.7.1/leaflet.css">
     <link rel="stylesheet" href="libs/LeafletMeasure/leaflet-geoman.css" />
     <link rel="stylesheet" href="libs/mdui-v1.0.2/css/mdui.min.css">
     <link rel="stylesheet" href="css/index.css">
-
 </head>
 
 <body>
@@ -49,13 +48,15 @@
                 <div class="layer_tool">
                     <div class="layer_search">
                         <img src="imgs/search.svg" alt="">
-                        <input class="layer_seatch_input" placeholder="共加载四个图层">
+                        <input class="layer_seatch_input" placeholder="">
                         <div class="search_btn">查询</div>
                     </div>
                 </div>
 
                 <div class="layer_wrap">
-
+                    <div class="empty_search_list"><img src="imgs/empty.png" />
+                        <p>查询到0张地图</p>
+                    </div>
                 </div>
             </div>
 
@@ -149,27 +150,29 @@
         </div>
     </div>
 
-    <!-- 加载图层 -->
+    <!-- 加载图层列表 -->
     <script id='layers-html' type='text/html'>
         {{each layerList as item i}}
-            <div class="layer_item" data-index="{{i}}">
+
+        {{if item.showStatus!==0}} 
+            <div class="layer_item" data-id="{{item.id}}">
                 <div class="layer_thumbnail">
                     <img src={{item.url}}{{item.thumbnail}} alt="" class="thumbImg" />
                     <p class="layer_type" title="地块类型">{{item.type}}</p>
                 </div>
                 <div class="layer_info">
                     <p class="layer_name" title="地块名称">{{item.name}}</p>
-                    <p class="layer_desc" title="这是一个展示城市地图的服务,包含了道路、建筑和公共设施的信息。">
+                    <p class="layer_desc" title="">
                         {{item.description}}
                     </p>
                     <div class="layer_info_line">
-                        <div class="layer_tags" title="地块标签">
+                        <!-- <div class="layer_tags" title="地块标签">
                             {{each item.tags as tag}}
                             <label>{{tag}}</label>
-                            {{/ each}}
-                        </div>
-                        <div class="layer_type" title="地块数量">{{item.layers.length}}</div>
-                        <div class="layer_area" title="地块面积">1254.62m2</div>
+                            {{/each}}
+                        </div> -->
+                        <div class="layer_count" title="地块数量">{{item.count}}</div>
+                        <div class="layer_area" title="地块面积">{{item.area}}</div>
                     </div>
                     <div class="layer_switch" data-index="{{i}}">
                         <label class="switch">
@@ -179,9 +182,10 @@
                     </div>
                 </div>
             </div>
+            {{/if}} 
             {{/each}}
     </script>
-
+    <!-- 弹窗 -->
     <script id="popupForm" type="text/html">
         <div class="popup_container">
             <div class="popup_title">{{NAME}}</div>
@@ -191,24 +195,20 @@
             </div>
         </div>
     </script>
-
-
 </body>
-<script src="js/config.js"></script>
 
+<script src="libs/jquery/jquery_3.0.0.js"></script>
 <script src="libs/template@4.8/template.js"></script>
+<script src="libs/tabulator-tables@5.6.0/tabulator.min.js"></script>
+<script src="libs/mdui-v1.0.2/js/mdui.min.js"></script>
+<script src="libs/echart/echarts.min.js"></script>
 
 <!-- 加载leaflet.esri插件 -->
 <script src="libs/leaflet@1.7.1/leaflet.js"></script>
 <script src="libs/esri-leaflet/esri-leaflet-2.5.0.js"></script>
-
-<script src="libs/jquery/jquery_3.0.0.js"></script>
-
 <script src="libs/LeafletMeasure/leaflet-geoman.min.js"></script>
-<script src="libs/mdui-v1.0.2/js/mdui.min.js"></script>
 
-<script src="libs/echart/echarts.min.js"></script>
-
+<script src="js/config.js"></script>
 <script src="js/map.js"></script>
 <script src="js/util.js"></script>
 <script src="js/index.js"></script>

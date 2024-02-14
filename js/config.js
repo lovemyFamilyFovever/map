@@ -14,69 +14,98 @@ var config = {
     "地形地图注记": 'http://t0.tianditu.gov.cn/DataServer?T=cta_w&x={x}&y={y}&l={z}&tk=94062428027398766a1d0f3000b5dc6c',
 
     layerList: [{
+        id: "0",
+        showStatus: 1,
         url: "https://mapservice.tdtah.cn/server1/rest/services/shidi/MapServer",
-        layers: [0],
+        layerIndex: 0,
         name: "湿地tm",
         type: "Feature Layer",
         description: "这是一个图层描述",
         tags: ["湿地", "郊区"],
-        thumbnail: "/info/thumbnail/thumbnail.png"
+        thumbnail: "/info/thumbnail/thumbnail.png",
+        count: "",
+        area: ""
     }, {
+        id: "1",
+        showStatus: 1,
         url: "https://mapservice.tdtah.cn/server1/rest/services/AHDISA/MapServer",
-        layers: [0],
+        layerIndex: 0,
         name: "行政区划_市",
         type: "Feature Layer",
         description: "",
         tags: ["郊区", "城市"],
-        thumbnail: "/info/thumbnail/thumbnail.png"
+        thumbnail: "/info/thumbnail/thumbnail.png",
+        count: "",
+        area: ""
     }, {
+        id: "2",
+        showStatus: 1,
         url: "https://mapservice.tdtah.cn/server1/rest/services/rootline/MapServer",
-        layers: [0],
+        layerIndex: 0,
         name: "rootline",
         type: "Feature Layer",
         description: "这是一个图层描述",
         tags: ["水体", "郊区", "道路"],
-        thumbnail: "/info/thumbnail/thumbnail.png"
+        thumbnail: "/info/thumbnail/thumbnail.png",
+        count: "",
+        area: ""
     }, {
+        id: "3",
+        showStatus: 0,
         url: "https://mapservice.tdtah.cn/server1/rest/services/Water07/MapServer",
-        layers: [0],
+        layerIndex: 0,
         name: "水体202007",
         type: "Feature Layer",
         description: "",
         tags: ["水体", "郊区"],
-        thumbnail: "/info/thumbnail/thumbnail.png"
+        thumbnail: "/info/thumbnail/thumbnail.png",
+        count: "",
+        area: ""
     }, {
+        id: "4",
         url: "https://mapservice.tdtah.cn/server1/rest/services/HF2012/MapServer",
-        layers: [0],
+        layerIndex: 0,
         name: "范围2000",
         type: "Feature Layer",
         description: "",
         tags: ["城市", "建筑"],
-        thumbnail: "/info/thumbnail/thumbnail.png"
+        thumbnail: "/info/thumbnail/thumbnail.png",
+        count: "",
+        area: ""
     }, {
+        id: "5",
         url: "https://mapservice.tdtah.cn/server1/rest/services/AHSZJZ/MapServer",
-        layers: [0],
+        layerIndex: 0,
         name: "1万图幅号",
         type: "Feature Layer",
         description: "",
         tags: ["城市", "建筑"],
-        thumbnail: "/info/thumbnail/thumbnail.png"
+        thumbnail: "/info/thumbnail/thumbnail.png",
+        count: "",
+        area: ""
     }, {
+        id: "6",
         url: "https://mapservice.tdtah.cn/server1/rest/services/AHSZJZ/MapServer",
-        layers: [1],
+        layerIndex: [1],
         name: "县（安徽）",
         type: "Feature Layer",
         description: "",
         tags: ["城市", "建筑"],
-        thumbnail: "/info/thumbnail/thumbnail.png"
+        thumbnail: "/info/thumbnail/thumbnail.png",
+        count: "",
+        area: ""
     }, {
+        id: "7",
         url: "https://mapservice.tdtah.cn/server1/rest/services/AHSZJZ/MapServer",
-        layers: [2],
+        layerIndex: [2],
         name: "市（安徽）",
         type: "Feature Layer",
         description: "",
         tags: ["城市", "建筑"],
-        thumbnail: "/info/thumbnail/thumbnail.png"
+        thumbnail: "/info/thumbnail/thumbnail.png",
+        count: "",
+        area: "",
+        area: ""
     }],
 
     mapOptions: {

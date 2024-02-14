@@ -1,5 +1,3 @@
-
-
 // 实例化使用
 const sfs = new Map(config.mapOptions)
 const map = sfs.map
@@ -22,7 +20,6 @@ let terrain = L.layerGroup([mapC, mapC_T]);
 var layerGroup = L.layerGroup().addTo(map);
 var addedLayers = {};//自定义存储已添加的图层
 
-
 loadBaseMap(satellite);// 加载底图
 loadMapLayers()//加载图层
 initEvent()// 首屏页面的事件注册
@@ -36,25 +33,117 @@ function loadBaseMap(layer) {
 }
 
 //加载图层html模板
-function loadMapLayers() {
-    $(".layer_wrap").html(template('layers-html', config))
+async function loadMapLayers() {
+    $(".layer_wrap").append(template('layers-html', config))
+    let activeLayerList = utils.getShowLayerList()
+    $('.layer_seatch_input').attr('placeholder', `共加载${activeLayerList.length}个图层`)
+    for (var i = 0; i < activeLayerList.length; i++) {
+        // 使用 await 等待获取数量结果
+        let data = await utils.getMapInfo(activeLayerList[i].url + '/' + activeLayerList[i].layerIndex);
+        $('.layer_count:eq(' + i + ')').html("地块数量:<b>" + data.count + '</b>')
+        $('.layer_area:eq(' + i + ')').html("图层面积:<b>" + data.totalArea + '</b>')
+    }
 }
+
+// 搜索功能
+$(".search_btn").click(function () {
+    var keyword = $(".layer_seatch_input").val().trim();
+    if (!keyword) {
+        $('.empty_search_list').hide()
+        $('.layer_item').show()
+    } else {
+        // 模糊搜索
+        const filteredNames = [];
+        utils.getShowLayerList().map(function (layer) {
+            if (layer.name.indexOf(keyword) >= 0) {
+                filteredNames.push(layer.id)
+            }
+        });
+        if (filteredNames.length == 0) {
+            $('.empty_search_list').show()
+            $('.layer_item').hide()
+        } else {
+            // 更新图层列表
+            $('.layer_item').each(function (item) {
+                var dom = $('.layer_item:eq(' + item + ')')
+                var id = dom.attr('data-id')
+                if (filteredNames.indexOf(id) == -1) {
+                    dom.hide()
+                }
+            })
+        }
+    }
+    const visibleDivCount = $(".layer_item").not(":hidden").length;
+    $('.layer_seatch_input').attr('placeholder', `共加载${visibleDivCount}个图层`)
+
+});
+// 添加键盘事件
+$(".layer_seatch_input").keydown(function (event) {
+    if (event.keyCode === 13) {
+        // 执行搜索功能
+        $(".search_btn").click();
+    }
+});
 
 // 绑定change事件  切换图层的显示和隐藏
 $('.layer_switch input[type="checkbox"]').on('click', function () {
 
     let index = $(this).parent().parent().attr('data-index')
-    let url = config.layerList[index].url + '/' + config.layerList[index].layers[0]
+    let url = config.layerList[index].url + '/' + config.layerList[index].layerIndex + '/query'
 
     if ($(this).prop('checked')) {
         // 添加图层到layerGroup
-        let selectLayer = L.esri.featureLayer({ url: url }).addTo(layerGroup);
-        selectLayer.bindPopup(function (layer) {
-            return L.Util.template(
-                template('popupForm', layer.feature.properties),
-                layer.feature.properties
-            );
+        let selectLayer = L.esri.featureLayer({
+            url: url,
+            simplifyFactor: 0.35,
+            precision: 5,
+        }).addTo(layerGroup);
+
+        //点击出现弹窗
+        // selectLayer.bindPopup(function (layer) {
+        //     return L.Util.template(
+        //         template('popupForm', layer.feature.properties),
+        //         layer.feature.properties
+        //     );
+        // });
+
+        //获取图层的源数据
+        // selectLayer.metadata(function (error, metadata) {
+        //     console.log(metadata);
+        // });
+
+        //查询图层的边界
+        // selectLayer.query().bounds(function (error, latlngbounds) {
+        //     if (error) {
+        //         console.log('Error running "Query" operation: ' + error);
+        //     }
+        //     map.fitBounds(latlngbounds);
+        // });
+
+        //查询要素的数量
+        selectLayer.query().run(function (error, featureCollection) {
+            // 4. 统计要素数量
+            var count = featureCollection.features.length;
+            console.log('图层地块数量:', count);
         });
+
+
+
+
+        //鼠标滑过图层  样式发生变化
+        // let oldId;
+        // selectLayer.on("mouseout", function (e) {
+        //     selectLayer.resetStyle(oldId);
+        // });
+        // selectLayer.on("mouseover", function (e) {
+        //     oldId = e.layer.feature.id;
+        //     selectLayer.setFeatureStyle(e.layer.feature.id, {
+        //         color: "red",
+        //         weight: 3,
+        //         opacity: 1
+        //     });
+        // });
+
         addedLayers[index] = selectLayer; // 存储图层
     } else {
         // 从layerGroup中查找并删除图层
