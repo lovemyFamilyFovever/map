@@ -376,6 +376,7 @@ a:hover {
     overflow: hidden;
     box-shadow: 0 2px 6px rgb(0 0 0 / 31%);
     width: 520px;
+    position: relative;
 }
 
 .layer_content_close {
@@ -608,4 +609,25 @@ p.layer_desc {
     font-weight: bolder;
     padding-top: 15px;
     padding-right: 15px;
+}
+
+/* 自定义表格 */
+.table-content {
+    background: #eff3fc;
+    padding: 15px 10px;
+    border-radius: 11px;
+    position: relative;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 33%);
+}
+
+.table-content .title {
+    font-size: 20px;
+    line-height: 30px;
+    font-weight: bolder;
+}
+
+.table-content-close {
+    position: absolute;
+    right: 20px;
+    top: 14px;
 }

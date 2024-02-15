@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>地图演示系统</title>
-    <link rel="stylesheet" href="libs/tabulator-tables@5.6.0/tabulator.min.css">
+    <link rel="stylesheet" href="libs/tabulator-tables@5.6.0/tabulator_bootstrap5.min.css">
     <link rel="stylesheet" href="libs/leaflet@1.7.1/leaflet.css">
     <link rel="stylesheet" href="libs/LeafletMeasure/leaflet-geoman.css" />
     <link rel="stylesheet" href="libs/mdui-v1.0.2/css/mdui.min.css">
@@ -62,58 +62,8 @@
 
             <div class="table-content" style="display: none;">
                 <div class="title">统计表</div>
-                <i class="mdui-icon material-icons">close</i>
-                <div class="mdui-table-fluid">
-                    <table class="mdui-table mdui-table-hoverable">
-                        <thead>
-                            <tr>
-                                <th>序号</th>
-                                <th>名称</th>
-                                <th>面积(m²)</th>
-                                <th>属性</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>A区</td>
-                                <td>4019.2</td>
-                                <td>居民用地</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>B区</td>
-                                <td>1544.2</td>
-                                <td>商业用地</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>C区</td>
-                                <td>52.59</td>
-                                <td>建筑用地</td>
-                            </tr>
-                            <tr>
-                                <td>4</td>
-                                <td>D区</td>
-                                <td>45.32</td>
-                                <td>建筑用地</td>
-                            </tr>
-                            <tr>
-                                <td>5</td>
-                                <td>E区</td>
-                                <td>145.5</td>
-                                <td>居民用地</td>
-                            </tr>
-                            <tr>
-                                <td>6</td>
-                                <td>F区</td>
-                                <td>1370</td>
-                                <td>商业用地</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
+                <div class="table-content-close"><img src="imgs/close.svg" alt=""></div>
+                <div id="table-statistic"></div>
             </div>
             <div class="statistics-content" style="display: none;">
                 <div class="title"></div>
@@ -195,6 +145,7 @@
             </div>
         </div>
     </script>
+
 </body>
 
 <script src="libs/jquery/jquery_3.0.0.js"></script>
@@ -207,6 +158,9 @@
 <script src="libs/leaflet@1.7.1/leaflet.js"></script>
 <script src="libs/esri-leaflet/esri-leaflet-2.5.0.js"></script>
 <script src="libs/LeafletMeasure/leaflet-geoman.min.js"></script>
+
+<!-- 定制化表格展示 -->
+<script src="js/mapTable_shidi.js"></script>
 
 <script src="js/config.js"></script>
 <script src="js/map.js"></script>

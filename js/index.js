@@ -87,7 +87,6 @@ $(".layer_seatch_input").keydown(function (event) {
 
 // 绑定change事件  切换图层的显示和隐藏
 $('.layer_switch input[type="checkbox"]').on('click', function () {
-
     let index = $(this).parent().parent().attr('data-index')
     let url = config.layerList[index].url + '/' + config.layerList[index].layerIndex + '/query'
 
@@ -108,9 +107,9 @@ $('.layer_switch input[type="checkbox"]').on('click', function () {
         // });
 
         //获取图层的源数据
-        // selectLayer.metadata(function (error, metadata) {
-        //     console.log(metadata);
-        // });
+        selectLayer.metadata(function (error, metadata) {
+            console.log(metadata);
+        });
 
         //查询图层的边界
         // selectLayer.query().bounds(function (error, latlngbounds) {
@@ -120,11 +119,18 @@ $('.layer_switch input[type="checkbox"]').on('click', function () {
         //     map.fitBounds(latlngbounds);
         // });
 
+        let currentIndex = index;
         //查询要素的数量
-        selectLayer.query().run(function (error, featureCollection) {
+        selectLayer.query().run((error, featureCollection) => {
             // 4. 统计要素数量
             var count = featureCollection.features.length;
             console.log('图层地块数量:', count);
+            console.log(featureCollection);
+            //生产环境需要修改
+            if (currentIndex == 0) {
+                renderTableShidi(featureCollection)
+            }
+
         });
 
 
