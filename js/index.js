@@ -129,12 +129,10 @@ $('.layer_switch input[type="checkbox"]').on('click', function () {
             //生产环境需要修改
             if (currentIndex == 0) {
                 renderTableShidi(featureCollection)
+                $('.statistics-content').show()
             }
 
         });
-
-
-
 
         //鼠标滑过图层  样式发生变化
         // let oldId;

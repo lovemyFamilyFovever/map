@@ -75,5 +75,5 @@ option && myChart.setOption(option);
 
 
 $('.echart-content-close').on('click', function () {
-    $('.echart-content').hide()
+    $('.statistics-content').hide()
 })
