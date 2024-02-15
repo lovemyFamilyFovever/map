@@ -59,21 +59,19 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <div class="table-content" style="display: none;">
-                <div class="title">统计表</div>
-                <div class="table-content-close"><img src="imgs/close.svg" alt=""></div>
-                <div id="table-statistic"></div>
-            </div>
+    <div class="bottom-tool">
+        <div class="bottom_statistic_content">
+            <div class="table-content" style="display: none;"></div>
             <div class="statistics-content" style="display: none;">
                 <div class="title"></div>
-                <i class="mdui-icon material-icons">close</i>
-                <div class="mdui-table-fluid">
-                    <div id="main-echart" style="width: 470px;height:460px;"></div>
+                <div class="echart-content-close"><img src="imgs/close.svg" alt=""></div>
+                <div class="echart-content" id="main-echart" style="width: 620px;height:652px;">
                 </div>
             </div>
         </div>
-
     </div>
 
     <div class="located_btn tool_btn" mdui-tooltip="{content: '定位您的位置', position: 'left'}">
@@ -160,7 +158,13 @@
 <script src="libs/LeafletMeasure/leaflet-geoman.min.js"></script>
 
 <!-- 定制化表格展示 -->
-<script src="js/mapTable_shidi.js"></script>
+<script src="js/table/mapTable_shidi.js"></script>
+<script src="libs/tabulator-tables@5.6.0/xlsx.full.min.js"></script>
+<script src="libs/tabulator-tables@5.6.0/jspdf.umd.min.js"></script>
+<script src="libs/tabulator-tables@5.6.0/jspdf.plugin.autotable.min.js"></script>
+
+<!-- 定制化图标展示 -->
+<script src="js/table/echart_shidi.js"></script>
 
 <script src="js/config.js"></script>
 <script src="js/map.js"></script>

@@ -63,6 +63,7 @@ var config = {
         area: ""
     }, {
         id: "4",
+        showStatus: 0,
         url: "https://mapservice.tdtah.cn/server1/rest/services/HF2012/MapServer",
         layerIndex: 0,
         name: "范围2000",

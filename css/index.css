@@ -360,7 +360,8 @@ a:hover {
 }
 
 .layer_title {
-    font-size: 20px;
+    font-size: 18px;
+    font-weight: bolder;
     padding-bottom: 15px;
     margin: 20px 20px 10px 20px;
     border-bottom: 1px solid #f7f2f2;
@@ -375,7 +376,7 @@ a:hover {
     padding-bottom: 10px;
     overflow: hidden;
     box-shadow: 0 2px 6px rgb(0 0 0 / 31%);
-    width: 520px;
+    width: 430px;
     position: relative;
 }
 
@@ -396,7 +397,7 @@ a:hover {
     display: flex;
     position: relative;
     gap: 14px;
-    height: 120px;
+    height: 110px;
     padding: 15px;
     margin-bottom: 10px;
     border: 1px solid #efEfef;
@@ -415,8 +416,8 @@ a:hover {
 }
 
 .layer_thumbnail img {
-    width: 80px;
-    height: 80px;
+    width: 70px;
+    height: 70px;
     display: inline-block;
     object-fit: cover;
     border-radius: 5px;
@@ -448,7 +449,7 @@ p.layer_name {
 
 p.layer_desc {
     margin: 10px 0;
-    width: 358px;
+    width: 280px;
     height: 50px;
     color: #8b9ca8;
     display: -webkit-box;
@@ -466,6 +467,7 @@ p.layer_desc {
     text-align: center;
     color: #8b9ca8;
     font-weight: bolder;
+    font-size: 12px;
 }
 
 .layer_tags {
@@ -612,22 +614,207 @@ p.layer_desc {
 }
 
 /* 自定义表格 */
+.bottom-tool {
+    position: absolute;
+    bottom: 10px;
+    z-index: 1005;
+    left: 550px;
+}
+
 .table-content {
-    background: #eff3fc;
     padding: 15px 10px;
-    border-radius: 11px;
     position: relative;
-    box-shadow: 0 2px 6px rgb(0 0 0 / 33%);
+    background: #ffffff;
+    border-radius: 10px;
+    font-size: 13px;
+    padding-bottom: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 31%);
 }
 
 .table-content .title {
-    font-size: 20px;
-    line-height: 30px;
+    font-size: 18px;
     font-weight: bolder;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f7f2f2;
+    border-radius: 10px 10px 0 0;
 }
 
 .table-content-close {
     position: absolute;
     right: 20px;
-    top: 14px;
+    top: 15px;
+    cursor: pointer;
+}
+
+
+.table_download_btn {
+    position: absolute;
+    right: 5px;
+    top: 10px;
+    cursor: pointer;
+    display: flex;
+    border-radius: 6px;
+    border-radius: 5px;
+    background: #f1f3f6;
+    padding: 0 14px;
+    line-height: 35px;
+    font-size: 15px;
+    gap: 10px;
+}
+
+.table_download_btn:hover {
+    background: aliceblue;
+}
+
+#table-statistic {
+    padding-top: 10px;
+}
+
+.select_group {
+    line-height: 40px;
+    font-size: 15px;
+}
+
+.select_group select {
+    border: 1px solid #d1d5db;
+    padding: 0px 10px;
+    border-radius: 5px;
+}
+
+div#shidi-table {
+    border-radius: 10px;
+}
+
+.tabulator-row.tabulator-row-even {
+    background-color: #edf6fd;
+}
+
+.tabulator-row {
+    border-bottom: 1px solid #edf6fd;
+}
+
+.tabulator .tabulator-footer {
+    background: #fff;
+    border-top: none;
+}
+
+.tabulator .tabulator-tableholder {
+    border-radius: 10px;
+    /* border: 1px solid #eee; */
+}
+
+.tabulator .tabulator-header {
+    border-bottom: none;
+    border-top: none;
+}
+
+.tabulator .tabulator-footer .tabulator-page[data-page="first"],
+.tabulator .tabulator-footer .tabulator-page[data-page="last"] {
+    display: none;
+}
+
+.dropdown_list {
+    display: none;
+    position: absolute;
+    right: 13px;
+    top: 40px;
+    margin-top: 10px;
+    z-index: 1;
+    background: #ffffff;
+    padding: 10px;
+    border-radius: 10px;
+    line-height: 40px;
+    cursor: pointer;
+    transition: height .3s ease-in-out;
+    box-shadow: 0 3px 11px rgba(25, 40, 81, 31%);
+}
+
+.dropdown_list li:hover {
+    background: #f1f5f8;
+}
+
+.dropdown_list li {
+    font-size: 14px;
+    padding: 0 20px;
+    border-radius: 3px;
+}
+
+.table_search {
+    display: flex;
+    line-height: 35px;
+    font-size: 14px;
+    margin: 8px 0;
+    justify-content: space-between;
+    position: relative;
+}
+
+.table_search img {
+    position: absolute;
+    left: 10px;
+    top: 8px;
+}
+
+.table_tools_panel {
+    position: relative;
+    display: flex;
+}
+
+.table_seatch_input {
+    background: #f1f3f6;
+    border: none;
+    width: calc(100% - 100px);
+    border-radius: 5px;
+    margin-right: 10px;
+    padding-left: 40px;
+    overflow: hidden;
+}
+
+.table_search_btn {
+    background: #327CFF;
+    color: #fff;
+    width: 80px;
+    text-align: center;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.table_seatch_input:focus {
+    outline: none;
+}
+
+.updown_svg {
+    display: none;
+}
+
+.statistics-content {
+    padding: 15px 10px;
+    position: relative;
+    background: #ffffff;
+    border-radius: 10px;
+    font-size: 13px;
+    padding-bottom: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 31%);
+}
+
+.bottom_statistic_content {
+    display: flex;
+    gap: 50px;
+}
+
+/* echart 样式 */
+.statistics-content .title {
+    font-size: 18px;
+    font-weight: bolder;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f7f2f2;
+    border-radius: 10px 10px 0 0;
+}
+
+.echart-content-close {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    cursor: pointer;
 }

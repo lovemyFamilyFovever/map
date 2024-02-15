@@ -1,36 +1,36 @@
 
 // map.js
 const getMapModule = (function () {
-    class Map {
+    class MapObj {
         constructor(options) {
-            this.map = null;
+            this.mapObj = null;
             this.options = this.getMergedOptions(options);
             this.initMap()
         }
         initMap() {
             // 创建地图
-            this.map = L.map("map", config.mapOptions).setView(config.center);
+            this.mapObj = L.map("map", config.mapOptions).setView(config.center);
             // 添加控件
             this.addControls();
         }
         addControls() {
             if (this.options.zoomControl) {
                 // 添加缩放控件
-                L.control.zoom({ position: 'bottomright' }).addTo(this.map);
+                L.control.zoom({ position: 'bottomright' }).addTo(this.mapObj);
             }
             if (this.options.scaleControl) {
                 // 添加比例尺控件 
-                L.control.scale().addTo(this.map);
+                L.control.scale().addTo(this.mapObj);
             }
             if (this.options.toolListControl) {
                 // 添加绘制控件 初始化右上角绘制测量工具栏
-                this.map.pm.addControls({
+                this.mapObj.pm.addControls({
                     position: 'topright',
                     drawCircleMarker: false,
                     rotateMode: false,
                 });
                 // 设置语言
-                this.map.pm.setLang('zh');
+                this.mapObj.pm.setLang('zh');
                 //修改右上角工具栏的默认属性
                 this.initTooltips();
             }
@@ -60,15 +60,15 @@ const getMapModule = (function () {
         }
 
         getMap() {
-            return this.map
+            return this.mapObj
         }
     }
 
     return {
-        Map: Map
+        MapObj: MapObj
     };
 
 })();
 
 // 获取 Map 类
-const Map = getMapModule.Map;
+const MapObj = getMapModule.MapObj;
