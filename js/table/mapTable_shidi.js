@@ -12,26 +12,23 @@ function renderTableShidi(data) {
 
     var table = new Tabulator("#shidi-table", {
         data: arr,
-        height: "535px",
+        height: "415px",
         layout: "fitData",
         pagination: true,
         paginationSize: 10,
-
-        pagination: "local",
-        langs: {
-            'zh-cn': {
-                "pagination": {
-                    "prev": "<",
-                    "next": ">",
-                },
-            }
+        rowHeight: 30,
+        columnDefaults: {
+            hozAlign: 'center',
+            vertAlign: "center",
+            padding: 0,
+            headerHozAlign: 'center',
         },
         columns: [
-            { title: "ID", field: "FID", width: 80 },
-            { title: "标题", field: "NAME", width: 200 },
-            { title: "类型", field: "TYPE", width: 100, hozAlign: "left", },
-            { title: "EC", field: "EC", width: 100 },
-            { title: "GB", field: "GB", hozAlign: "center" },
+            { title: "ID", field: "FID", width: 80, },
+            { title: "标题", field: "NAME", width: 200, },
+            { title: "类型", field: "TYPE", width: 100, },
+            { title: "EC", field: "EC", width: 100, },
+            { title: "GB", field: "GB", },
         ],
     });
     $('.table-content').show()
@@ -78,6 +75,7 @@ function renderTableShidi(data) {
         $('.dropdown_list').hide()
     })
 
+    //搜索功能
     $('.table_search_btn').on('click', function () {
         var value = $('.table_seatch_input').val()
         if (value.trim() !== "")

@@ -389,8 +389,8 @@ a:hover {
 
 .layer_wrap {
     padding: 0px 10px;
-    max-height: 800px;
-    overflow: scroll;
+    max-height: 80vh;
+    overflow-y: scroll;
 }
 
 .layer_item {
@@ -429,6 +429,7 @@ a:hover {
     line-height: 25px;
     display: flex;
     flex-direction: column;
+    width: calc(100% - 92px);
 }
 
 .layer_info p {
@@ -467,7 +468,7 @@ p.layer_desc {
     text-align: center;
     color: #8b9ca8;
     font-weight: bolder;
-    font-size: 12px;
+    font-size: 10px;
 }
 
 .layer_tags {
@@ -635,7 +636,7 @@ p.layer_desc {
 .table-content .title {
     font-size: 18px;
     font-weight: bolder;
-    padding-bottom: 10px;
+    padding-bottom: 5px;
     border-bottom: 1px solid #f7f2f2;
     border-radius: 10px 10px 0 0;
 }
@@ -668,7 +669,7 @@ p.layer_desc {
 }
 
 #table-statistic {
-    padding-top: 10px;
+    /* padding-top: 10px; */
 }
 
 .select_group {
@@ -692,6 +693,13 @@ div#shidi-table {
 
 .tabulator-row {
     border-bottom: 1px solid #edf6fd;
+    min-height: 30px;
+    line-height: 30px;
+    font-size: 14px;
+}
+
+.tabulator-row .tabulator-cell {
+    padding: 0;
 }
 
 .tabulator .tabulator-footer {
@@ -744,7 +752,7 @@ div#shidi-table {
     display: flex;
     line-height: 35px;
     font-size: 14px;
-    margin: 8px 0;
+    margin: 5px 0;
     justify-content: space-between;
     position: relative;
 }
