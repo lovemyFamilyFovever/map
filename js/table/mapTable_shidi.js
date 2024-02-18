@@ -12,11 +12,11 @@ function renderTableShidi(data) {
 
     var table = new Tabulator("#shidi-table", {
         data: arr,
-        height: "415px",
+        height: "365px",
         layout: "fitData",
         pagination: true,
         paginationSize: 10,
-        rowHeight: 30,
+        rowHeight: 27,
         columnDefaults: {
             hozAlign: 'center',
             vertAlign: "center",
