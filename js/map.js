@@ -32,6 +32,28 @@ const getMapModule = (function () {
                 // 设置语言
                 this.mapObj.pm.setLang('zh');
             }
+            if (this.options.mousemoveLatlng) {
+
+                // 定义一个变量存储坐标信息
+                var coords = L.control();
+                // 添加一个div来显示坐标  
+                coords.onAdd = function () {
+                    let _this = this;
+                    _this._div = L.DomUtil.create('div', 'coords');
+                    return _this._div;
+                };
+                coords.update = function (evt) {
+                    coords._div.innerHTML =
+                        '经度:' + evt.latlng.lng + '<br>' +
+                        '纬度:' + evt.latlng.lat;
+                };
+
+                this.mapObj.on('mousemove', coords.update);
+
+                // 添加控件到地图
+                coords.addTo(this.mapObj)
+                coords.setPosition('bottomleft')
+            }
         }
 
         getMergedOptions(options) {
@@ -43,7 +65,9 @@ const getMapModule = (function () {
             return $.extend({}, defaultOptions, options);
         }
 
-        getMap() {
+        get
+
+            getMap() {
             return this.mapObj
         }
     }

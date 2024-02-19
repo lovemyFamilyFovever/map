@@ -118,6 +118,7 @@ var config = {
         scaleControl: true,//是否启用比例尺控件 
         toolListControl: true, //是否启用地图测量工具
         initTooltips: true,//是否初始化右上角的工具栏
+        mousemoveLatlng: true,//是否显示鼠标滑动的坐标
     },
     center: [33.523079, 116.477051],
 
