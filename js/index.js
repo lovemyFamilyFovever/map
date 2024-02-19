@@ -126,7 +126,7 @@ $('.layer_switch input[type="checkbox"]').on('click', function () {
         //查询要素的数量
         selectLayer.query().run((error, featureCollection) => {
             // 4. 统计要素数量
-            if (featureCollection.features)
+            if (featureCollection)
                 var count = featureCollection.features.length;
             console.log('图层地块数量:', count);
             console.log(featureCollection);

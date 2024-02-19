@@ -103,17 +103,17 @@ function getHeadHtml() {
         </div>
         <div class="table_download_btn">
             <img src="imgs/download.svg" />
-            <div class="table_download_text">导出表格</div>
+            <div class="table_download_text">下载</div>
             <img src="imgs/dropdown.svg" class="dropdown_svg" />
             <img src="imgs/updown.svg" class="updown_svg" />
         </div>
         <div class="dropdown_list">
             <ul>
-                <li class="download-csv">导出csv</li>
-                <li class="download-json">导出json</li>
-                <li class="download-xlsx">导出XLSX</li>
-                <li class="download-pdf">导出PDF</li>
-                <li class="download-html">导出HTML</li>
+                <li class="download-csv">下载csv</li>
+                <li class="download-json">下载json</li>
+                <li class="download-xlsx">下载XLSX</li>
+                <li class="download-pdf">下载PDF</li>
+                <li class="download-html">下载HTML</li>
             </ul>
         </div>
     </div>

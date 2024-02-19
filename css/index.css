@@ -64,12 +64,12 @@ a:hover {
 
 .located_btn {
     right: 10px;
-    bottom: 190px;
+    bottom: 170px;
 }
 
 .baselayer_btn {
     right: 10px;
-    bottom: 130px;
+    bottom: 110px;
 }
 
 .leaflet-touch .leaflet-bar a:first-child {
@@ -270,8 +270,9 @@ a:hover {
     width: 500px;
 }
 
-.leaflet-bottom {
-    bottom: 20px;
+.leaflet-bottom .leaflet-control {
+    margin-left: 5px;
+    margin-bottom: 15px;
 }
 
 /* 重写Leaflet-Geoman的css样式 */
@@ -382,7 +383,7 @@ a:hover {
 
 .layer_wrap {
     padding: 0px 10px;
-    max-height: 80vh;
+    max-height: 78vh;
     position: relative;
 }
 
@@ -611,7 +612,7 @@ p.layer_desc {
 .right-tool {
     position: absolute;
     top: 10px;
-    z-index: 1005;
+    z-index: 999;
     right: 70px;
 }
 
