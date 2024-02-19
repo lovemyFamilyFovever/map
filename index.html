@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>地图演示系统</title>
     <link rel="stylesheet" href="libs/tabulator-tables@5.6.0/tabulator_bootstrap5.min.css">
+    <link rel="stylesheet" href="libs/perfectScrollbar/perfect-scrollbar.css">
     <link rel="stylesheet" href="libs/leaflet@1.7.1/leaflet.css">
     <link rel="stylesheet" href="libs/LeafletMeasure/leaflet-geoman.css" />
     <link rel="stylesheet" href="css/index.css">
@@ -18,24 +19,24 @@
     </div>
     <div id="map"></div>
 
-    <div class="right-tool">
-        <div class="right-tool-title">
+    <div class="left-tool">
+        <div class="left-tool-title">
 
             <!-- 加载图层 -->
-            <div class="right-tool-item switchmlayer-container" title="加载图层" onclick="  $('.layer_content').toggle()">
+            <div class="left-tool-item switchmlayer-container" title="加载图层" onclick="  $('.layer_content').toggle()">
                 <img src="imgs/more.png" alt="">
             </div>
             <!-- 统计图 -->
-            <div class="right-tool-item statistics-container" title="统计图">
+            <div class="left-tool-item statistics-container" title="统计图">
                 <img src="imgs/statistics.png" alt="">
             </div>
             <!-- 统计表 -->
-            <div class="right-tool-item table-container" title="统计表">
+            <div class="left-tool-item table-container" title="统计表">
                 <img src="imgs/table.png" alt="">
             </div>
         </div>
 
-        <div class="right-tool-content">
+        <div class="left-tool-content">
 
             <!-- 图层容器 -->
             <div class="layer_content">
@@ -60,13 +61,13 @@
         </div>
     </div>
 
-    <div class="bottom-tool">
-        <div class="bottom_statistic_content">
+    <div class="right-tool">
+        <div class="right_statistic_content">
             <div class="table-content" style="display: none;"></div>
             <div class="statistics-content" style="display: none;">
                 <div class="title"></div>
                 <div class="echart-content-close"><img src="imgs/close.svg" alt=""></div>
-                <div class="echart-content" id="main-echart" style="width: 520px;height:395px;">
+                <div class="echart-content" id="main-echart" style="width: 380px;height:390px;">
                 </div>
             </div>
         </div>
@@ -147,6 +148,7 @@
 <script src="libs/template@4.8/template.js"></script>
 <script src="libs/tabulator-tables@5.6.0/tabulator.min.js"></script>
 <script src="libs/echart/echarts.min.js"></script>
+<script src="libs/perfectScrollbar/perfect-scrollbar.js"></script>
 
 <!-- 加载leaflet.esri插件 -->
 <script src="libs/leaflet@1.7.1/leaflet.js"></script>

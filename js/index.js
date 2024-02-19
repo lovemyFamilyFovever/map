@@ -43,6 +43,9 @@ async function loadMapLayers() {
         $('.layer_count:eq(' + i + ')').html("地块数量:<b>" + data.count + '</b>')
         $('.layer_area:eq(' + i + ')').html("图层面积:<b>" + data.totalArea + '</b>')
     }
+
+    //格式化滚动条
+    new PerfectScrollbar('.layer_wrap');
 }
 
 // 搜索功能
@@ -123,7 +126,8 @@ $('.layer_switch input[type="checkbox"]').on('click', function () {
         //查询要素的数量
         selectLayer.query().run((error, featureCollection) => {
             // 4. 统计要素数量
-            var count = featureCollection.features.length;
+            if (featureCollection.features)
+                var count = featureCollection.features.length;
             console.log('图层地块数量:', count);
             console.log(featureCollection);
             //生产环境需要修改
@@ -159,7 +163,6 @@ $('.layer_switch input[type="checkbox"]').on('click', function () {
     }
 });
 
-
 // 首屏页面的事件注册
 function initEvent() {
     // 添加定位按钮点击事件
@@ -193,7 +196,8 @@ function initEvent() {
 
     //统计表 展开悬浮窗
     $('.table-container').on('click', function () {
-        $('.table-content').toggle()
+        if ($('.table-content').children().length !== 0)
+            $('.table-content').toggle()
     })
 
     //统计图 展开悬浮窗

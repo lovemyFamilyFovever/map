@@ -9,10 +9,11 @@ function renderTableShidi(data) {
     data.features.forEach(item => {
         arr.push(item.properties)
     })
+    $('.table_statistic_data').html(`总计${arr.length}条数据`)
 
     var table = new Tabulator("#shidi-table", {
         data: arr,
-        height: "365px",
+        height: "360px",
         layout: "fitData",
         pagination: true,
         paginationSize: 10,
@@ -32,6 +33,11 @@ function renderTableShidi(data) {
         ],
     });
     $('.table-content').show()
+    //当调用tabulator构造函数并且表已完成渲染时，触发tableBuilt事件,渲染滚动条
+    table.on("tableBuilt", function () {
+        new PerfectScrollbar('.tabulator-tableholder');
+    });
+
 
     //隐藏表格
     $('.table-content-close').on('click', function () {
@@ -113,6 +119,7 @@ function getHeadHtml() {
     </div>
     <div id="table-statistic">
         <div id="shidi-table"></div>
+        <div class="table_statistic_data"></div>
     </div>`
 
 }
