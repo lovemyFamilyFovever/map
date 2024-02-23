@@ -494,7 +494,7 @@ p.layer_desc {
 
 .layer_switch {
     position: absolute;
-    right: 20px;
+    right: 10px;
 }
 
 .switch {
@@ -627,14 +627,6 @@ p.layer_desc {
 
 .table-content .title {
     margin-left: 0;
-}
-
-
-.table-content-close {
-    position: absolute;
-    right: 20px;
-    top: 15px;
-    cursor: pointer;
 }
 
 .table_download_btn {
@@ -843,9 +835,50 @@ p.layer_desc {
     color: rgb(0 147 255);
 }
 
-.echart-content-close {
+.layer_content_close, .echart-content-close, .table-content-close {
     position: absolute;
     right: 20px;
     top: 15px;
     cursor: pointer;
+}
+
+.echart_tools {
+    display: flex;
+    justify-content: space-between;
+}
+
+.echart_download {
+    cursor: pointer;
+    display: flex;
+    border-radius: 5px;
+    background: #f1f3f6;
+    padding: 0 10px;
+    font-weight: bolder;
+    line-height: 30px;
+    height: 30px;
+    font-size: 13px;
+    gap: 7px;
+    align-items: center;
+}
+
+.echart_type .active {
+    border: 1px solid red;
+}
+
+.echart_type img {
+    margin: 0 2px;
+    padding: 2px;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    box-sizing: border-box;
+}
+
+.echart_type {
+    margin-left: 10px;
+}
+
+.echart_type img:hover {
+    filter: brightness(0.8);
+    border: 1px solid red;
 }

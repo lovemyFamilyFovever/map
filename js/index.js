@@ -18,7 +18,7 @@ const mapC_T = L.tileLayer(config["地形地图注记"], { subdomains: ["0", "1"
 let terrain = L.layerGroup([mapC, mapC_T]);
 
 var layerGroup = L.layerGroup().addTo(mapObj);
-var addedLayers = {};//自定义存储已添加的图层
+var addedLayers = [];//自定义存储已添加的图层
 
 loadBaseMap(satellite);// 加载底图
 loadMapLayers()//加载图层
@@ -101,6 +101,9 @@ $('.layer_switch input[type="checkbox"]').on('click', function () {
             precision: 5,
         }).addTo(layerGroup);
 
+        let leafletID = selectLayer._leaflet_id
+        addedLayers[index] = selectLayer; // 存储图层
+
         //点击出现弹窗
         // selectLayer.bindPopup(function (layer) {
         //     return L.Util.template(
@@ -135,8 +138,16 @@ $('.layer_switch input[type="checkbox"]').on('click', function () {
                 renderTableShidi(featureCollection)
                 $('.statistics-content').show()
             }
-
         });
+
+        // 使用 eachLayer 方法迭代所有图层
+        // selectLayer.eachLayer(function (layer) {
+        //     var markerCoord = layer.getLatLng();
+        //     if (markerCoord.lat === targetCoord[0] && markerCoord.lng === targetCoord[1]) {
+        //         // 高亮样式（可以根据需求修改）
+        //         layer.setIcon(L.divIcon({ className: 'highlighted-marker' }));
+        //     }
+        // });
 
         //鼠标滑过图层  样式发生变化
         // let oldId;
@@ -152,7 +163,7 @@ $('.layer_switch input[type="checkbox"]').on('click', function () {
         //     });
         // });
 
-        addedLayers[index] = selectLayer; // 存储图层
+
     } else {
         // 从layerGroup中查找并删除图层
         let layerToRemove = addedLayers[index];

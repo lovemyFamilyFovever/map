@@ -38,7 +38,6 @@ function renderTableShidi(data) {
         new PerfectScrollbar('.tabulator-tableholder');
     });
 
-
     //隐藏表格
     $('.table-content-close').on('click', function () {
         $('.table-content').hide()
