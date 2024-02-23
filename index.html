@@ -67,7 +67,18 @@
             <div class="statistics-content" style="display: none;">
                 <div class="title"></div>
                 <div class="echart-content-close"><img src="imgs/close.svg" alt=""></div>
-                <div class="echart-content" id="main-echart" style="width: 380px;height:390px;">
+                <div class="echart_tools">
+                    <div class="echart_type">
+                        <img src="imgs/pie.svg" alt="切换饼图" title="切换饼图" class="pie">
+                        <img src="imgs/line.svg" alt="切换折线图" title="切换折线图" class="line">
+                        <img src="imgs/bar.svg" alt="切换柱状图" title="切换柱状图" class="bar active">
+                    </div>
+                    <a class="echart_download" href="#">
+                        <img src="imgs/download.svg" alt="下载图表">
+                        <div class="echart_download_text">下载</div>
+                    </a>
+                </div>
+                <div class="echart-content" id="main-echart" style="width: 380px;height:360px;">
                 </div>
             </div>
         </div>
@@ -101,7 +112,7 @@
         {{each layerList as item i}}
 
         {{if item.showStatus!==0}} 
-            <div class="layer_item" data-id="{{item.id}}">
+            <div class="layer_item">
                 <div class="layer_thumbnail">
                     <img src={{item.url}}{{item.thumbnail}} alt="" class="thumbImg" />
                     <p class="layer_type" title="地块类型">{{item.type}}</p>
@@ -112,11 +123,6 @@
                         {{item.description}}
                     </p>
                     <div class="layer_info_line">
-                        <!-- <div class="layer_tags" title="地块标签">
-                            {{each item.tags as tag}}
-                            <label>{{tag}}</label>
-                            {{/each}}
-                        </div> -->
                         <div class="layer_count" title="地块数量">{{item.count}}</div>
                         <div class="layer_area" title="地块面积">{{item.area}}</div>
                     </div>
@@ -125,7 +131,7 @@
                             <input type="checkbox">
                             <span class="slider"></span>
                         </label>
-                    </div>
+                    </div>                    
                 </div>
             </div>
             {{/if}} 
@@ -147,7 +153,7 @@
 <script src="libs/jquery/jquery_3.0.0.js"></script>
 <script src="libs/template@4.8/template.js"></script>
 <script src="libs/tabulator-tables@5.6.0/tabulator.min.js"></script>
-<script src="libs/echart/echarts.min.js"></script>
+<script src="libs/echart/echarts.5.5.min.js"></script>
 <script src="libs/perfectScrollbar/perfect-scrollbar.js"></script>
 
 <!-- 加载leaflet.esri插件 -->
