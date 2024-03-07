@@ -107,35 +107,46 @@
         </div>
     </div>
 
+    <div class="modal-mask">
+        <div class="modal-dialog">
+            <div class="modal-title">提示</div>
+            <div class="modal-content">🚀 国内用户推荐访问国内镜像以获得极速体验～</div>
+            <div class="modal-btns">
+                <a class="modal-cancel-btn modal-btn">7 天内不再显示</a>
+                <a class="modal-confirm-btn modal-btn" href="https://ant-design.antgroup.com/components/overview-cn/">🚀
+                    立刻前往</a>
+            </div>
+        </div>
+    </div>
+
     <!-- 加载图层列表 -->
     <script id='layers-html' type='text/html'>
         {{each layerList as item i}}
-
-        {{if item.showStatus!==0}} 
-            <div class="layer_item">
-                <div class="layer_thumbnail">
-                    <img src={{item.url}}{{item.thumbnail}} alt="" class="thumbImg" />
-                    <p class="layer_type" title="地块类型">{{item.type}}</p>
-                </div>
-                <div class="layer_info">
-                    <p class="layer_name" title="地块名称">{{item.name}}</p>
-                    <p class="layer_desc" title="">
-                        {{item.description}}
-                    </p>
-                    <div class="layer_info_line">
-                        <div class="layer_count" title="地块数量">{{item.count}}</div>
-                        <div class="layer_area" title="地块面积">{{item.area}}</div>
+            {{if item.showStatus!==0}} 
+                <div class="layer_item">
+                    <div class="layer_thumbnail">
+                        <img src={{item.url}}{{item.thumbnail}} alt="" class="thumbImg" />
+                        <p class="layer_type" title="地块类型">{{item.type}}</p>
                     </div>
-                    <div class="layer_switch" data-index="{{i}}">
-                        <label class="switch">
-                            <input type="checkbox">
-                            <span class="slider"></span>
-                        </label>
-                    </div>                    
+                    <div class="layer_info">
+                        <p class="layer_name" title="地块名称">{{item.name}}</p>
+                        <p class="layer_desc" title="">
+                            {{item.description}}
+                        </p>
+                        <div class="layer_info_line">
+                            <div class="layer_count" title="地块数量">{{item.count}}</div>
+                            <div class="layer_area" title="地块面积">{{item.area}}</div>
+                        </div>
+                        <div class="layer_switch" data-index="{{i}}">
+                            <label class="switch">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                        </div>                    
+                    </div>
                 </div>
-            </div>
             {{/if}} 
-            {{/each}}
+        {{/each}}
     </script>
     <!-- 弹窗 -->
     <script id="popupForm" type="text/html">
