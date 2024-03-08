@@ -1,15 +1,16 @@
 //渲染指定图层的表格
-function renderTableShidi(data) {
-    const title = "湿地"
+function renderTableShidi(data, title) {
+
+    tableList
 
     $('.table-content').html(getHeadHtml())
-    $('.table-content .title').html(title + '统计表')
+    $('.table-content .title').html(title)
 
     let arr = []
     data.features.forEach(item => {
         arr.push(item.properties)
     })
-    $('.table_statistic_data').html(`总计${arr.length}条数据`)
+    $('.table_statistic_data').html(`共${arr.length}条数据`)
 
     var table = new Tabulator("#shidi-table", {
         data: arr,
@@ -37,6 +38,10 @@ function renderTableShidi(data) {
     table.on("tableBuilt", function () {
         new PerfectScrollbar('.tabulator-tableholder');
     });
+    // 当提示用户下载文件时，将触发downloadFull回调。
+    table.on("downloadComplete", function () {
+        $('.dropdown_list').hide()
+    });
 
     //隐藏表格
     $('.table-content-close').on('click', function () {
@@ -55,31 +60,35 @@ function renderTableShidi(data) {
         }
     })
 
-
-
     //文件下载
     $('.download-csv').on('click', function () {
-        table.download("csv", title + "统计表.csv", { bom: true });
-        $('.dropdown_list').hide()
+        showModal(title, function (name) {
+            table.download("csv", name + ".csv", { bom: true });
+        })
     })
+
     $('.download-json').on('click', function () {
-        table.download("json", title + "统计表.json");
-        $('.dropdown_list').hide()
+        showModal(title, function (name) {
+            table.download("json", name + ".json");
+        })
     })
     $('.download-xlsx').on('click', function () {
-        table.download("xlsx", title + "统计表.xlsx", { sheetName: "My Data" });
-        $('.dropdown_list').hide()
+        showModal(title, function (name) {
+            table.download("xlsx", name + ".xlsx", { sheetName: "My Data" });
+        })
     })
     $('.download-pdf').on('click', function () {
-        table.download("pdf", title + "统计表.pdf", {
-            orientation: "portrait", //set page orientation to portrait
-            title: "Example Report", //add title to report
-        });
-        $('.dropdown_list').hide()
+        showModal(title, function (name) {
+            table.download("pdf", name + ".pdf", {
+                orientation: "portrait", //set page orientation to portrait
+                title: "Example Report", //add title to report
+            });
+        })
     })
     $('.download-html').on('click', function () {
-        table.download("html", title + "统计表.html", { style: true });
-        $('.dropdown_list').hide()
+        showModal(title, function (name) {
+            table.download("html", name + ".html", { style: true });
+        })
     })
 
     //搜索功能
@@ -95,7 +104,7 @@ function renderTableShidi(data) {
 function getHeadHtml() {
     return `
     <div class="title"></div>
-    <div class="table-content-close"><img src="imgs/close.svg" alt=""></div>
+    <div class="table-content-close close_btn"><img src="imgs/close.svg" alt=""></div>
     <div class="table_tools_panel">
         <div class="table_search">
             <img src="imgs/search.svg" alt="">
@@ -119,8 +128,8 @@ function getHeadHtml() {
         </div>
     </div>
     <div id="table-statistic">
-        <div id="shidi-table"></div>
+        <div id="shidi-table">
+        </div>
         <div class="table_statistic_data"></div>
     </div>`
-
 }

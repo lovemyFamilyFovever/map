@@ -41,7 +41,7 @@
             <!-- 图层容器 -->
             <div class="layer_content">
                 <div class="layer_title">低效用地</div>
-                <div class="layer_content_close" onclick="$('.layer_content').hide()">
+                <div class="layer_content_close close_btn" onclick="$('.layer_content').hide()">
                     <img src="imgs/close.svg" alt="关闭" />
                 </div>
                 <div class="layer_tool">
@@ -63,10 +63,12 @@
 
     <div class="right-tool">
         <div class="right_statistic_content">
+
             <div class="table-content" style="display: none;"></div>
+
             <div class="statistics-content" style="display: none;">
                 <div class="title"></div>
-                <div class="echart-content-close"><img src="imgs/close.svg" alt=""></div>
+                <div class="echart-content-close close_btn"><img src="imgs/close.svg" alt=""></div>
                 <div class="echart_tools">
                     <div class="echart_type">
                         <img src="imgs/pie.svg" alt="切换饼图" title="切换饼图" class="pie">
@@ -109,15 +111,27 @@
 
     <div class="modal-mask">
         <div class="modal-dialog">
-            <div class="modal-title">提示</div>
-            <div class="modal-content">🚀 国内用户推荐访问国内镜像以获得极速体验～</div>
+            <div class="modal-title">
+                <img src="imgs/file.svg">设置下载文件名称
+                <div class="modal-dialog-close close_btn"><img src="imgs/close.svg" alt=""></div>
+            </div>
+            <div class="modal-content">
+                <input type="text" placeholder="" class="modal-input">
+            </div>
             <div class="modal-btns">
-                <a class="modal-cancel-btn modal-btn">7 天内不再显示</a>
-                <a class="modal-confirm-btn modal-btn" href="https://ant-design.antgroup.com/components/overview-cn/">🚀
-                    立刻前往</a>
+                <div class="addDate">
+                    <input type="checkbox" name="addDate" id="addDateCheckbox">
+                    <label id="lab" for="addDateCheckbox">添加日期</label>
+                </div>
+                <div class="modal-btn-group">
+                    <a class="modal-cancel-btn modal-btn">取消</a>
+                    <a class="modal-confirm-btn modal-btn">确定</a>
+                </div>
+
             </div>
         </div>
     </div>
+
 
     <!-- 加载图层列表 -->
     <script id='layers-html' type='text/html'>

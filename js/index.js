@@ -19,6 +19,7 @@ let terrain = L.layerGroup([mapC, mapC_T]);
 
 var layerGroup = L.layerGroup().addTo(mapObj);
 var addedLayers = [];//自定义存储已添加的图层
+var tableList = [];//自定义存储已加载的表格
 
 loadBaseMap(satellite);// 加载底图
 loadMapLayers()//加载图层
@@ -101,7 +102,6 @@ $('.layer_switch input[type="checkbox"]').on('click', function () {
             precision: 5,
         }).addTo(layerGroup);
 
-        let leafletID = selectLayer._leaflet_id
         addedLayers[index] = selectLayer; // 存储图层
 
         //点击出现弹窗
@@ -127,18 +127,20 @@ $('.layer_switch input[type="checkbox"]').on('click', function () {
 
         let currentIndex = index;
         //查询要素的数量
-        selectLayer.query().run((error, featureCollection) => {
-            // 4. 统计要素数量
-            if (featureCollection)
-                var count = featureCollection.features.length;
-            console.log('图层地块数量:', count);
-            console.log(featureCollection);
-            //生产环境需要修改
-            if (currentIndex == 0) {
-                renderTableShidi(featureCollection)
+        selectLayer.query()
+            .where("1=1")
+            .fields(config.layerList[index]["outFields"])
+            .run((error, featureCollection) => {
+                //统计要素数量
+                if (featureCollection)
+                    var count = featureCollection.features.length;
+                console.log('图层地块数量:', count);
+                // console.log(featureCollection);
+
+                //渲染表格+图表
+                renderTableShidi(featureCollection, config.layerList[index]["name"] + '统计表')
                 $('.statistics-content').show()
-            }
-        });
+            });
 
         // 使用 eachLayer 方法迭代所有图层
         // selectLayer.eachLayer(function (layer) {
@@ -162,8 +164,6 @@ $('.layer_switch input[type="checkbox"]').on('click', function () {
         //         opacity: 1
         //     });
         // });
-
-
     } else {
         // 从layerGroup中查找并删除图层
         let layerToRemove = addedLayers[index];
@@ -214,5 +214,35 @@ function initEvent() {
     //统计图 展开悬浮窗
     $('.statistics-container').on('click', function () {
         $('.statistics-content').toggle()
+    })
+}
+
+// 展开弹窗
+function showModal(title, fn) {
+    $('.modal-mask .modal-input').val(title)
+    $('.modal-mask').show()
+
+    let currentTitle = $('.modal-mask .modal-input').val()
+
+    // 监听复选框的变化事件
+    $("#addDateCheckbox").change(function () {
+        let date = new Date()
+        if ($(this).is(":checked")) {
+            $('.modal-mask .modal-input').val(currentTitle + ' ' + date.toLocaleDateString())
+        } else {
+            let updatedTitle = currentTitle.replace(/\d{1,2}\/\d{1,2}\/\d{4}/, ''); // 使用正则表达式匹配日期部分
+            $('.modal-mask .modal-input').attr('placeholder', updatedTitle.trim());
+        }
+    });
+
+    //取消-关闭弹窗
+    $('.modal-dialog-close,.modal-cancel-btn').on('click', function () {
+        $('.modal-mask').hide()
+    })
+
+    //确定-下载文件
+    $('.modal-confirm-btn').on('click', function () {
+        $('.modal-mask').hide()
+        fn(currentTitle)
     })
 }

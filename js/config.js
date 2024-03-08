@@ -23,6 +23,7 @@ var config = {
         description: "这是一个图层描述",
         tags: ["湿地", "郊区"],
         thumbnail: "/info/thumbnail/thumbnail.png",
+        outFields: ["FID", "NAME", "GB", "TYPE", "EC"],
         count: "",
         area: ""
     }, {
@@ -32,9 +33,10 @@ var config = {
         layerIndex: 0,
         name: "行政区划_市",
         type: "Feature Layer",
-        description: "",
+        description: "这是一个图层描述这是一个图层描述这是一个图层描述",
         tags: ["郊区", "城市"],
         thumbnail: "/info/thumbnail/thumbnail.png",
+        outFields: ["NAME"],
         count: "",
         area: ""
     }, {
@@ -47,6 +49,7 @@ var config = {
         description: "这是一个图层描述",
         tags: ["水体", "郊区", "道路"],
         thumbnail: "/info/thumbnail/thumbnail.png",
+        outFields: ["NAME"],
         count: "",
         area: ""
     }, {
@@ -56,9 +59,10 @@ var config = {
         layerIndex: 0,
         name: "水体202007",
         type: "Feature Layer",
-        description: "",
+        description: "这是一个图层描述这是一个图层描述这是一个图层描述这是一个图层描述",
         tags: ["水体", "郊区"],
         thumbnail: "/info/thumbnail/thumbnail.png",
+        outFields: ["NAME"],
         count: "",
         area: ""
     }, {
@@ -71,6 +75,7 @@ var config = {
         description: "",
         tags: ["城市", "建筑"],
         thumbnail: "/info/thumbnail/thumbnail.png",
+        outFields: ["NAME"],
         count: "",
         area: ""
     }, {
@@ -82,6 +87,7 @@ var config = {
         description: "",
         tags: ["城市", "建筑"],
         thumbnail: "/info/thumbnail/thumbnail.png",
+        outFields: ["NAME"],
         count: "",
         area: ""
     }, {
@@ -93,6 +99,7 @@ var config = {
         description: "",
         tags: ["城市", "建筑"],
         thumbnail: "/info/thumbnail/thumbnail.png",
+        outFields: ["NAME"],
         count: "",
         area: ""
     }, {
@@ -104,6 +111,7 @@ var config = {
         description: "",
         tags: ["城市", "建筑"],
         thumbnail: "/info/thumbnail/thumbnail.png",
+        outFields: ["NAME"],
         count: "",
         area: "",
         area: ""
