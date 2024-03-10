@@ -26,14 +26,15 @@
             <div class="left-tool-item switchmlayer-container" title="加载图层" onclick="  $('.layer_content').toggle()">
                 <img src="imgs/more.png" alt="">
             </div>
-            <!-- 统计图 -->
-            <div class="left-tool-item statistics-container" title="统计图">
-                <img src="imgs/statistics.png" alt="">
-            </div>
             <!-- 统计表 -->
             <div class="left-tool-item table-container" title="统计表">
                 <img src="imgs/table.png" alt="">
             </div>
+            <!-- 统计图 -->
+            <div class="left-tool-item statistics-container" title="统计图">
+                <img src="imgs/statistics.png" alt="">
+            </div>
+
         </div>
 
         <div class="left-tool-content">
@@ -53,7 +54,7 @@
                 </div>
 
                 <div class="layer_wrap">
-                    <div class="empty_search_list"><img src="imgs/empty.png" />
+                    <div class="empty_search_list"><img src="imgs/empty_map.png" />
                         <p>查询到0张地图</p>
                     </div>
                 </div>
@@ -64,7 +65,14 @@
     <div class="right-tool">
         <div class="right_statistic_content">
 
-            <div class="table-content" style="display: none;"></div>
+            <div class="table-content" style="display: none;">
+                <div class="title">
+                    <div class="title-text"></div>
+                    <ul class="title-group">
+                    </ul>
+                </div>
+                <div class="table-content-close close_btn"><img src="imgs/close.svg" alt=""></div>
+            </div>
 
             <div class="statistics-content" style="display: none;">
                 <div class="title"></div>
@@ -92,9 +100,8 @@
     <div class="baselayer_btn tool_btn" title="切换底图" onclick="$('.common-panel.layer-pop').show()">
         <img src="imgs/baselayer.svg">
     </div>
-
     <div class="common-panel layer-pop">
-        <a href="javascript:void(0);" class="close" onclick="$('.common-panel.layer-pop').hide()"></a>
+        <img src="imgs/close.svg" alt="" class="close" onclick="$('.common-panel.layer-pop').hide()">
         <span class="angle-to-right"></span>
         <h3 class="common-panel-title">选择底图</h3>
         <div class="layer-items clearfix">
@@ -109,29 +116,31 @@
         </div>
     </div>
 
-    <div class="modal-mask">
-        <div class="modal-dialog">
-            <div class="modal-title">
-                <img src="imgs/file.svg">设置下载文件名称
-                <div class="modal-dialog-close close_btn"><img src="imgs/close.svg" alt=""></div>
-            </div>
-            <div class="modal-content">
-                <input type="text" placeholder="" class="modal-input">
-            </div>
-            <div class="modal-btns">
-                <div class="addDate">
-                    <input type="checkbox" name="addDate" id="addDateCheckbox">
-                    <label id="lab" for="addDateCheckbox">添加日期</label>
-                </div>
-                <div class="modal-btn-group">
-                    <a class="modal-cancel-btn modal-btn">取消</a>
-                    <a class="modal-confirm-btn modal-btn">确定</a>
-                </div>
+    <!-- 下载文件时的弹窗 -->
+    <script id="modal-html" type="text/html">
+        <div class="modal-mask">
+                <div class="modal-dialog">
+                    <div class="modal-title">
+                        <img src="imgs/file.svg">设置下载文件名称 {{type}}
+                        <div class="modal-dialog-close close_btn"><img src="imgs/close.svg" alt=""></div>
+                    </div>
+                    <div class="modal-content">
+                        <input type="text" placeholder="" class="modal-input" value="{{title}}">
+                    </div>
+                    <div class="modal-btns">
+                        <div class="addDate">
+                            <input type="checkbox" name="addDate" id="addDateCheckbox">
+                            <label id="lab" for="addDateCheckbox">添加日期</label>
+                        </div>
+                        <div class="modal-btn-group">
+                            <a class="modal-cancel-btn modal-btn">取消</a>
+                            <a class="modal-confirm-btn modal-btn">确定</a>
+                        </div>
 
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-
+    </script>
 
     <!-- 加载图层列表 -->
     <script id='layers-html' type='text/html'>
@@ -175,6 +184,10 @@
 
 </body>
 
+<script src="js/config.js"></script>
+<script src="js/util.js"></script>
+<script src="js/modal.js"></script>
+
 <script src="libs/jquery/jquery_3.0.0.js"></script>
 <script src="libs/template@4.8/template.js"></script>
 <script src="libs/tabulator-tables@5.6.0/tabulator.min.js"></script>
@@ -187,7 +200,7 @@
 <script src="libs/LeafletMeasure/leaflet-geoman.min.js"></script>
 
 <!-- 定制化表格展示 -->
-<script src="js/table/mapTable_shidi.js"></script>
+<script src="js/table/mapTable.js"></script>
 <script src="libs/tabulator-tables@5.6.0/xlsx.full.min.js"></script>
 <script src="libs/tabulator-tables@5.6.0/jspdf.umd.min.js"></script>
 <script src="libs/tabulator-tables@5.6.0/jspdf.plugin.autotable.min.js"></script>
@@ -195,9 +208,7 @@
 <!-- 定制化图表展示 -->
 <script src="js/table/echart_shidi.js"></script>
 
-<script src="js/config.js"></script>
 <script src="js/map.js"></script>
-<script src="js/util.js"></script>
 <script src="js/index.js"></script>
 
 </html>

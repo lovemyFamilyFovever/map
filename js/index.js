@@ -19,7 +19,6 @@ let terrain = L.layerGroup([mapC, mapC_T]);
 
 var layerGroup = L.layerGroup().addTo(mapObj);
 var addedLayers = [];//自定义存储已添加的图层
-var tableList = [];//自定义存储已加载的表格
 
 loadBaseMap(satellite);// 加载底图
 loadMapLayers()//加载图层
@@ -125,7 +124,6 @@ $('.layer_switch input[type="checkbox"]').on('click', function () {
         //     mapObj.fitBounds(latlngbounds);
         // });
 
-        let currentIndex = index;
         //查询要素的数量
         selectLayer.query()
             .where("1=1")
@@ -138,7 +136,7 @@ $('.layer_switch input[type="checkbox"]').on('click', function () {
                 // console.log(featureCollection);
 
                 //渲染表格+图表
-                renderTableShidi(featureCollection, config.layerList[index]["name"] + '统计表')
+                new CustomTable(featureCollection, config.layerList[index]["name"] + '统计表', index)
                 $('.statistics-content').show()
             });
 
@@ -166,10 +164,21 @@ $('.layer_switch input[type="checkbox"]').on('click', function () {
         // });
     } else {
         // 从layerGroup中查找并删除图层
-        let layerToRemove = addedLayers[index];
+        let layerToRemove = addedLayers[index]
         if (layerToRemove) {
-            layerGroup.removeLayer(layerToRemove);
+            layerGroup.removeLayer(layerToRemove)
             delete addedLayers[index]; // 从对象中移除图层
+        }
+
+        var liElement = $('ul.title-group li[data-index="' + index + '"]')
+        var tableIndex = liElement.index()
+        $('.table_panel:eq(' + tableIndex + ')').remove()
+        liElement.remove()
+        $('.table_panel:last').addClass('active')
+
+        if ($('.layer_switch input[type="checkbox"]:checked').length == 0) {
+            $('.table-content').hide()
+            $('.statistics-content').hide()
         }
     }
 });
@@ -179,21 +188,21 @@ function initEvent() {
     // 添加定位按钮点击事件
     $('.located_btn').on('click', function () {
         // 使用 Leaflet 的 locate 方法获取用户当前位置
-        mapObj.locate({ setView: true });
+        mapObj.locate({ setView: true })
     });
 
     // 阻止图层面板点击事件冒泡
     $('.layer-pop').on('click', function () {
-        return false;
+        return false
     }).on('mouseover', function () {
-        return false;
+        return false
     });
 
     // 图层底图选择
     $('.layer-items a').on('click', function (e) {
-        $(this).siblings().removeClass('active');
-        $(this).addClass('active');
-        const id = $(this).attr('id');
+        $(this).siblings().removeClass('active')
+        $(this).addClass('active')
+        const id = $(this).attr('id')
         // 切换地图类型
         if (id == 'vec_type') {//矢量
             loadBaseMap(satellite)
@@ -204,45 +213,44 @@ function initEvent() {
         }
     });
 
-
-    //统计表 展开悬浮窗
+    //统计表 点击左侧按钮 展开悬浮窗
     $('.table-container').on('click', function () {
-        if ($('.table-content').children().length !== 0)
+        if ($('.layer_switch input[type="checkbox"]:checked').length > 0) {
             $('.table-content').toggle()
+        }
     })
-
-    //统计图 展开悬浮窗
+    //统计图 点击左侧按钮 展开悬浮窗
     $('.statistics-container').on('click', function () {
-        $('.statistics-content').toggle()
+        if ($('.layer_switch input[type="checkbox"]:checked').length > 0) {
+            $('.statistics-content').toggle()
+        }
     })
-}
 
-// 展开弹窗
-function showModal(title, fn) {
-    $('.modal-mask .modal-input').val(title)
-    $('.modal-mask').show()
-
-    let currentTitle = $('.modal-mask .modal-input').val()
-
-    // 监听复选框的变化事件
-    $("#addDateCheckbox").change(function () {
-        let date = new Date()
-        if ($(this).is(":checked")) {
-            $('.modal-mask .modal-input').val(currentTitle + ' ' + date.toLocaleDateString())
-        } else {
-            let updatedTitle = currentTitle.replace(/\d{1,2}\/\d{1,2}\/\d{4}/, ''); // 使用正则表达式匹配日期部分
-            $('.modal-mask .modal-input').attr('placeholder', updatedTitle.trim());
+    //点击空白区域隐藏下拉框
+    $(document).on('click', function (event) {
+        var target = $(event.target);
+        // 检查点击的元素是否在 .table-content 内部，且不是 .title-group 和 .dropdown_list 内部
+        if (!target.closest('.title-text, .title-group, .dropdown_list,.table_download_btn').length) {
+            // 如果不在 .table-content 内部，隐藏 .title-group 和 .dropdown_list
+            $('.title-group, .dropdown_list').hide();
         }
     });
 
-    //取消-关闭弹窗
-    $('.modal-dialog-close,.modal-cancel-btn').on('click', function () {
-        $('.modal-mask').hide()
+    //点击标题显隐下拉选项列表
+    $('.title-text').on('click', function () {
+        $('.title-group').toggle()
     })
 
-    //确定-下载文件
-    $('.modal-confirm-btn').on('click', function () {
-        $('.modal-mask').hide()
-        fn(currentTitle)
+    //切换统计表格
+    $('.title-group').on('click', 'li', function () {
+        var i = $(this).index()
+        $('.title-text').html($(this).html())
+        $('.table_panel,.title-group').hide()
+        $('.table_panel:eq(' + i + ')').show()
+    })
+
+    //隐藏表格
+    $('.table-content-close').on('click', function () {
+        $('.table-content').hide()
     })
 }
