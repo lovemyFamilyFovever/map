@@ -55,7 +55,7 @@
 
                 <div class="layer_wrap">
                     <div class="empty_search_list"><img src="imgs/empty_map.png" />
-                        <p>查询到0张地图</p>
+                        <p>没有查询到相关数据!</p>
                     </div>
                 </div>
             </div>
@@ -116,37 +116,11 @@
         </div>
     </div>
 
-    <!-- 下载文件时的弹窗 -->
-    <script id="modal-html" type="text/html">
-        <div class="modal-mask">
-                <div class="modal-dialog">
-                    <div class="modal-title">
-                        <img src="imgs/file.svg">设置下载文件名称 {{type}}
-                        <div class="modal-dialog-close close_btn"><img src="imgs/close.svg" alt=""></div>
-                    </div>
-                    <div class="modal-content">
-                        <input type="text" placeholder="" class="modal-input" value="{{title}}">
-                    </div>
-                    <div class="modal-btns">
-                        <div class="addDate">
-                            <input type="checkbox" name="addDate" id="addDateCheckbox">
-                            <label id="lab" for="addDateCheckbox">添加日期</label>
-                        </div>
-                        <div class="modal-btn-group">
-                            <a class="modal-cancel-btn modal-btn">取消</a>
-                            <a class="modal-confirm-btn modal-btn">确定</a>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-    </script>
-
     <!-- 加载图层列表 -->
     <script id='layers-html' type='text/html'>
         {{each layerList as item i}}
             {{if item.showStatus!==0}} 
-                <div class="layer_item">
+                <div class="layer_item " data-index="{{i}}">
                     <div class="layer_thumbnail">
                         <img src={{item.url}}{{item.thumbnail}} alt="" class="thumbImg" />
                         <p class="layer_type" title="地块类型">{{item.type}}</p>

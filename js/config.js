@@ -15,41 +15,62 @@ var config = {
 
     layerList: [{
         id: "0",
-        showStatus: 1,
+        name: "湿地tm",
         url: "https://mapservice.tdtah.cn/server1/rest/services/shidi/MapServer",
         layerIndex: 0,
-        name: "湿地tm",
+        showStatus: 1,
         type: "Feature Layer",
         description: "这是一个图层描述",
         tags: ["湿地", "郊区"],
         thumbnail: "/info/thumbnail/thumbnail.png",
-        outFields: ["FID", "NAME", "GB", "TYPE", "EC"],
+        outFields: {
+            "FID": "ID",
+            "NAME": "标题",
+            "TYPE": "类型",
+            "GB": "面积",
+            "EC": "EC",
+            "FEATID": "FEATID",
+        },
         count: "",
         area: ""
     }, {
         id: "1",
-        showStatus: 1,
+        name: "行政区划_市",
         url: "https://mapservice.tdtah.cn/server1/rest/services/AHDISA/MapServer",
         layerIndex: 0,
-        name: "行政区划_市",
+        showStatus: 1,
         type: "Feature Layer",
         description: "这是一个图层描述这是一个图层描述这是一个图层描述",
         tags: ["郊区", "城市"],
         thumbnail: "/info/thumbnail/thumbnail.png",
-        outFields: ["NAME"],
+        outFields: {
+            "FID": "ID",
+            "NAME": "标题",
+            "ENTIID": "ENTIID",
+            "PAC": "PAC",
+            "ASCRIPTION": "ASCRIPTION",
+            "SOURCE": "SOURCE",
+        },
         count: "",
         area: ""
     }, {
         id: "2",
-        showStatus: 1,
+        name: "rootline",
         url: "https://mapservice.tdtah.cn/server1/rest/services/rootline/MapServer",
         layerIndex: 0,
-        name: "rootline",
+        showStatus: 1,
         type: "Feature Layer",
         description: "这是一个图层描述",
         tags: ["水体", "郊区", "道路"],
         thumbnail: "/info/thumbnail/thumbnail.png",
-        outFields: ["NAME"],
+        outFields: {
+            "FID": "ID",
+            "NAME": "标题",
+            "TYPE": "类型",
+            "GB": "面积",
+            "EC": "EC",
+            "FEATID": "FEATID",
+        },
         count: "",
         area: ""
     }, {
@@ -62,7 +83,14 @@ var config = {
         description: "这是一个图层描述这是一个图层描述这是一个图层描述这是一个图层描述",
         tags: ["水体", "郊区"],
         thumbnail: "/info/thumbnail/thumbnail.png",
-        outFields: ["NAME"],
+        outFields: {
+            "FID": "ID",
+            "NAME": "标题",
+            "TYPE": "类型",
+            "GB": "面积",
+            "EC": "EC",
+            "FEATID": "FEATID",
+        },
         count: "",
         area: ""
     }, {
@@ -75,7 +103,14 @@ var config = {
         description: "",
         tags: ["城市", "建筑"],
         thumbnail: "/info/thumbnail/thumbnail.png",
-        outFields: ["NAME"],
+        outFields: {
+            "FID": "ID",
+            "NAME": "标题",
+            "TYPE": "类型",
+            "GB": "面积",
+            "EC": "EC",
+            "FEATID": "FEATID",
+        },
         count: "",
         area: ""
     }, {
@@ -87,7 +122,14 @@ var config = {
         description: "",
         tags: ["城市", "建筑"],
         thumbnail: "/info/thumbnail/thumbnail.png",
-        outFields: ["NAME"],
+        outFields: {
+            "FID": "ID",
+            "NAME": "标题",
+            "TYPE": "类型",
+            "GB": "面积",
+            "EC": "EC",
+            "FEATID": "FEATID",
+        },
         count: "",
         area: ""
     }, {
@@ -99,7 +141,14 @@ var config = {
         description: "",
         tags: ["城市", "建筑"],
         thumbnail: "/info/thumbnail/thumbnail.png",
-        outFields: ["NAME"],
+        outFields: {
+            "FID": "ID",
+            "NAME": "标题",
+            "TYPE": "类型",
+            "GB": "面积",
+            "EC": "EC",
+            "FEATID": "FEATID",
+        },
         count: "",
         area: ""
     }, {
@@ -111,7 +160,14 @@ var config = {
         description: "",
         tags: ["城市", "建筑"],
         thumbnail: "/info/thumbnail/thumbnail.png",
-        outFields: ["NAME"],
+        outFields: {
+            "FID": "ID",
+            "NAME": "标题",
+            "TYPE": "类型",
+            "GB": "面积",
+            "EC": "EC",
+            "FEATID": "FEATID",
+        },
         count: "",
         area: "",
         area: ""

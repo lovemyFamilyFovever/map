@@ -1,49 +1,40 @@
 //渲染指定图层的表格
 class CustomTable {
-    constructor(data, title, index) {
+    constructor(data, title, index, columns) {
         this.data = data;
         this.title = title;
         this.index = index;
+        this.columns = columns;
 
-        this.getData();
         this.initTable();
     }
 
-    getData() {
-        let arr = []
-        // 增加判断内容  如果数据为空 显示提示内容
-        if (this.data) {
-            this.data.features.forEach(item => {
-                arr.push(item.properties)
-            })
-        }
-        this.length = arr.length
-        return arr
-    }
-
     initTable() {
-        $('.title-text').html(this.title)
-        $('.title-group').append(`<li data-index=${this.index}>${this.title}</li>`)
-
         if (this.data) {
-            $('.table-content').append(this.getTableHtml(this.length))
+            const features = this.data.features || [];
 
-            this.container = $('.table_panel:last')
-            this.container.addClass('active').siblings().removeClass('active')
-            this.container.find('.table').attr('id', 'table' + this.index)
+            const tableHtml = this.getTableHtml(features.length);
+            $('.table-content').append(tableHtml);
 
-            this.renderTable();
-            this.bindEvents()
+            this.container = $('.table_panel:last');
+            this.container.addClass('active').siblings().removeClass('active');
+            this.container.find('.table').attr('id', `table${this.index}`);
+
+            this.renderTable(features);
+            this.bindEvents();
         } else {
-            $('.empty_table').remove()
-            $('.table-content').append(this.getEmptyStatus())
+            $('.empty_table').remove();
+            $('.table-content').append(this.getEmptyStatus());
         }
-        $('.table-content').show()
+
+        $('.title-text').html(this.title);
+        $('.title-group').append(`<li data-index=${this.index}>${this.title}</li>`);
+        $('.table-content').show();
     }
 
-    renderTable() {
-        this.table = new Tabulator('#table' + this.index, {
-            data: this.getData(),
+    renderTable(data) {
+        this.table = new Tabulator(`#table${this.index}`, {
+            data: data.map(item => item.properties),
             height: "360px",
             layout: "fitData",
             pagination: true,
@@ -55,84 +46,79 @@ class CustomTable {
                 padding: 0,
                 headerHozAlign: 'center',
             },
-            initialSort: [
-                { column: "FID", dir: "asc" } // 按照 "name" 列升序排序
-            ],
-            columns: [
-                { title: "ID", field: "FID", width: 80, sorter: "number" },// 设置排序器为number
-                { title: "标题", field: "NAME", width: 200, },
-                { title: "类型", field: "TYPE", width: 100, },
-                { title: "EC", field: "EC", width: 100, },
-                { title: "GB", field: "GB", },
-            ],
+            initialSort: this.setDefaultSort(),
+            columns: this.handleColumns(),
         });
 
         //当调用tabulator构造函数并且表已完成渲染时，触发tableBuilt事件,渲染滚动条
         this.table.on("tableBuilt", () => {
-            new PerfectScrollbar('.tabulator-tableholder');
+            new PerfectScrollbar('.table_panel:last-child .tabulator-tableholder');
         });
         // 当提示用户下载文件时，将触发downloadFull回调。
         this.table.on("downloadComplete", () => {
-            this.container.find('.dropdown_list').hide()
+            this.container.find('.dropdown_list').hide();
         });
     }
 
     bindEvents() {
         // 使用事件委托，将点击事件绑定到表格容器上
         this.container.on('click', '.table_download_btn', (e) => {
-            this.container.find('.dropdown_list').toggle()
+            this.container.find('.dropdown_list').toggle();
         });
 
         //文件下载
-        this.container.on('click', '.download-csv', () => {
-            new Modal(this.title, "CSV", (name) => {
-                this.table.download("csv", name + ".csv", { bom: true });
-            })
-        });
-
-        this.container.on('click', '.download-json', () => {
-            new Modal(this.title, "JSON", (name) => {
-                this.table.download("json", name + ".json");
-            })
-        });
-
-        this.container.on('click', '.download-xlsx', () => {
-            new Modal(this.title, "XLSL", (name) => {
-                this.table.download("xlsx", name + ".xlsx", { sheetName: name });
-            })
-        });
-
-        this.container.on('click', '.download-pdf', () => {
-            new Modal(this.title, (name) => {
-                this.table.download("pdf", "PDF", name + ".pdf", {
-                    orientation: "portrait", //set page orientation to portrait
-                    title: name, //add title to report
+        const downloadOptions = ['CSV', 'JSON', 'XLSX', 'PDF', 'HTML'];
+        downloadOptions.forEach((option) => {
+            this.container.on('click', `.download-${option.toLowerCase()}`, () => {
+                new Modal(this.title, option, (name) => {
+                    this.table.download(option.toLowerCase(), `${name}.${option.toLowerCase()}`, {
+                        sheetName: name,
+                        bom: option === 'CSV',
+                        style: option === 'HTML',
+                        orientation: option === 'PDF' ? 'portrait' : undefined,
+                        title: option === 'PDF' ? name : undefined,
+                    });
                 });
-            })
+            });
         });
 
-        this.container.on('click', '.download-html', () => {
-            new Modal(this.title, "HTML", (name) => {
-                this.table.download("html", name + ".html", { style: true });
-            })
-        });
         //搜索功能
         this.container.on('click', '.table_search_btn', () => {
-            var value = $('.table_seatch_input').val()
-            if (value.trim() !== "")
-                this.table.setFilter("NAME", 'like', value);
-            else
-                this.table.clearFilter()
+            const value = $('.table_seatch_input').val().trim();
+            this.table.setFilter("NAME", 'like', value !== "" ? value : undefined);
         })
         //搜索框enter事件
         this.container.on('keydown', '.table_seatch_input', (event) => {
-            // 检查按下的键是否是 Enter 键
             if (event.key === 'Enter') {
                 event.preventDefault();
-                // 在这里触发查询按钮的点击事件或执行查询操作
-                this.container.find('.table_search_btn').click(); // 请将 'queryButton' 替换为实际的查询按钮的ID或选择器
+                this.container.find('.table_search_btn').click();
             }
         })
+    }
+
+    setDefaultSort() {
+        const keys = Object.keys(this.columns);
+        if (keys.includes("ID")) {
+            return [{ column: "ID", dir: "asc" }];
+        } else if (keys.includes("FID")) {
+            return [{ column: "FID", dir: "asc" }];
+        }
+        return [{ column: "ID", dir: "asc" }];
+    }
+
+    //处理列名
+    handleColumns() {
+        let currentColumns = []
+        for (var key in this.columns) {
+            if (this.columns.hasOwnProperty(key)) {
+                currentColumns.push({
+                    title: this.columns[key],
+                    field: key,
+                    sorter: (key == "ID" || key == "FID") ? "number" : "string"
+                })
+            }
+        }
+        return currentColumns
     }
 
     getEmptyStatus() {
@@ -142,8 +128,7 @@ class CustomTable {
                 <img src="imgs/empty_table.svg" />
             </div>
             <div class="empty_table_text">没有查询到相关数据!</div>
-        </div>
-        `
+        </div>`
     }
 
     getTableHtml(count) {
@@ -172,9 +157,8 @@ class CustomTable {
             </div>
             <div class="table-wrapper">
                 <div class="table"></div>
-                <div class="table-wrapper-count">共${count}条数据</div>
+                <div class="table-wrapper-count" title='共${count}条数据'>共${count > 999 ? '999+' : count}条数据</div>
             </div>
         </div>`
     }
-
 }

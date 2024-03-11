@@ -51,34 +51,39 @@ async function loadMapLayers() {
 // 搜索功能
 $(".search_btn").click(function () {
     var keyword = $(".layer_seatch_input").val().trim();
+    var emptySearchList = $('.empty_search_list');
+    var layerItem = $('.layer_item');
     if (!keyword) {
-        $('.empty_search_list').hide()
-        $('.layer_item').show()
+        emptySearchList.hide()
+        layerItem.show()
     } else {
         // 模糊搜索
-        const filteredNames = [];
-        utils.getShowLayerList().map(function (layer) {
-            if (layer.name.indexOf(keyword) >= 0) {
-                filteredNames.push(layer.id)
-            }
-        });
+        const filteredNames = utils.getShowLayerList()
+            .filter(layer => layer.name.includes(keyword))
+            .map(layer => layer.id);
+
         if (filteredNames.length == 0) {
-            $('.empty_search_list').show()
-            $('.layer_item').hide()
+            emptySearchList.css('display', 'flex')
+            layerItem.hide()
         } else {
+            emptySearchList.hide()
+            layerItem.show()
             // 更新图层列表
-            $('.layer_item').each(function (item) {
-                var dom = $('.layer_item:eq(' + item + ')')
-                var id = dom.attr('data-id')
-                if (filteredNames.indexOf(id) == -1) {
-                    dom.hide()
+
+            $('.layer-item[data-index="' + filteredNames + '"]');
+
+            layerItem.each(function (index, element) {
+                var id = $(element).attr('data-index')
+                if (filteredNames.indexOf(id) === -1) {
+                    $(element).hide()
+                } else {
+                    $(element).show()
                 }
             })
         }
     }
     const visibleDivCount = $(".layer_item").not(":hidden").length;
     $('.layer_seatch_input').attr('placeholder', `共加载${visibleDivCount}个图层`)
-
 });
 // 添加键盘事件
 $(".layer_seatch_input").keydown(function (event) {
@@ -94,6 +99,8 @@ $('.layer_switch input[type="checkbox"]').on('click', function () {
     let url = config.layerList[index].url + '/' + config.layerList[index].layerIndex + '/query'
 
     if ($(this).prop('checked')) {
+        $('.layer_item[data-index=' + index + ']').addClass('active')
+
         // 添加图层到layerGroup
         let selectLayer = L.esri.featureLayer({
             url: url,
@@ -127,16 +134,14 @@ $('.layer_switch input[type="checkbox"]').on('click', function () {
         //查询要素的数量
         selectLayer.query()
             .where("1=1")
-            .fields(config.layerList[index]["outFields"])
+            .fields(utils.getOutFieldsKey(index))
             .run((error, featureCollection) => {
                 //统计要素数量
                 if (featureCollection)
                     var count = featureCollection.features.length;
                 console.log('图层地块数量:', count);
-                // console.log(featureCollection);
-
                 //渲染表格+图表
-                new CustomTable(featureCollection, config.layerList[index]["name"] + '统计表', index)
+                new CustomTable(featureCollection, config.layerList[index]["name"] + '统计表', index, config.layerList[index]["outFields"])
                 $('.statistics-content').show()
             });
 
@@ -163,6 +168,7 @@ $('.layer_switch input[type="checkbox"]').on('click', function () {
         //     });
         // });
     } else {
+        $('.layer_item[data-index=' + index + ']').removeClass('active')
         // 从layerGroup中查找并删除图层
         let layerToRemove = addedLayers[index]
         if (layerToRemove) {

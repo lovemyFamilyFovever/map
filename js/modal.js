@@ -9,17 +9,8 @@ class Modal {
     }
 
     renderTable() {
-
-        let modalHtml = template('modal-html', {
-            "type": this.type,
-            "title": this.title,
-        })
+        let modalHtml = this.getHtml(this.type, this.title)
         $('body').append(modalHtml)
-        this.initModal()
-    }
-
-    //初始化
-    initModal() {
         this.container = $('.modal-mask')
         this.container.show()
     }
@@ -36,19 +27,45 @@ class Modal {
         //         this.input.val(updatedTitle.trim());
         //     }
         // });
+        this.container.on('click', '.modal-dialog-close, .modal-cancel-btn', this.closeModal.bind(this));
+        this.container.on('click', '.modal-confirm-btn', this.confirmModal.bind(this));
+    }
 
-        //取消-关闭弹窗
-        this.container.on('click', '.modal-dialog-close,.modal-cancel-btn', (event) => {
-            $('.modal-mask').remove()
-        });
+    closeModal(e) {
+        this.container.remove();
+    }
 
-        //确定-下载文件
-        this.container.on('click', '.modal-confirm-btn', (event) => {
-            $('.modal-mask').remove()
+    confirmModal() {
+        this.container.remove();
+        if (typeof this.clickCallback === 'function') {
+            const inputValue = this.container.find('.modal-input').val();
+            this.clickCallback(inputValue);
+        }
+    }
+    getHtml(type, title) {
+        return `
+        <div class="modal-mask">
+            <div class="modal-dialog">
+                <div class="modal-title">
+                    <img src="imgs/file.svg">设置文件名称 ${type}
+                    <div class="modal-dialog-close close_btn"><img src="imgs/close.svg" alt=""></div>
+                </div>
+                <div class="modal-content">
+                    <input type="text" placeholder="" class="modal-input" value="${title}">
+                </div>
+                <div class="modal-btns">
+                    <div class="addDate">
+                        <input type="checkbox" name="addDate" id="addDateCheckbox">
+                        <label id="lab" for="addDateCheckbox">添加日期</label>
+                    </div>
+                    <div class="modal-btn-group">
+                        <a class="modal-cancel-btn modal-btn">取消</a>
+                        <a class="modal-confirm-btn modal-btn">确定</a>
+                    </div>
 
-            if (typeof this.clickCallback === 'function') {
-                this.clickCallback(this.container.find('.modal-input').val())
-            }
-        })
+                </div>
+            </div>
+        </div>
+        `
     }
 }
