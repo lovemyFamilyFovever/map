@@ -85,7 +85,10 @@ class CustomTable {
         //搜索功能
         this.container.on('click', '.table_search_btn', () => {
             const value = $('.table_seatch_input').val().trim();
-            this.table.setFilter("NAME", 'like', value !== "" ? value : undefined);
+            if (value.trim() !== "")
+                this.table.setFilter("NAME", 'like', value);
+            else
+                this.table.clearFilter()
         })
         //搜索框enter事件
         this.container.on('keydown', '.table_seatch_input', (event) => {
