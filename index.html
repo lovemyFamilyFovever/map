@@ -13,26 +13,22 @@
 </head>
 
 <body>
-    <div class="topContainer" style="display: none;">
-        <img src="" alt="imgs/map_icon.svg">
-        地图演示系统
-    </div>
     <div id="map"></div>
 
     <div class="left-tool">
         <div class="left-tool-title">
 
             <!-- 加载图层 -->
-            <div class="left-tool-item switchmlayer-container" title="加载图层" onclick="  $('.layer_content').toggle()">
-                <img src="imgs/more.png" alt="">
+            <div class="left-tool-item switchmlayer-container">
+                <img src="imgs/more.png" alt="加载图层" title="加载图层">
             </div>
             <!-- 统计表 -->
-            <div class="left-tool-item table-container" title="统计表">
-                <img src="imgs/table.png" alt="">
+            <div class="left-tool-item table-container">
+                <img src="imgs/table.png" alt="统计表" title="统计表">
             </div>
             <!-- 统计图 -->
-            <div class="left-tool-item statistics-container" title="统计图">
-                <img src="imgs/statistics.png" alt="">
+            <div class="left-tool-item statistics-container">
+                <img src="imgs/statistics.png" alt="统计图" title="统计图">
             </div>
 
         </div>
@@ -42,12 +38,16 @@
             <!-- 图层容器 -->
             <div class="layer_content">
                 <div class="layer_title">低效用地</div>
-                <div class="layer_content_close close_btn" onclick="$('.layer_content').hide()">
-                    <img src="imgs/close.svg" alt="关闭" />
+                <div class="layer_drag_tool">
+                    <img src="imgs/changeIndexOff.svg" alt="拖拽" title="打开拖拽功能" class="changeIndexOff" />
+                    <img src="imgs/changeIndexOn.svg" alt="拖拽" title="关闭拖拽功能" class="changeIndexOn" />
                 </div>
-                <div class="layer_tool">
+                <div class="layer_content_close close_btn">
+                    <img src="imgs/close.svg" alt="关闭" title="关闭" />
+                </div>
+                <div class="layer_search_tool">
                     <div class="layer_search">
-                        <img src="imgs/search.svg" alt="">
+                        <img src="imgs/search.svg" alt="搜索">
                         <input class="layer_seatch_input" placeholder="">
                         <div class="search_btn">查询</div>
                     </div>
@@ -71,12 +71,12 @@
                     <ul class="title-group">
                     </ul>
                 </div>
-                <div class="table-content-close close_btn"><img src="imgs/close.svg" alt=""></div>
+                <div class="table-content-close close_btn"><img src="imgs/close.svg" alt="关闭" title="关闭"></div>
             </div>
 
             <div class="statistics-content" style="display: none;">
                 <div class="title"></div>
-                <div class="echart-content-close close_btn"><img src="imgs/close.svg" alt=""></div>
+                <div class="echart-content-close close_btn"><img src="imgs/close.svg" alt="关闭" title="关闭"></div>
                 <div class="echart_tools">
                     <div class="echart_type">
                         <img src="imgs/pie.svg" alt="切换饼图" title="切换饼图" class="pie">
@@ -97,11 +97,11 @@
     <div class="located_btn tool_btn" title="定位您的位置">
         <img src="imgs/locate.svg">
     </div>
-    <div class="baselayer_btn tool_btn" title="切换底图" onclick="$('.common-panel.layer-pop').show()">
+    <div class="baselayer_btn tool_btn" title="切换底图">
         <img src="imgs/baselayer.svg">
     </div>
     <div class="common-panel layer-pop">
-        <img src="imgs/close.svg" alt="" class="close" onclick="$('.common-panel.layer-pop').hide()">
+        <img src="imgs/close.svg" alt="关闭" class="close" title="关闭">
         <span class="angle-to-right"></span>
         <h3 class="common-panel-title">选择底图</h3>
         <div class="layer-items clearfix">
@@ -122,7 +122,7 @@
             {{if item.showStatus!==0}} 
                 <div class="layer_item " data-index="{{i}}">
                     <div class="layer_thumbnail">
-                        <img src={{item.url}}{{item.thumbnail}} alt="" class="thumbImg" />
+                        <img src={{item.url}}{{item.thumbnail}} alt="地块缩略图" class="thumbImg" />
                         <p class="layer_type" title="地块类型">{{item.type}}</p>
                     </div>
                     <div class="layer_info">
@@ -163,6 +163,7 @@
 <script src="js/modal.js"></script>
 
 <script src="libs/jquery/jquery_3.0.0.js"></script>
+<script src="libs/Sortable/Sortable.js"></script>
 <script src="libs/template@4.8/template.js"></script>
 <script src="libs/tabulator-tables@5.6.0/tabulator.min.js"></script>
 <script src="libs/echart/echarts.5.5.min.js"></script>

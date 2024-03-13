@@ -139,7 +139,7 @@ class CustomTable {
         <div class="table_panel">
             <div class="table_panel_container">
                 <div class="table_search">
-                    <img src="imgs/search.svg" alt="">
+                    <img src="imgs/search.svg" alt="搜索">
                     <input class="table_seatch_input" placeholder="请输入标题">
                     <div class="table_search_btn">查询</div>
                 </div>

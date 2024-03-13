@@ -19,6 +19,7 @@ let terrain = L.layerGroup([mapC, mapC_T]);
 
 var layerGroup = L.layerGroup().addTo(mapObj);
 var addedLayers = [];//自定义存储已添加的图层
+var sortable = null;
 
 loadBaseMap(satellite);// 加载底图
 loadMapLayers()//加载图层
@@ -35,6 +36,14 @@ function loadBaseMap(layer) {
 //加载图层html模板
 async function loadMapLayers() {
     $(".layer_wrap").append(template('layers-html', config))
+
+    sortable = new Sortable($('.layer_wrap')[0], {
+        animation: 150,
+        forceFallback: true,
+        fallbackClass: "dragged-item"
+    });
+    sortable.option('disabled', 'false')
+
     let activeLayerList = utils.getShowLayerList()
     $('.layer_seatch_input').attr('placeholder', `共加载${activeLayerList.length}个图层`)
     for (var i = 0; i < activeLayerList.length; i++) {
@@ -204,6 +213,27 @@ function initEvent() {
         return false
     });
 
+    //切换拖拽功能
+    $('.layer_drag_tool').on('click', function () {
+        $('.layer_drag_tool').toggleClass('active')
+
+        const isDraggable = sortable.option('disabled'); // 获取当前拖拽状态
+        sortable.option('disabled', !isDraggable); // 切换拖拽状态
+    })
+
+    //显示隐藏 图层列表dom
+    $('.switchmlayer-container').on('click', function () {
+        $('.layer_content').toggle()
+    })
+    //展开 切换地图页面
+    $('.baselayer_btn.tool_btn').on('click', function () {
+        $('.common-panel.layer-pop').show()
+    })
+    //关闭 切换底图页面
+    $('.common-panel.layer-pop .close').on('click', function () {
+        $('.common-panel.layer-pop').hide()
+    })
+
     // 图层底图选择
     $('.layer-items a').on('click', function (e) {
         $(this).siblings().removeClass('active')
@@ -218,6 +248,11 @@ function initEvent() {
             loadBaseMap(terrain)
         }
     });
+
+    //关闭图层列表
+    $('.layer_content_close.close_btn').on('click', function () {
+        $('.layer_content').hide()
+    })
 
     //统计表 点击左侧按钮 展开悬浮窗
     $('.table-container').on('click', function () {

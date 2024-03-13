@@ -47,8 +47,8 @@ class Modal {
         <div class="modal-mask">
             <div class="modal-dialog">
                 <div class="modal-title">
-                    <img src="imgs/file.svg">设置文件名称 ${type}
-                    <div class="modal-dialog-close close_btn"><img src="imgs/close.svg" alt=""></div>
+                    <img src="imgs/editFile.svg">设置文件名称 ${type}
+                    <div class="modal-dialog-close close_btn"><img src="imgs/close.svg" alt="关闭" title="关闭"></div>
                 </div>
                 <div class="modal-content">
                     <input type="text" placeholder="" class="modal-input" value="${title}">
