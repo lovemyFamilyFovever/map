@@ -23,8 +23,9 @@ class CustomTable {
             this.renderTable(features);
             this.bindEvents();
         } else {
-            $('.empty_table').remove();
             $('.table-content').append(this.getEmptyStatus());
+            this.container = $('.table_panel:last');
+            this.container.addClass('active').siblings().removeClass('active');
         }
 
         $('.title-text').html(this.title);
@@ -126,11 +127,13 @@ class CustomTable {
 
     getEmptyStatus() {
         return `
-        <div class="empty_table">
-            <div class="empty_table_image">
-                <img src="imgs/empty_table.svg" />
+        <div class="table_panel">
+            <div class="empty_table">
+                <div class="empty_table_image">
+                    <img src="imgs/empty_table.svg" />
+                </div>
+                <div class="empty_table_text">没有查询到相关数据!</div>
             </div>
-            <div class="empty_table_text">没有查询到相关数据!</div>
         </div>`
     }
 

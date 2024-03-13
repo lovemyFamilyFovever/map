@@ -14,7 +14,7 @@ https://mapservice.tdtah.cn/server1/rest/services
 5. [x] 调整表格序号 从0开始
 6. [X] 优化业务代码
 7. [ ] 新增图层列表拖动排序功能
-8. [ ] 新增一个feature   选中图层显示的时候，展示loading  防止快速点击后 数据加载不同步
+8. [ ] 新增一个feature   选中图层显示的时候，展示loading  防止快速点击后 数据加载不同步(这个不做了)
    
 
 2024年3月11日 14:40:10
@@ -25,4 +25,3 @@ https://mapservice.tdtah.cn/server1/rest/services
 
 2024年3月13日 16:16:41
 1. [x] 新增图层列表拖动排序功能
-2. [ ] 
