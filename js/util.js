@@ -86,6 +86,11 @@ window.utils = {
                 count
             };
         } catch (error) {
+            $('.notification').remove();
+            $("body").append(template('notification-html', {
+                title: "提示",
+                text: "获取地图数据失败！请刷新网页或联系管理员后重新获取。"
+            }))
             console.log(error);
             return {
                 totalArea: 0,

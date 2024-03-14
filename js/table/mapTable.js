@@ -2,7 +2,7 @@
 class CustomTable {
     constructor(data, title, index, columns) {
         this.data = data;
-        this.title = title;
+        this.title = title + '统计表';
         this.index = index;
         this.columns = columns;
 
@@ -28,9 +28,12 @@ class CustomTable {
             this.container.addClass('active').siblings().removeClass('active');
         }
 
-        $('.title-text').html(this.title);
-        $('.title-group').append(`<li data-index=${this.index}>${this.title}</li>`);
+        $('.table-content .title-text').html(this.title);
+        $('.table-content .title-group').append(`<li data-index=${this.index}>${this.title}</li>`);
         $('.table-content').show();
+
+        new CustomTable('main-echart', title)
+
     }
 
     renderTable(data) {

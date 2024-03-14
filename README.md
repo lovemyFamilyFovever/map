@@ -25,3 +25,7 @@ https://mapservice.tdtah.cn/server1/rest/services
 
 2024年3月13日 16:16:41
 1. [x] 新增图层列表拖动排序功能
+
+2024年3月14日 14:21:45
+1. [x] 新增网页图标 描述内容 关键词
+2. [x] 完善echart逻辑 

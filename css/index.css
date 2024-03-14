@@ -8,6 +8,7 @@ body {
     padding: 0;
     width: 100%;
     height: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
 ul {
@@ -288,7 +289,7 @@ a:hover {
     color: #cccccc;
 }
 
-.statistics-content,
+.chart-content,
 .table-content,
 .layer_content {
     padding: 10px;
@@ -307,11 +308,11 @@ a:hover {
 
 .layer_drag_tool {
     position: absolute;
-    right: 60px;
     top: 11px;
     cursor: pointer;
     width: 24px;
     height: 24px;
+    right: 60px;
 }
 
 .layer_drag_tool:hover {
@@ -332,6 +333,10 @@ a:hover {
     padding: 0px 10px;
     max-height: 78vh;
     position: relative;
+}
+
+.layer_drag_tool.active~.layer_wrap .layer_item {
+    user-select: none;
 }
 
 .layer_thumbnail img {
@@ -874,7 +879,7 @@ p.layer_desc {
     display: none;
 }
 
-.right_statistic_content {
+.right_data_content {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -888,7 +893,7 @@ p.layer_desc {
 
 /* echart 样式 */
 .layer_title,
-.statistics-content .title,
+.chart-content .title,
 .table-content .title {
     font-size: 16px;
     font-weight: bolder;
@@ -921,7 +926,7 @@ p.layer_desc {
     transform: rotate(90deg);
 }
 
-.echart_tools {
+.echart_container {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -975,6 +980,10 @@ p.layer_desc {
     -webkit-filter: brightness(0.8);
     filter: brightness(0.8);
     border: 1px solid red;
+}
+
+.empty_chart {
+    display: none;
 }
 
 /* 弹窗 */
@@ -1202,4 +1211,52 @@ p.layer_desc {
     background-color: #ffffffb2;
     opacity: 1 !important;
     z-index: 1000;
+}
+
+.notification {
+    position: fixed;
+    background: #fff;
+    padding: 20px 24px;
+    width: 284px;
+    overflow: hidden;
+    border-radius: 10px;
+    line-height: 20px;
+    word-wrap: break-word;
+    box-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+    z-index: 999;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: slideDown 0.45s forwards;
+}
+
+@keyframes slideDown {
+    from {
+        top: -100%;
+    }
+
+    to {
+        top: 5%;
+    }
+}
+
+.notification_close {
+    position: absolute;
+    inset-inline-end: 24px;
+    cursor: pointer;
+}
+
+.notification_title {
+    margin-bottom: 8px;
+    font-size: 21px;
+    display: flex;
+    gap: 12px;
+}
+
+.notification_content {
+    line-height: 1.5;
+}
+
+.notification_text {
+    font-size: 14px;
+    margin-inline-start: 36px;
 }

@@ -150,8 +150,9 @@ $('.layer_switch input[type="checkbox"]').on('click', function () {
                     var count = featureCollection.features.length;
                 console.log('图层地块数量:', count);
                 //渲染表格+图表
-                new CustomTable(featureCollection, config.layerList[index]["name"] + '统计表', index, config.layerList[index]["outFields"])
-                $('.statistics-content').show()
+                new CustomTable(featureCollection, config.layerList[index]["name"], index, config.layerList[index]["outFields"])
+                new CustomChart('main-echart', featureCollection, config.layerList[index]["name"],)
+                $('.chart-content').show()
             });
 
         // 使用 eachLayer 方法迭代所有图层
@@ -193,7 +194,7 @@ $('.layer_switch input[type="checkbox"]').on('click', function () {
 
         if ($('.layer_switch input[type="checkbox"]:checked').length == 0) {
             $('.table-content').hide()
-            $('.statistics-content').hide()
+            $('.chart-content').hide()
         }
     }
 });
@@ -261,9 +262,9 @@ function initEvent() {
         }
     })
     //统计图 点击左侧按钮 展开悬浮窗
-    $('.statistics-container').on('click', function () {
+    $('.chart-container').on('click', function () {
         if ($('.layer_switch input[type="checkbox"]:checked').length > 0) {
-            $('.statistics-content').toggle()
+            $('.chart-content').toggle()
         }
     })
 
@@ -273,21 +274,21 @@ function initEvent() {
         // 检查点击的元素是否在 .table-content 内部，且不是 .title-group 和 .dropdown_list 内部
         if (!target.closest('.title-text, .title-group, .dropdown_list,.table_download_btn').length) {
             // 如果不在 .table-content 内部，隐藏 .title-group 和 .dropdown_list
-            $('.title-group, .dropdown_list').hide();
+            $('.table-content .title-group,.table-content .dropdown_list').hide();
         }
     });
 
     //点击标题显隐下拉选项列表
-    $('.title-text').on('click', function () {
+    $('.table-content .title-text').on('click', function () {
         $('.title-group').toggle()
     })
 
     //切换统计表格
-    $('.title-group').on('click', 'li', function () {
+    $('.table-content .title-group').on('click', 'li', function () {
         var i = $(this).index()
-        $('.title-text').html($(this).html())
-        $('.table_panel,.title-group').hide()
-        $('.table_panel:eq(' + i + ')').show()
+        $('.table-content .title-text').html($(this).html())
+        $('.table-content .table_panel,.table-content .title-group').hide()
+        $('.table-content .table_panel:eq(' + i + ')').show()
     })
 
     //隐藏表格
