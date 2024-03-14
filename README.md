@@ -29,3 +29,6 @@ https://mapservice.tdtah.cn/server1/rest/services
 2024年3月14日 14:21:45
 1. [x] 新增网页图标 描述内容 关键词
 2. [x] 完善echart逻辑 
+
+2024年3月14日 23:29:11
+1. [x] 新增数据获取失败时的弹窗组件
