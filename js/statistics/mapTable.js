@@ -28,12 +28,9 @@ class CustomTable {
             this.container.addClass('active').siblings().removeClass('active');
         }
 
-        $('.table-content .title-text').html(this.title);
+        $('.table-content .title-text').html('<img src="imgs/表格.svg" alt="" title="" />' + this.title);
         $('.table-content .title-group').append(`<li data-index=${this.index}>${this.title}</li>`);
         $('.table-content').show();
-
-        new CustomTable('main-echart', title)
-
     }
 
     renderTable(data) {

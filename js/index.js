@@ -151,8 +151,8 @@ $('.layer_switch input[type="checkbox"]').on('click', function () {
                 console.log('图层地块数量:', count);
                 //渲染表格+图表
                 new CustomTable(featureCollection, config.layerList[index]["name"], index, config.layerList[index]["outFields"])
-                new CustomChart('main-echart', featureCollection, config.layerList[index]["name"],)
-                $('.chart-content').show()
+
+                new CustomChart('main-echart', featureCollection, config.layerList[index]["name"])
             });
 
         // 使用 eachLayer 方法迭代所有图层
@@ -278,17 +278,17 @@ function initEvent() {
         }
     });
 
-    //点击标题显隐下拉选项列表
-    $('.table-content .title-text').on('click', function () {
-        $('.title-group').toggle()
-    })
-
     //切换统计表格
     $('.table-content .title-group').on('click', 'li', function () {
         var i = $(this).index()
         $('.table-content .title-text').html($(this).html())
         $('.table-content .table_panel,.table-content .title-group').hide()
         $('.table-content .table_panel:eq(' + i + ')').show()
+    })
+
+    //点击标题显隐下拉选项列表
+    $('.table-content .title-text').on('click', function () {
+        $('.title-group').toggle()
     })
 
     //隐藏表格

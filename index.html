@@ -13,8 +13,8 @@
     <meta name="referrer" content="no-referrer-when-downgrade">
     <link rel="shortcut icon" href="imgs/shortcut/shortcut.svg" type="image/x-icon">
     <link rel="icon" type="image/svg+xml" href="imgs/shortcut/shortcut.svg">
-    <link rel="icon" type="image/png" href="imgs/shortcut/电子地图.png">
-    <link rel="apple-touch-icon" href="imgs/shortcut/电子地图.png">
+    <link rel="icon" type="image/png" href="imgs/shortcut/shortcut.png">
+    <link rel="apple-touch-icon" href="imgs/shortcut/shortcut.png">
     <link rel="stylesheet" href="libs/tabulator-tables@5.6.0/tabulator_bootstrap5.min.css" />
     <link rel="stylesheet" href="libs/perfectScrollbar/perfect-scrollbar.css" />
     <link rel="stylesheet" href="libs/leaflet@1.7.1/leaflet.css" />
@@ -43,7 +43,7 @@
         <div class="left-tool-content">
             <!-- 图层容器 -->
             <div class="layer_content">
-                <div class="layer_title">低效用地</div>
+                <div class="layer_title"><img src="imgs/图层.svg" alt="" title="" />低效用地</div>
                 <div class="layer_drag_tool">
                     <img src="imgs/changeIndexOff.svg" alt="拖拽" title="打开拖拽功能" class="changeIndexOff" />
                     <img src="imgs/changeIndexOn.svg" alt="拖拽" title="关闭拖拽功能" class="changeIndexOn" />
@@ -79,6 +79,7 @@
                 <div class="table-content-close close_btn">
                     <img src="imgs/close.svg" alt="关闭" title="关闭" />
                 </div>
+                <div class="table-panel"></div>
             </div>
 
             <div class="chart-content" style="display: none">
@@ -94,15 +95,17 @@
                         <div class="empty_chart_text">没有查询到相关数据!</div>
                     </div>
                     <div class="echart_body">
-                        <div class="echart_type">
-                            <img src="imgs/pie.svg" alt="切换饼图" title="切换饼图" class="pie" />
-                            <img src="imgs/line.svg" alt="切换折线图" title="切换折线图" class="line" />
-                            <img src="imgs/bar.svg" alt="切换柱状图" title="切换柱状图" class="bar active" />
+                        <div class="echart_toolList">
+                            <div class="echart_type">
+                                <img src="imgs/pie.svg" alt="切换饼图" title="切换饼图" class="pie" />
+                                <img src="imgs/line.svg" alt="切换折线图" title="切换折线图" class="line" />
+                                <img src="imgs/bar.svg" alt="切换柱状图" title="切换柱状图" class="bar active" />
+                            </div>
+                            <a class="echart_download" href="#">
+                                <img src="imgs/download.svg" alt="下载图表" />
+                                <div class="echart_download_text">下载</div>
+                            </a>
                         </div>
-                        <a class="echart_download" href="#">
-                            <img src="imgs/download.svg" alt="下载图表" />
-                            <div class="echart_download_text">下载</div>
-                        </a>
                         <div id="main-echart" style="width: 380px; height: 360px"></div>
                     </div>
                 </div>
@@ -189,11 +192,11 @@
 <script src="libs/tabulator-tables@5.6.0/xlsx.full.min.js"></script>
 <script src="libs/tabulator-tables@5.6.0/jspdf.umd.min.js"></script>
 <script src="libs/tabulator-tables@5.6.0/jspdf.plugin.autotable.min.js"></script>
-<script src="js/table/mapTable.js"></script>
+<script src="js/statistics/mapTable.js"></script>
 
 <!-- 定制化图表展示 -->
 <script src="libs/echart/echarts.5.5.min.js"></script>
-<script src="js/table/mapChart.js"></script>
+<script src="js/statistics/mapChart.js"></script>
 
 <script src="js/map.js"></script>
 <script src="js/index.js"></script>

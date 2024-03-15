@@ -6,19 +6,57 @@ class CustomChart {
         this.data = data;
 
         this.initChart();
+        this.renderChart();
+        this.bindEvents();
+        $('.chart-content').show()
     }
 
     initChart() {
-        var chartDom = document.getElementById(this.container);
-        this.Chart = echarts.init(chartDom);
-        $('.chart-content .title').html(this.title)
-
+        $('.chart-content .title').html('<img src="imgs/图表.svg" alt="" title="" />' + this.title)
     }
 
     renderChart() {
-        // 将 option 设置给图表
-        this.Chart.setOption(this.barOption);
-        this.renderImg()
+        if (this.data) {
+            var chartDom = document.getElementById(this.container);
+            this.Chart = echarts.init(chartDom);
+            // 将 option 设置给图表
+            this.Chart.setOption(this.getBarOption());
+            this.renderImg()
+            this.getChartHtml()
+        } else {
+            this.getEmptyStatus()
+        }
+
+    }
+
+    bindEvents() {
+        var self = this;
+        //关闭图表弹窗
+        $('.chart-content-close').on('click', function () {
+            $('.chart-content').hide()
+        })
+
+        //切换图表
+        $('.echart_type img').on('click', function () {
+            if ($(this).hasClass('active')) {
+                return
+            } else {
+                $(this).addClass('active').siblings().removeClass('active')
+                // 清除之前的图表
+                self.Chart.clear();
+                // 切换图表类型
+                if ($(this).hasClass('pie')) {
+                    self.currentOption = self.getPieOption();
+                } else if ($(this).hasClass('line')) {
+                    self.currentOption = self.getLineOption();
+                } else {
+                    self.currentOption = self.getBarOption();
+                }
+                // 更新图表
+                self.Chart.setOption(self.currentOption);
+                self.renderImg()
+            }
+        })
     }
 
     getBarOption() {
@@ -60,7 +98,7 @@ class CustomChart {
             };
         });
 
-        this.barOption = {
+        const barOption = {
             legend: {
                 top: 10,
                 data: ['Direct', 'Mail Ad', 'Affiliate Ad', 'Video Ad']
@@ -81,9 +119,10 @@ class CustomChart {
             },
             series
         };
+        return barOption
     }
     getLineOption() {
-        this.lineOption = {
+        let lineOption = {
             tooltip: {
                 trigger: 'axis'
             },
@@ -139,9 +178,10 @@ class CustomChart {
                 }
             ]
         };
+        return lineOption
     }
     getPieOption() {
-        this.pieOption = {
+        let pieOption = {
             tooltip: {
                 trigger: 'item'
             },
@@ -179,40 +219,12 @@ class CustomChart {
                 }
             ]
         };
-    }
-
-    bindEvents() {
-        //关闭图表弹窗
-        $('.chart-content-close').on('click', function () {
-            $('.chart-content').hide()
-        })
-
-        //切换图表
-        $('.echart_type img').on('click', function () {
-            if ($(this).hasClass('active')) {
-                return
-            } else {
-                $(this).addClass('active').siblings().removeClass('active')
-                // 清除之前的图表
-                this.Chart.clear();
-                // 切换图表类型
-                if ($(this).hasClass('pie')) {
-                    this.currentOption = this.pieOption;
-                } else if ($(this).hasClass('line')) {
-                    this.currentOption = this.lineOption;
-                } else {
-                    this.currentOption = this.barOption;
-                }
-                // 更新图表
-                this.Chart.setOption(this.currentOption);
-                this.renderImg()
-            }
-        })
+        return pieOption
     }
 
     //渲染图表下载项
     renderImg() {
-        this.Chart.on('finished', function () {
+        this.Chart.on('finished', () => {
             var dataURL = this.Chart.getDataURL({
                 pixelRatio: 2, // 可选，设置导出的图像分辨率
                 backgroundColor: '#fff' // 可选，设置导出的图像背景色
@@ -220,13 +232,13 @@ class CustomChart {
             // 创建一个隐藏的链接元素用于下载
             $('.echart_download').attr({
                 'href': dataURL,
-                "download": title + ".png"//下载的文件名
+                "download": this.title + ".png"//下载的文件名
             })
         });
     }
 
     getEmptyStatus() {
-        $('.empty_chart').show()
+        $('.empty_chart').css('display', 'flex')
         $('.echart_body').hide()
     }
 
