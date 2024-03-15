@@ -32,29 +32,10 @@ var config = {
             "FEATID": "FEATID",
         },
         count: "",
-        area: ""
+        area: "",
+        data: null
     }, {
         id: "1",
-        name: "行政区划_市",
-        url: "https://mapservice.tdtah.cn/server1/rest/services/AHDISA/MapServer",
-        layerIndex: 0,
-        showStatus: 1,
-        type: "Feature Layer",
-        description: "这是一个图层描述这是一个图层描述这是一个图层描述",
-        tags: ["郊区", "城市"],
-        thumbnail: "/info/thumbnail/thumbnail.png",
-        outFields: {
-            "FID": "ID",
-            "NAME": "标题",
-            "ENTIID": "ENTIID",
-            "PAC": "PAC",
-            "ASCRIPTION": "ASCRIPTION",
-            "SOURCE": "SOURCE",
-        },
-        count: "",
-        area: ""
-    }, {
-        id: "2",
         name: "rootline",
         url: "https://mapservice.tdtah.cn/server1/rest/services/rootline/MapServer",
         layerIndex: 0,
@@ -72,7 +53,29 @@ var config = {
             "FEATID": "FEATID",
         },
         count: "",
-        area: ""
+        area: "",
+        data: null
+    }, {
+        id: "2",
+        name: "行政区划_市",
+        url: "https://mapservice.tdtah.cn/server1/rest/services/AHDISA/MapServer",
+        layerIndex: 0,
+        showStatus: 1,
+        type: "Feature Layer",
+        description: "这是一个图层描述这是一个图层描述这是一个图层描述",
+        tags: ["郊区", "城市"],
+        thumbnail: "/info/thumbnail/thumbnail.png",
+        outFields: {
+            "FID": "ID",
+            "NAME": "标题",
+            "ENTIID": "ENTIID",
+            "PAC": "PAC",
+            "ASCRIPTION": "ASCRIPTION",
+            "SOURCE": "SOURCE",
+        },
+        count: "",
+        area: "",
+        data: null
     }, {
         id: "3",
         showStatus: 0,
@@ -92,7 +95,8 @@ var config = {
             "FEATID": "FEATID",
         },
         count: "",
-        area: ""
+        area: "",
+        data: null
     }, {
         id: "4",
         showStatus: 0,
@@ -112,7 +116,8 @@ var config = {
             "FEATID": "FEATID",
         },
         count: "",
-        area: ""
+        area: "",
+        data: null
     }, {
         id: "5",
         url: "https://mapservice.tdtah.cn/server1/rest/services/AHSZJZ/MapServer",
@@ -131,7 +136,8 @@ var config = {
             "FEATID": "FEATID",
         },
         count: "",
-        area: ""
+        area: "",
+        data: null
     }, {
         id: "6",
         url: "https://mapservice.tdtah.cn/server1/rest/services/AHSZJZ/MapServer",
@@ -150,7 +156,8 @@ var config = {
             "FEATID": "FEATID",
         },
         count: "",
-        area: ""
+        area: "",
+        data: null
     }, {
         id: "7",
         url: "https://mapservice.tdtah.cn/server1/rest/services/AHSZJZ/MapServer",
@@ -170,7 +177,8 @@ var config = {
         },
         count: "",
         area: "",
-        area: ""
+        area: "",
+        data: null
     }],
 
     mapOptions: {

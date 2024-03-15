@@ -148,7 +148,9 @@ $('.layer_switch input[type="checkbox"]').on('click', function () {
                 //统计要素数量
                 if (featureCollection)
                     var count = featureCollection.features.length;
-                console.log('图层地块数量:', count);
+
+                config.layerList[index]["data"] = featureCollection
+
                 //渲染表格+图表
                 new CustomTable(featureCollection, config.layerList[index]["name"], index, config.layerList[index]["outFields"])
 
@@ -281,9 +283,15 @@ function initEvent() {
     //切换统计表格
     $('.table-content .title-group').on('click', 'li', function () {
         var i = $(this).index()
-        $('.table-content .title-text').html($(this).html())
+        $('.table-content .title-text').html('<img src="imgs/表格.svg" alt="" title="" />' + $(this).html())
         $('.table-content .table_panel,.table-content .title-group').hide()
         $('.table-content .table_panel:eq(' + i + ')').show()
+
+        var dataIndex = $(this).attr('data-index');
+        new CustomChart('main-echart', config.layerList[dataIndex]["data"], config.layerList[dataIndex]["name"])
+
+        $(this).addClass('active').siblings().removeClass('active')
+
     })
 
     //点击标题显隐下拉选项列表
