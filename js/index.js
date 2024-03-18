@@ -180,6 +180,7 @@ $('.layer_switch input[type="checkbox"]').on('click', function () {
         //     });
         // });
     } else {
+
         $('.layer_item[data-index=' + index + ']').removeClass('active')
         // 从layerGroup中查找并删除图层
         let layerToRemove = addedLayers[index]
@@ -280,20 +281,25 @@ function initEvent() {
         }
     });
 
-    //切换统计表格
+    // 定义切换统计表格的事件处理程序
     $('.table-content .title-group').on('click', 'li', function () {
         var i = $(this).index()
+        // 显示选定的统计表格标题文本
         $('.table-content .title-text').html('<img src="imgs/表格.svg" alt="" title="" />' + $(this).html())
+        // 隐藏所有统计表格面板和标题组
         $('.table-content .table_panel,.table-content .title-group').hide()
+        // 显示选定的统计表格面板
         $('.table-content .table_panel:eq(' + i + ')').show()
 
+        // 获取当前li的data-index属性值
         var dataIndex = $(this).attr('data-index');
+        // 创建并显示自定义图表
         new CustomChart('main-echart', config.layerList[dataIndex]["data"], config.layerList[dataIndex]["name"])
 
+        // 为当前选定的li添加active类，并移除其兄弟元素的active类
         $(this).addClass('active').siblings().removeClass('active')
 
     })
-
     //点击标题显隐下拉选项列表
     $('.table-content .title-text').on('click', function () {
         $('.title-group').toggle()

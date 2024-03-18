@@ -7,6 +7,7 @@ const getMapModule = (function () {
             this.options = this.getMergedOptions(options);
             this.initMap()
         }
+
         initMap() {
             // 创建地图
             this.mapObj = L.map("map", config.mapOptions).setView(config.center);

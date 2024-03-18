@@ -94,6 +94,9 @@ window.utils = {
             };
         }
     },
+
+
+
     //获取显示的图层
     getShowLayerList: function () {
         return config.layerList.filter(layer => layer.showStatus !== 0);
