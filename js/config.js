@@ -20,7 +20,7 @@ var config = {
         layerIndex: 0,
         showStatus: 1,
         type: "Feature Layer",
-        description: "这是一个图层描述",
+        description: "请在这里添加图层描述内容",
         tags: ["湿地", "郊区"],
         thumbnail: "/info/thumbnail/thumbnail.png",
         outFields: {
@@ -41,7 +41,7 @@ var config = {
         layerIndex: 0,
         showStatus: 1,
         type: "Feature Layer",
-        description: "这是一个图层描述",
+        description: "请在这里添加图层描述内容请在这里添加图层描述内容请在这里添加图层描述内容请在这里添加图层描述内容请在这里添加图层描述内容",
         tags: ["水体", "郊区", "道路"],
         thumbnail: "/info/thumbnail/thumbnail.png",
         outFields: {
