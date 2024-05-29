@@ -140,7 +140,8 @@
         {{each layerList as item i}} {{if item.showStatus!==0}}
         <div class="layer_item " data-index="{{i}}">
             <div class="layer_thumbnail">
-                <img src="{{item.url}}{{item.thumbnail}}" alt="地块缩略图" class="thumbImg" />
+                <!-- <img src="{{item.url}}{{item.thumbnail}}" alt="地块缩略图" class="thumbImg" /> -->
+                <img src="./temp/2.jpg" alt="地块缩略图" class="thumbImg" />
                 <p class="layer_type" title="地块类型">{{item.type}}</p>
             </div>
             <div class="layer_info">
@@ -172,6 +173,9 @@
     </script>
 
 </body>
+
+<script src="temp/data.js"></script>
+
 <script src="libs/jquery/jquery_3.0.0.js"></script>
 <script src="libs/Sortable/Sortable.js"></script>
 <script src="libs/template@4.8/template.js"></script>

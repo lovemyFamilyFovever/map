@@ -3,13 +3,14 @@ class CustomTable {
     constructor(data, title, index, columns) {
         this.data = data;
         this.title = title + '统计表';
-        this.index = index;
+        this.index = index || 1000;
         this.columns = columns;
 
         this.initTable();
     }
 
     initTable() {
+        this.data = this.data || window.tabledata;
         if (this.data) {
             const features = this.data.features || [];
 
@@ -34,11 +35,13 @@ class CustomTable {
     }
 
     renderTable(data) {
+
         this.table = new Tabulator(`#table${this.index}`, {
-            data: data.map(item => item.properties),
-            height: "360px",
+            // data: data.map(item => item.properties),
+            data,
+            height: "330px",
             layout: "fitData",
-            pagination: true,
+            pagination: false,
             paginationSize: 10,
             rowHeight: 27,
             columnDefaults: {
@@ -163,7 +166,7 @@ class CustomTable {
             </div>
             <div class="table-wrapper">
                 <div class="table"></div>
-                <div class="table-wrapper-count" title='共${count}条数据'>共${count > 999 ? '999+' : count}条数据</div>
+                <div class="table-wrapper-count" title='共${count}条'>共<b>${count > 999 ? '999+' : count}</b>条丨工业用地:<b>59</b>宗丨工业面积:<b>443.95</b>公顷丨工业企业:<b>296</b>家</div>
             </div>
         </div>`
     }

@@ -86,7 +86,7 @@ window.utils = {
                 count
             };
         } catch (error) {
-            new Notification("获取地图数据失败！请刷新网页或联系管理员后重新获取。")
+            // new Notification("获取地图数据失败！请刷新网页或联系管理员后重新获取。")
             console.log(error);
             return {
                 totalArea: 0,

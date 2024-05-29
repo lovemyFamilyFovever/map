@@ -16,6 +16,7 @@ class CustomChart {
     }
 
     renderChart() {
+        this.data = true
         if (this.data) {
             var chartDom = document.getElementById(this.container);
             this.Chart = echarts.init(chartDom);
@@ -77,11 +78,7 @@ class CustomChart {
             totalData.push(sum);
         }
         const series = [
-            'Direct',
-            'Mail Ad',
-            'Affiliate Ad',
-            'Video Ad',
-            'Search Engine'
+            '工业用地数量', '工业用地面积', '工业企业数量', '缺失经济数据企业', '规上企业'
         ].map((name, sid) => {
             return {
                 name,
@@ -100,8 +97,8 @@ class CustomChart {
 
         const barOption = {
             legend: {
-                top: 10,
-                data: ['Direct', 'Mail Ad', 'Affiliate Ad', 'Video Ad']
+                top: 0,
+                data: ['工业用地数量', '工业用地面积', '工业企业数量', '缺失经济数据企业', '规上企业']
             },
             tooltip: {},
             grid: {
@@ -115,7 +112,7 @@ class CustomChart {
             },
             xAxis: {
                 type: 'category',
-                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+                data: ['工业用地数量', '工业用地面积', '工业企业数量', '缺失经济数据企业数量', '规上企业用地数量', '规上企业用地面积']
             },
             series
         };
