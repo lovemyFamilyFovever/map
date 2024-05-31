@@ -1264,15 +1264,7 @@ p.layer_desc {
     z-index: 1000;
 }
 
-.notification-container {
-    position: fixed;
-    top: 10px;
-    left: 50%;
-    -webkit-transform: translate(-50%, 0);
-    -ms-transform: translate(-50%, 0);
-    transform: translate(-50%, 0);
-    z-index: 999;
-}
+
 
 .notification {
     position: relative;

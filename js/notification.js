@@ -9,7 +9,6 @@ class Notification {
     renderTable() {
 
         this.container = $(this.getHtml());
-        $('.notification-container').append(this.container);
         this.container.addClass('animated-notification')
 
         let t = setTimeout(() => {
