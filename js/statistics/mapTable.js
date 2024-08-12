@@ -39,7 +39,7 @@ class CustomTable {
         this.table = new Tabulator(`#table${this.index}`, {
             // data: data.map(item => item.properties),
             data,
-            height: "330px",
+            height: "280px",
             layout: "fitData",
             pagination: false,
             paginationSize: 10,

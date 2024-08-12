@@ -15,6 +15,7 @@
     <link rel="icon" type="image/svg+xml" href="imgs/shortcut/shortcut.svg">
     <link rel="icon" type="image/png" href="imgs/shortcut/shortcut.png">
     <link rel="apple-touch-icon" href="imgs/shortcut/shortcut.png">
+
     <link rel="stylesheet" href="libs/tabulator-tables@5.6.0/tabulator_bootstrap5.min.css" />
     <link rel="stylesheet" href="libs/perfectScrollbar/perfect-scrollbar.css" />
     <link rel="stylesheet" href="libs/leaflet@1.7.1/leaflet.css" />
@@ -106,7 +107,7 @@
                                 <div class="echart_download_text">下载</div>
                             </a>
                         </div>
-                        <div id="main-echart" style="width: 380px; height: 360px"></div>
+                        <div id="main-echart" style="width: 410px; height: 300px"></div>
                     </div>
                 </div>
             </div>
@@ -136,29 +137,36 @@
     </div>
     <!-- 加载图层列表 -->
     <script id="layers-html" type="text/html">
-        {{each layerList as item i}} {{if item.showStatus!==0}}
-        <div class="layer_item " data-index="{{i}}">
-            <div class="layer_thumbnail">
-                <!-- <img src="{{item.url}}{{item.thumbnail}}" alt="地块缩略图" class="thumbImg" /> -->
-                <img src="./temp/2.jpg" alt="地块缩略图" class="thumbImg" />
-                <p class="layer_type" title="地块类型">{{item.type}}</p>
-            </div>
-            <div class="layer_info">
-                <p class="layer_name" title="地块名称">{{item.name}}</p>
-                <p class="layer_desc" title="">{{item.description}}</p>
-                <div class="layer_info_line">
-                    <div class="layer_count" title="地块数量">{{item.count}}</div>
-                    <div class="layer_area" title="地块面积">{{item.area}}</div>
+
+        <div class="layer_items">
+
+            <div class="layer_items_title"> </div>
+
+            {{each layerList as item i}} {{if item.showStatus!==0}}
+            <div class="layer_item" data-index="{{i}}">
+                <div class="layer_thumbnail">
+                    <!-- <img src="{{item.url}}{{item.thumbnail}}" alt="地块缩略图" class="thumbImg" /> -->
+                    <img src="./temp/2.jpg" alt="地块缩略图" class="thumbImg" />
+                    <p class="layer_type" title="地块类型">{{item.type}}</p>
                 </div>
-                <div class="layer_switch" data-index="{{i}}">
-                    <label class="switch">
-                        <input type="checkbox" />
-                        <span class="slider"></span>
-                    </label>
+                <div class="layer_info">
+                    <p class="layer_name" title="地块名称">{{item.name}}</p>
+                    <p class="layer_desc" title="">{{item.description}}</p>
+                    <div class="layer_info_line">
+                        <div class="layer_count" title="地块数量">{{item.count}}</div>
+                        <div class="layer_area" title="地块面积">{{item.area}}</div>
+                    </div>
+                    <div class="layer_switch" data-index="{{i}}">
+                        <label class="switch">
+                            <input type="checkbox" />
+                            <span class="slider"></span>
+                        </label>
+                    </div>
                 </div>
             </div>
+            {{/if}} {{/each}}
         </div>
-        {{/if}} {{/each}}
+
     </script>
     <!-- 点击地图的弹窗 -->
     <script id="popupForm" type="text/html">

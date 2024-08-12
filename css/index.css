@@ -327,6 +327,10 @@ a:hover {
     box-shadow: 0 2px 6px rgb(0 0 0 / 31%);
 }
 
+.table-content {
+    width: 845px;
+}
+
 .layer_content {
     display: none;
     font-size: 13px;
@@ -611,12 +615,13 @@ p.layer_desc {
 /* 自定义表格 */
 .right-tool {
     position: absolute;
-    top: 10px;
     z-index: 999;
-    right: 70px;
+    right: 80px;
+    bottom: 0;
 }
 
-.empty_table, .empty_chart {
+.empty_table,
+.empty_chart {
     color: rgba(0, 0, 0, 0.25);
     font-size: 14px;
     display: -webkit-box;
@@ -641,11 +646,6 @@ p.layer_desc {
     margin-bottom: 20px;
 }
 
-.table-content .title {
-    margin-left: 0;
-    position: relative;
-    cursor: pointer;
-}
 
 .table_download_btn {
     cursor: pointer;
@@ -925,12 +925,12 @@ p.layer_desc {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
+    flex-direction: row;
     gap: 5px;
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
-    -ms-flex-direction: column;
-    flex-direction: column;
-    width: 400px;
+    -ms-flex-direction: row;
+    width: 1300px;
 }
 
 /* echart 样式 */
@@ -948,6 +948,12 @@ p.layer_desc {
     width: -webkit-max-content;
     width: -moz-max-content;
     width: max-content;
+    cursor: pointer;
+}
+
+.table-content .title,
+.chart-content .title {
+    margin-left: 0;
 }
 
 .echart_toolList {
@@ -1339,11 +1345,8 @@ p.layer_desc {
     transform: rotate(90deg);
 }
 
-.layer_title img, .title img {
+.layer_title img,
+.title img {
     vertical-align: text-top;
     padding-right: 6px;
-}
-
-.table-content .title, .chart-content .title {
-    margin-left: 0;
 }
