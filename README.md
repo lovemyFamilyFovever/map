@@ -6,6 +6,10 @@ https://mapservice.tdtah.cn/server1/rest/services
 ```
 
 
+- 在线地址
+https://lovemyfamilyfovever.github.io/map/
+
+
 2024年3月8日 17:36:13
 1. [x] 新增表格保存文件时的名称弹窗
 2. [ ] 新增表格自定义查询逻辑fields  待完善
