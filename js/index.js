@@ -49,8 +49,8 @@ async function loadMapLayers() {
     for (var i = 0; i < activeLayerList.length; i++) {
         // 使用 await 等待获取数量结果
         let data = await utils.getMapInfo(activeLayerList[i].url + '/' + activeLayerList[i].layerIndex);
-        $('.layer_count:eq(' + i + ')').html("地块数量:<b>" + data.count + '</b>')
-        $('.layer_area:eq(' + i + ')').html("图层面积:<b>" + data.totalArea + '</b>')
+        // $('.layer_count:eq(' + i + ')').html("地块数量:<b>" + data.count + '</b>')
+        // $('.layer_area:eq(' + i + ')').html("图层面积:<b>" + data.totalArea + '</b>')
     }
 
     //格式化滚动条

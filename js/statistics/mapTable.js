@@ -39,9 +39,9 @@ class CustomTable {
         this.table = new Tabulator(`#table${this.index}`, {
             // data: data.map(item => item.properties),
             data,
-            height: "280px",
+            height: "300px",
             layout: "fitData",
-            pagination: false,
+            pagination: true,
             paginationSize: 10,
             rowHeight: 27,
             columnDefaults: {
@@ -121,6 +121,7 @@ class CustomTable {
                 currentColumns.push({
                     title: this.columns[key],
                     field: key,
+                    headerFilter: "input",
                     sorter: (key == "ID" || key == "FID") ? "number" : "string"
                 })
             }
@@ -149,6 +150,12 @@ class CustomTable {
                     <input class="table_seatch_input" placeholder="请输入标题">
                     <div class="table_search_btn">查询</div>
                 </div>
+
+                  <div class="layer_info_line">
+                        <div class="layer_count" title="地块数量">地块数量:<b>0</b></div>
+                        <div class="layer_area" title="地块面积">地块面积:<b>0</b></div>
+                    </div>
+
                 <div class="table_download_btn">
                     <img src="imgs/download.svg" />
                     <div class="table_download_text">下载</div>

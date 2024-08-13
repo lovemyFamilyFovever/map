@@ -33,6 +33,23 @@ a:hover {
     outline: 0
 }
 
+.project_name {
+    font-size: 20px;
+    font-weight: bolder;
+    line-height: 50px;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    right: 0;
+    left: 0;
+    color: #fff;
+    z-index: 1005;
+    padding: 5px 18px;
+    background-image: -webkit-gradient(linear, left bottom, left top, from(#aac6ee), to(#6f86d6));
+    background-image: -o-linear-gradient(bottom, #aac6ee 0%, #6f86d6 100%);
+    background-image: linear-gradient(0deg, #aac6ee 0%, #6f86d6 100%);
+}
+
 #map {
     height: 100vh;
 }
@@ -210,13 +227,17 @@ a:hover {
     display: none;
 }
 
+.leaflet-top {
+    top: 65px;
+}
+
 .layer_item {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
     position: relative;
     gap: 14px;
-    height: 110px;
+    /* height: 110px; */
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #efEfef;
@@ -245,7 +266,7 @@ a:hover {
 /* 图层加载 */
 .left-tool {
     position: absolute;
-    top: 15px;
+    top: 75px;
     left: 20px;
     z-index: 1005;
 }
@@ -409,6 +430,11 @@ a:hover {
     -webkit-box-pack: justify;
     -ms-flex-pack: justify;
     justify-content: space-between;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    gap: 10px;
+    height: 30px;
 }
 
 p.layer_name {
@@ -430,7 +456,10 @@ p.layer_desc {
     text-overflow: ellipsis;
 }
 
-.layer_type {
+p.layer_type {
+    position: absolute;
+    right: 65px;
+    padding: 0 10px;
     background: #f7f8fa;
     border-radius: 3px;
     height: 25px;
@@ -458,16 +487,16 @@ p.layer_desc {
 
 .layer_area {
     background: #fff2e5;
-    padding: 0 7px;
-    border-radius: 3px;
+    padding: 4.5px 10px;
+    border-radius: 5px;
     color: #ff7d00;
 }
 
 .layer_count {
     color: #623cea;
     background: #efebfd;
-    padding: 0 7px;
-    border-radius: 3px;
+    padding: 4.5px 10px;
+    border-radius: 5px;
 }
 
 .layer_switch {
@@ -617,7 +646,7 @@ p.layer_desc {
     position: absolute;
     z-index: 999;
     right: 80px;
-    bottom: 0;
+    bottom: 10px;
 }
 
 .empty_table,
@@ -648,6 +677,7 @@ p.layer_desc {
 
 
 .table_download_btn {
+    /* justify-content: flex-end; */
     cursor: pointer;
     display: -webkit-box;
     display: -ms-flexbox;
@@ -666,6 +696,7 @@ p.layer_desc {
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
+    margin-left: auto;
 }
 
 .table_download_text {
@@ -731,9 +762,9 @@ p.layer_desc {
     font-size: 14px;
 }
 
-.tabulator-headers {
+/* .tabulator-headers {
     height: 25px !important;
-}
+} */
 
 .tabulator .tabulator-header {
     border-bottom: none;
@@ -793,11 +824,8 @@ p.layer_desc {
     -ms-flex-pack: justify;
     justify-content: space-between;
     position: relative;
-}
-
-.table-wrapper {
-    min-height: 30px;
-    padding-bottom: 35px;
+    width: 300px;
+    margin-right: 10px;
 }
 
 .table_search img {
@@ -873,13 +901,8 @@ p.layer_desc {
 
 .table_panel_container {
     position: relative;
-    gap: 10px;
-    display: -webkit-box;
-    display: -ms-flexbox;
+    width: 100%;
     display: flex;
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
-    justify-content: space-between;
 }
 
 .table_seatch_input {
@@ -912,7 +935,8 @@ p.layer_desc {
 
 .table-wrapper-count {
     position: absolute;
-    bottom: 11px;
+    bottom: 5px;
+    left: 30px;
     font-size: 13px;
     line-height: 33px;
 }
@@ -1270,8 +1294,6 @@ p.layer_desc {
     z-index: 1000;
 }
 
-
-
 .notification {
     position: relative;
     padding: 10px 45px 10px 20px;
@@ -1308,7 +1330,6 @@ p.layer_desc {
         transform: translateY(0);
     }
 }
-
 
 @keyframes slideDown {
     from {
@@ -1349,4 +1370,9 @@ p.layer_desc {
 .title img {
     vertical-align: text-top;
     padding-right: 6px;
+}
+
+.tabulator .tabulator-header .tabulator-col .tabulator-header-filter input {
+    font-size: 12px;
+    padding: 2px !important;
 }

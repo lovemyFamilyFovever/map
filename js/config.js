@@ -25,9 +25,10 @@ var config = {
         tags: ["湿地", "郊区"],
         thumbnail: "/info/thumbnail/thumbnail.png",
         outFields: {
-            "行政区名称": "行政区名称",
-            "是否建成": "是否建成",
-            "用地性质": "用地性质",
+            "所在县（市、区）": "所在县（市、区）",
+            "所在乡镇": "所在乡镇",
+            "建设情况": "建设情况",
+            "规划用途": "规划用途",
             "分类": "分类",
             "面积": "面积(公顷)",
             "占比": "占比",
@@ -50,12 +51,17 @@ var config = {
         tags: ["水体", "郊区", "道路"],
         thumbnail: "/info/thumbnail/thumbnail.png",
         outFields: {
-            "FID": "ID",
-            "NAME": "标题",
-            "TYPE": "类型",
-            "GB": "面积",
-            "EC": "EC",
-            "FEATID": "FEATID",
+            "所在县（市、区）": "所在县（市、区）",
+            "所在乡镇": "所在乡镇",
+            "建设情况": "建设情况",
+            "规划用途": "规划用途",
+            "分类": "分类",
+            "面积": "面积(公顷)",
+            "占比": "占比",
+            "宗地数": "宗地数(宗)",
+            "涉及企业数": "涉及企业数(家)",
+            "亩": "亩",
+            "备注": "备注",
         },
         count: "",
         area: "",
@@ -83,9 +89,9 @@ var config = {
         data: null
     }, {
         id: "3",
-        showStatus: 0,
+        showStatus: 1,
         url: "https://mapservice.tdtah.cn/server1/rest/services/Water07/MapServer",
-        layerIndex: 0,
+        layerIndex: 1,
         name: "大庙街道",
         type: "Feature Layer",
         description: "这是一个图层描述这是一个图层描述这是一个图层描述这是一个图层描述",
@@ -104,12 +110,12 @@ var config = {
         data: null
     }, {
         id: "4",
-        showStatus: 0,
+        showStatus: 1,
         url: "https://mapservice.tdtah.cn/server1/rest/services/HF2012/MapServer",
         layerIndex: 0,
         name: "金龙湖街道",
         type: "Feature Layer",
-        description: "",
+        description: "这是一个图层描述这是一个图层描述这是一个图层描述这是一个图层描述",
         tags: ["城市", "建筑"],
         thumbnail: "/info/thumbnail/thumbnail.png",
         outFields: {
@@ -125,11 +131,12 @@ var config = {
         data: null
     }, {
         id: "5",
+        showStatus: 1,
         url: "https://mapservice.tdtah.cn/server1/rest/services/AHSZJZ/MapServer",
         layerIndex: 0,
         name: "徐庄街道",
         type: "Feature Layer",
-        description: "",
+        description: "这是一个图层描述这是一个图层描述这是一个图层描述这是一个图层描述",
         tags: ["城市", "建筑"],
         thumbnail: "/info/thumbnail/thumbnail.png",
         outFields: {

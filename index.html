@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport"
         content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
-    <title>市政府规划局低效用地在线平台 - 数量、面积和控件分布展示</title>
+    <title>徐州经济技术开发区工业企业低效用地分析系统</title>
     <meta name="description" content="我们的在线平台展示了市政府规划局开发全域低效用地的数量、面积和控件分布情况。欢迎探索和分析这些数据。" />
     <meta name="keywords" content="市政府规划局 低效用地 全域 在线平台 数量 面积 控件分布 数据展示 市政府数据 地区规划 城市发展" />
     <meta name="google" value="notranslate" />
@@ -24,9 +24,17 @@
 </head>
 
 <body>
+    <div class="project_name">
+        <img src="imgs/shortcut/shortcut.png" alt="logo" style="vertical-align: sub;">
+        徐州经济技术开发区工业企业低效用地分析系统
+    </div>
     <div id="map"></div>
     <div class="left-tool">
         <div class="left-tool-title">
+            <!-- 加载图层 -->
+            <div class="left-tool-item totalStatistics-container">
+                <img src="imgs/total-statistics.svg" alt="预览图层" title="预览图层" />
+            </div>
             <!-- 加载图层 -->
             <div class="left-tool-item switchmlayer-container">
                 <img src="imgs/more.png" alt="加载图层" title="加载图层" />
@@ -147,15 +155,11 @@
                 <div class="layer_thumbnail">
                     <!-- <img src="{{item.url}}{{item.thumbnail}}" alt="地块缩略图" class="thumbImg" /> -->
                     <img src="./temp/2.jpg" alt="地块缩略图" class="thumbImg" />
-                    <p class="layer_type" title="地块类型">{{item.type}}</p>
                 </div>
                 <div class="layer_info">
                     <p class="layer_name" title="地块名称">{{item.name}}</p>
                     <p class="layer_desc" title="">{{item.description}}</p>
-                    <div class="layer_info_line">
-                        <div class="layer_count" title="地块数量">{{item.count}}</div>
-                        <div class="layer_area" title="地块面积">{{item.area}}</div>
-                    </div>
+                    <p class="layer_type" title="地块类型">{{item.type}}</p>
                     <div class="layer_switch" data-index="{{i}}">
                         <label class="switch">
                             <input type="checkbox" />
