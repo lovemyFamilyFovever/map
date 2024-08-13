@@ -5,16 +5,36 @@ class CustomTable {
         this.title = title + '统计表';
         this.index = index || 1000;
         this.columns = columns;
+        this.filterList = {
+            area: new Set(),
+            build: new Set(),
+            user: new Set(),
+            type: new Set(),
+        };
+
+        this.table = null;
 
         this.initTable();
     }
 
     initTable() {
-        this.data = this.data || window.tabledata;
+        // this.data = this.data || window.tabledata;
+        this.data = window.tabledata;
         if (this.data) {
             const features = this.data.features || [];
 
-            const tableHtml = this.getTableHtml(features.length);
+            features.forEach(feature => {
+                this.filterList.area.add(feature["所在乡镇"]);
+                this.filterList.build.add(feature["建设情况"]);
+                this.filterList.user.add(feature["规划用途"]);
+                this.filterList.type.add(feature["分类"]);
+            });
+            this.filterList.area = Array.from(this.filterList.area);
+            this.filterList.build = Array.from(this.filterList.build);
+            this.filterList.user = Array.from(this.filterList.user);
+            this.filterList.type = Array.from(this.filterList.type);
+
+            const tableHtml = this.getTableHtml(features.length, this.filterList);
             $('.table-content').append(tableHtml);
 
             this.container = $('.table_panel:last');
@@ -29,8 +49,7 @@ class CustomTable {
             this.container.addClass('active').siblings().removeClass('active');
         }
 
-        $('.table-content .title-text').html('<img src="imgs/表格.svg" alt="" title="" />' + this.title);
-        $('.table-content .title-group').append(`<li data-index=${this.index}>${this.title}</li>`);
+        $('.table-content .title-text').html('<img src="imgs/表格.svg" alt="" title="" />低效用地数据统计表');
         $('.table-content').show();
     }
 
@@ -39,10 +58,10 @@ class CustomTable {
         this.table = new Tabulator(`#table${this.index}`, {
             // data: data.map(item => item.properties),
             data,
-            height: "300px",
+            height: "330px",
             layout: "fitData",
             pagination: true,
-            paginationSize: 10,
+            paginationSize: 20,
             rowHeight: 27,
             columnDefaults: {
                 hozAlign: 'center',
@@ -57,6 +76,7 @@ class CustomTable {
         //当调用tabulator构造函数并且表已完成渲染时，触发tableBuilt事件,渲染滚动条
         this.table.on("tableBuilt", () => {
             new PerfectScrollbar('.table_panel:last-child .tabulator-tableholder');
+            this.getStatisticsTable()
         });
         // 当提示用户下载文件时，将触发downloadFull回调。
         this.table.on("downloadComplete", () => {
@@ -69,6 +89,50 @@ class CustomTable {
         this.container.on('click', '.table_download_btn', (e) => {
             this.container.find('.dropdown_list').toggle();
         });
+
+        // 使用事件委托，点击获取筛选下拉列表
+        this.container.on('click', '.tabler_filter_item_btn', (e) => {
+            e.stopPropagation();
+            const $currentDropdown = $(e.currentTarget).next('.dropdown_list_filter');
+
+            // 检查当前点击的 dropdown_list_filter 是否已经可见
+            if ($currentDropdown.is(':visible')) {
+                // 如果当前 dropdown_list_filter 已经可见，则隐藏
+                $currentDropdown.hide();
+                return;
+            }
+
+            // // 隐藏所有 .dropdown_list_filter 元素
+            $('.dropdown_list_filter').hide();
+
+            // 显示当前点击的 .dropdown_list_filter 元素
+            $currentDropdown.show();
+        });
+
+        //点击选中li元素
+        this.container.off('click', '.dropdown_list_filter');
+        this.container.on('click', '.dropdown_list_filter', (e) => {
+            e.stopPropagation();
+            const $target = $(e.currentTarget);
+
+            const selectedText = $target.find('input:checkbox:checked')
+                .map((_, checkbox) => $(checkbox).closest('li').find('span').last().text())
+                .get()
+                .join(',');
+            const showText = $target.prev().find('.search_input')
+            showText.val(selectedText)
+        });
+
+        //搜索按钮
+        this.container.on('click', '.filter_table_search_btn', (e) => {
+            this.queryTable()
+        })
+
+        //重置数据
+        this.container.on('click', '.filter_table_reset_btn', (e) => {
+            $('.search_input').val("")
+            this.queryTable()
+        })
 
         //文件下载
         const downloadOptions = ['CSV', 'JSON', 'XLSX', 'PDF', 'HTML'];
@@ -85,22 +149,6 @@ class CustomTable {
                 });
             });
         });
-
-        //搜索功能
-        this.container.on('click', '.table_search_btn', () => {
-            const value = $('.table_seatch_input').val().trim();
-            if (value.trim() !== "")
-                this.table.setFilter("NAME", 'like', value);
-            else
-                this.table.clearFilter()
-        })
-        //搜索框enter事件
-        this.container.on('keydown', '.table_seatch_input', (event) => {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-                this.container.find('.table_search_btn').click();
-            }
-        })
     }
 
     setDefaultSort() {
@@ -121,12 +169,65 @@ class CustomTable {
                 currentColumns.push({
                     title: this.columns[key],
                     field: key,
-                    headerFilter: "input",
                     sorter: (key == "ID" || key == "FID") ? "number" : "string"
                 })
             }
         }
         return currentColumns
+    }
+
+    //统计列名
+    reduceSum(columName) {
+        let columnSum = 0;
+        let data = this.table.getData(); // 获取当前表格数据
+
+        data.forEach(row => {
+            // 假设我们要统计的列名为 "amount"
+            columnSum += parseFloat(row[columName]) || 0;
+        });
+        return columnSum.toFixed(2)
+    }
+
+    //统计结果，底部数据
+    getStatisticsTable() {
+        const count = this.table.getDataCount()
+        $('.table-wrapper-count').html(
+            `
+            共<b>${count > 999 ? '999+' : count}</b>条丨
+            面积:<b>${this.reduceSum("面积")}</b>公顷丨
+            宗地数:<b>${this.reduceSum("宗地数")}</b>宗丨
+            涉及企业数:<b>${this.reduceSum("涉及企业数")}</b>家丨
+            面积:<b>${this.reduceSum("亩")}</b>亩
+            `
+        )
+    }
+
+    queryTable() {
+        const filters = [];
+
+        // 定义筛选条件和相应的字段映射
+        const filterFields = [
+            { selector: '.filter_area .search_input', field: '所在乡镇' },
+            { selector: '.filter_build .search_input', field: '建设情况' },
+            { selector: '.filter_user .search_input', field: '规划用途' },
+            { selector: '.filter_type .search_input', field: '分类' }
+        ];
+
+        // 遍历筛选条件
+        filterFields.forEach(({ selector, field }) => {
+            const value = $(selector).val().trim();
+            if (value) {
+                filters.push({ field, type: 'in', value: value.split(',') });
+            }
+        });
+
+        // 应用筛选条件
+        this.table.setFilter(filters, function () {
+            //统计底部数据
+            this.table.redraw();
+            this.getStatisticsTable();
+        });
+        // this.table.redraw();
     }
 
     getEmptyStatus() {
@@ -141,21 +242,56 @@ class CustomTable {
         </div>`
     }
 
-    getTableHtml(count) {
-        return `
+    getTableHtml(count, features) {
+
+        const generateListItems = (items) =>
+            items.map(item => `
+                <li>
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="cbx-${item}" class="inp-cbx" />
+                        <label for="cbx-${item}" class="cbx">
+                            <span>
+                                <svg viewBox="0 0 12 10" height="10px" width="12px">
+                                    <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                                </svg>
+                            </span>
+                            <span>${item}</span>
+                        </label>
+                    </div>
+                </li>`).join('');
+
+
+        const areaHtml = generateListItems(features.area);
+        const buildHtml = generateListItems(features.build);
+        const userHtml = generateListItems(features.user);
+        const typeHtml = generateListItems(features.type);
+
+        const generateFilterSection = function (filterClass, title, listHtml) {
+            return `
+            <div class="tabler_filter_item">
+                <div class="tabler_filter_item_btn ${filterClass}">
+                    <span>
+                        <input type="text" class="search_input" value="" placeholder="${title}" />
+                    </span>
+                    <img src="imgs/dropdown.svg" class="dropdown_svg">
+                </div>
+                <div class="dropdown_list_filter dropdown_${filterClass}">
+                    <ul>${listHtml}</ul>
+                </div>
+            </div>`
+        };
+
+        const html = `
         <div class="table_panel">
             <div class="table_panel_container">
-                <div class="table_search">
-                    <img src="imgs/search.svg" alt="搜索">
-                    <input class="table_seatch_input" placeholder="请输入标题">
-                    <div class="table_search_btn">查询</div>
+                <div class="table_filter_group">
+                    ${generateFilterSection('filter_area', '所在乡镇', areaHtml)}
+                    ${generateFilterSection('filter_build', '建设情况', buildHtml)}
+                    ${generateFilterSection('filter_user', '规划用途', userHtml)}
+                    ${generateFilterSection('filter_type', '地块分类', typeHtml)}
+                    <div class="filter_table_search_btn filter_btn">查询</div>
+                    <div class="filter_table_reset_btn filter_btn">重置</div>
                 </div>
-
-                  <div class="layer_info_line">
-                        <div class="layer_count" title="地块数量">地块数量:<b>0</b></div>
-                        <div class="layer_area" title="地块面积">地块面积:<b>0</b></div>
-                    </div>
-
                 <div class="table_download_btn">
                     <img src="imgs/download.svg" />
                     <div class="table_download_text">下载</div>
@@ -173,8 +309,16 @@ class CustomTable {
             </div>
             <div class="table-wrapper">
                 <div class="table"></div>
-                <div class="table-wrapper-count" title='共${count}条'>共<b>${count > 999 ? '999+' : count}</b>条丨工业用地:<b>59</b>宗丨工业面积:<b>443.95</b>公顷丨工业企业:<b>296</b>家</div>
+                <div class="table-wrapper-count">
+                    共<b>${count > 999 ? '999+' : count}</b>条丨
+                    面积(公顷):<b></b>宗丨
+                    宗地数(宗):<b></b>公顷丨
+                    涉及企业数(家):<b></b>家
+                    面积(亩):<b></b>家
+                </div>
             </div>
-        </div>`
+        </div>`;
+
+        return html;
     }
 }

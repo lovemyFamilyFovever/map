@@ -48,9 +48,7 @@ async function loadMapLayers() {
     $('.layer_seatch_input').attr('placeholder', `共加载${activeLayerList.length}个图层`)
     for (var i = 0; i < activeLayerList.length; i++) {
         // 使用 await 等待获取数量结果
-        let data = await utils.getMapInfo(activeLayerList[i].url + '/' + activeLayerList[i].layerIndex);
-        // $('.layer_count:eq(' + i + ')').html("地块数量:<b>" + data.count + '</b>')
-        // $('.layer_area:eq(' + i + ')').html("图层面积:<b>" + data.totalArea + '</b>')
+        //let data = await utils.getMapInfo(activeLayerList[i].url + '/' + activeLayerList[i].layerIndex);
     }
 
     //格式化滚动条
@@ -110,14 +108,24 @@ $('.layer_switch input[type="checkbox"]').on('click', function () {
     if ($(this).prop('checked')) {
         $('.layer_item[data-index=' + index + ']').addClass('active')
 
-        // 添加图层到layerGroup
-        let selectLayer = L.esri.featureLayer({
-            url: url,
-            simplifyFactor: 0.35,
-            precision: 5,
-        }).addTo(layerGroup);
 
-        addedLayers[index] = selectLayer; // 存储图层
+        //渲染表格+图表
+        // new CustomTable(featureCollection, config.layerList[index]["name"], index, config.layerList[index]["outFields"])
+
+        // new CustomChart('main-echart', featureCollection, config.layerList[index]["name"])
+
+        new CustomTable([], config.layerList[index]["name"], index, config.layerList[index]["outFields"])
+
+        new CustomChart('main-echart', [], config.layerList[index]["name"])
+
+        // 添加图层到layerGroup
+        // let selectLayer = L.esri.featureLayer({
+        //     url: url,
+        //     simplifyFactor: 0.35,
+        //     precision: 5,
+        // }).addTo(layerGroup);
+
+        // addedLayers[index] = selectLayer; // 存储图层
 
         //点击出现弹窗
         // selectLayer.bindPopup(function (layer) {
@@ -128,9 +136,9 @@ $('.layer_switch input[type="checkbox"]').on('click', function () {
         // });
 
         //获取图层的源数据
-        selectLayer.metadata(function (error, metadata) {
-            console.log(metadata);
-        });
+        // selectLayer.metadata(function (error, metadata) {
+        //     console.log(metadata);
+        // });
 
         //查询图层的边界
         // selectLayer.query().bounds(function (error, latlngbounds) {
@@ -141,21 +149,21 @@ $('.layer_switch input[type="checkbox"]').on('click', function () {
         // });
 
         //查询要素的数量
-        selectLayer.query()
-            .where("1=1")
-            .fields(utils.getOutFieldsKey(index))
-            .run((error, featureCollection) => {
-                //统计要素数量
-                if (featureCollection)
-                    var count = featureCollection.features.length;
+        // selectLayer.query()
+        //     .where("1=1")
+        //     .fields(utils.getOutFieldsKey(index))
+        //     .run((error, featureCollection) => {
+        //         //统计要素数量
+        //         if (featureCollection)
+        //             var count = featureCollection.features.length;
 
-                config.layerList[index]["data"] = featureCollection
+        //         config.layerList[index]["data"] = featureCollection
 
-                //渲染表格+图表
-                new CustomTable(featureCollection, config.layerList[index]["name"], index, config.layerList[index]["outFields"])
+        //         //渲染表格+图表
+        //         new CustomTable(featureCollection, config.layerList[index]["name"], index, config.layerList[index]["outFields"])
 
-                new CustomChart('main-echart', featureCollection, config.layerList[index]["name"])
-            });
+        //         new CustomChart('main-echart', featureCollection, config.layerList[index]["name"])
+        //     });
 
         // 使用 eachLayer 方法迭代所有图层
         // selectLayer.eachLayer(function (layer) {
@@ -188,12 +196,6 @@ $('.layer_switch input[type="checkbox"]').on('click', function () {
             layerGroup.removeLayer(layerToRemove)
             delete addedLayers[index]; // 从对象中移除图层
         }
-
-        var liElement = $('ul.title-group li[data-index="' + index + '"]')
-        var tableIndex = liElement.index()
-        $('.table_panel:eq(' + tableIndex + ')').remove()
-        liElement.remove()
-        $('.table_panel:last').addClass('active')
 
         if ($('.layer_switch input[type="checkbox"]:checked').length == 0) {
             $('.table-content').hide()
@@ -274,39 +276,17 @@ function initEvent() {
     //点击空白区域隐藏下拉框
     $(document).on('click', function (event) {
         var target = $(event.target);
-        // 检查点击的元素是否在 .table-content 内部，且不是 .title-group 和 .dropdown_list 内部
-        if (!target.closest('.title-text, .title-group, .dropdown_list,.table_download_btn').length) {
-            // 如果不在 .table-content 内部，隐藏 .title-group 和 .dropdown_list
-            $('.table-content .title-group,.table-content .dropdown_list').hide();
+        // 检查点击的元素是否在 .table-content 内部，且不是 .dropdown_list 内部
+        if (!target.closest('.dropdown_list,.dropdown_list_filter,.table_download_btn').length) {
+            // 如果不在 .table-content 内部，隐藏  .dropdown_list
+            $('.table-content .dropdown_list').hide();
+            $('.dropdown_list_filter').hide();
         }
     });
-
-    // 定义切换统计表格的事件处理程序
-    $('.table-content .title-group').on('click', 'li', function () {
-        var i = $(this).index()
-        // 显示选定的统计表格标题文本
-        $('.table-content .title-text').html('<img src="imgs/表格.svg" alt="" title="" />' + $(this).html())
-        // 隐藏所有统计表格面板和标题组
-        $('.table-content .table_panel,.table-content .title-group').hide()
-        // 显示选定的统计表格面板
-        $('.table-content .table_panel:eq(' + i + ')').show()
-
-        // 获取当前li的data-index属性值
-        var dataIndex = $(this).attr('data-index');
-        // 创建并显示自定义图表
-        new CustomChart('main-echart', config.layerList[dataIndex]["data"], config.layerList[dataIndex]["name"])
-
-        // 为当前选定的li添加active类，并移除其兄弟元素的active类
-        $(this).addClass('active').siblings().removeClass('active')
-
-    })
-    //点击标题显隐下拉选项列表
-    $('.table-content .title-text').on('click', function () {
-        $('.title-group').toggle()
-    })
 
     //隐藏表格
     $('.table-content-close').on('click', function () {
         $('.table-content').hide()
     })
+
 }
