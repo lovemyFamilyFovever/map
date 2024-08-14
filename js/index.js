@@ -21,9 +21,6 @@ var layerGroup = L.layerGroup().addTo(mapObj);
 var addedLayers = [];//自定义存储已添加的图层
 var sortable = null;
 
-let answer = null
-
-
 loadBaseMap(satellite);// 加载底图
 loadMapLayers()//加载图层
 initEvent()// 首屏页面的事件注册
@@ -117,9 +114,7 @@ $('.layer_switch input[type="checkbox"]').on('click', function () {
 
         // new CustomChart('main-echart', featureCollection, config.layerList[index]["name"])
 
-        if (answer == null) {
-            answer = new CustomTable([], config.layerList[index]["name"], index, config.layerList[index]["outFields"])
-        }
+        new CustomTable([], config.layerList[index]["name"], index, config.layerList[index]["outFields"])
 
         new CustomChart('main-echart', [], config.layerList[index]["name"])
 

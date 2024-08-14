@@ -34,9 +34,9 @@ class CustomTable {
         fetch('http://127.0.0.1:5000/query?table=GYYD0812&column=' + this.columnName)
             .then(response => response.json())
             .then(data => {
-
+                console.log(data)
                 // 处理返回数据
-                this.data.push(data)
+                this.data.push(...data)
 
                 this.performData(this.data)
             })
@@ -64,10 +64,10 @@ class CustomTable {
         if (data) {
             const features = data || [];
             features.forEach(feature => {
-                this.filterList.area.add(feature["SZXZ"]);
-                this.filterList.build.add(feature["JSZK"]);
-                this.filterList.user.add(feature["GHYT"]);
-                this.filterList.type.add(feature["DXLB"]);
+                this.filterList.area.add(feature["所在乡镇"]);
+                this.filterList.build.add(feature["建设情况"]);
+                this.filterList.user.add(feature["规划用途"]);
+                this.filterList.type.add(feature["分类"]);
             });
             this.filterList.area = Array.from(this.filterList.area);
             this.filterList.build = Array.from(this.filterList.build);
@@ -329,7 +329,7 @@ class CustomTable {
                     ${generateFilterSection('filter_area', '所在乡镇', areaHtml)}
                     ${generateFilterSection('filter_build', '建设情况', buildHtml)}
                     ${generateFilterSection('filter_user', '规划用途', userHtml)}
-                    ${generateFilterSection('filter_type', '地块分类', typeHtml)}
+                    ${generateFilterSection('filter_type', '分类', typeHtml)}
                     <div class="filter_table_search_btn filter_btn">查询</div>
                     <div class="filter_table_reset_btn filter_btn">重置</div>
                 </div>

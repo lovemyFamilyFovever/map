@@ -24,7 +24,7 @@ def query_table(table_name, column_name=None, column_value=None):
     conn = get_connection()
     cursor = conn.cursor()
     if column_name:
-        query = f"SELECT a.DKBM, a.SZX, a.SZXZ, a.JSZK, a.GHYT, a.DXLB, a.TDMJ, a.BZ, a.TDMJ*15 AS CHNMJ, COUNT(b.TBBM) AS ZONGDI FROM GYYD0812 a LEFT JOIN QYWZ0812 b ON b.TBBM=a.DKBM WHERE a.SZXZ = '{column_name}' GROUP BY a.DKBM, a.SZX, a.SZXZ, a.JSZK, a.GHYT, a.DXLB, a.TDMJ, a.BZ;"
+        query = f"SELECT a.DKBM, a.SZX as 所在县市区, a.SZXZ as 所在乡镇, a.JSZK as 建设情况, a.GHYT as 规划用途, a.DXLB as 分类, a.TDMJ as 面积_公顷, ROUND(a.TDMJ*15,3) AS 亩, COUNT(b.TBBM) AS 宗地数_宗, a.BZ as 备注 FROM GYYD0812 a LEFT JOIN QYWZ0812 b ON b.TBBM=a.DKBM WHERE a.SZXZ = '{column_name}' GROUP BY a.DKBM, a.SZX, a.SZXZ, a.JSZK, a.GHYT, a.DXLB, a.TDMJ, a.BZ;"
     else:
         query = f"SELECT * FROM {table_name}"
     cursor.execute(query)
