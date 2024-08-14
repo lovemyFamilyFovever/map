@@ -2,6 +2,7 @@
 class CustomTable {
     constructor(data, title, index, columns) {
         this.data = data;
+        this.columnName = title;
         this.title = title + '统计表';
         this.index = index || 1000;
         this.columns = columns;
@@ -19,15 +20,54 @@ class CustomTable {
 
     initTable() {
         // this.data = this.data || window.tabledata;
-        this.data = window.tabledata;
-        if (this.data) {
-            const features = this.data.features || [];
+        // this.data = window.tabledata;
+        // this.data = utils.ajaxRequest({
+        //     url: "http://127.0.0.1:5000/query?table=GYYD0812&column=东环街道",
+        //     success: function (data) {
+        //         console.log(data)
+        //     },
+        //     error: function (data) {
+        //         console.log(data)
+        //     },
+        // })
 
+        fetch('http://127.0.0.1:5000/query?table=GYYD0812&column=' + this.columnName)
+            .then(response => response.json())
+            .then(data => {
+
+                // 处理返回数据
+                this.data.push(data)
+
+                this.performData(this.data)
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    //左侧关闭
+    deleteData(title) {
+        // 将数据转换为 jQuery 对象（可选）
+        const $data = $(this.data);
+
+        // 使用 filter 方法
+        this.data = $data.filter(function (index, item) {
+            return item.address !== title;
+        });
+
+        this.performData(this.data)
+    }
+
+
+    //封装操作data的方法
+    performData(data) {
+        if (data) {
+            const features = data || [];
             features.forEach(feature => {
-                this.filterList.area.add(feature["所在乡镇"]);
-                this.filterList.build.add(feature["建设情况"]);
-                this.filterList.user.add(feature["规划用途"]);
-                this.filterList.type.add(feature["分类"]);
+                this.filterList.area.add(feature["SZXZ"]);
+                this.filterList.build.add(feature["JSZK"]);
+                this.filterList.user.add(feature["GHYT"]);
+                this.filterList.type.add(feature["DXLB"]);
             });
             this.filterList.area = Array.from(this.filterList.area);
             this.filterList.build = Array.from(this.filterList.build);
@@ -43,6 +83,9 @@ class CustomTable {
 
             this.renderTable(features);
             this.bindEvents();
+
+            //格式化滚动条
+            new PerfectScrollbar('.dropdown_filter_user');
         } else {
             $('.table-content').append(this.getEmptyStatus());
             this.container = $('.table_panel:last');

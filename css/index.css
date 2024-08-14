@@ -733,7 +733,8 @@ p.layer_type {
 .dropdown_list_filter {
     display: none;
     position: absolute;
-    right: 0px;
+    left: 50%;
+    transform: translate(-50%, 0);
     top: 30px;
     margin-top: 10px;
     z-index: 1;
@@ -759,6 +760,11 @@ p.layer_type {
 
 .dropdown_list_filter li:hover {
     background: #f1f5f8;
+}
+
+.dropdown_filter_user {
+    max-height: 290px;
+    overflow: scroll;
 }
 
 .select_group {
