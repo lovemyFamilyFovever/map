@@ -179,7 +179,7 @@ class CustomTable {
     //统计列名
     reduceSum(columName) {
         let columnSum = 0;
-        let data = this.table.getData(); // 获取当前表格数据
+        let data = this.table.getData('active'); // 获取当前表格数据
 
         data.forEach(row => {
             // 假设我们要统计的列名为 "amount"
@@ -190,7 +190,7 @@ class CustomTable {
 
     //统计结果，底部数据
     getStatisticsTable() {
-        const count = this.table.getDataCount()
+        const count = this.table.getDataCount("active");
         $('.table-wrapper-count').html(
             `
             共<b>${count > 999 ? '999+' : count}</b>条丨
@@ -222,11 +222,9 @@ class CustomTable {
         });
 
         // 应用筛选条件
-        this.table.setFilter(filters, function () {
-            //统计底部数据
-            this.table.redraw();
-            this.getStatisticsTable();
-        });
+        this.table.setFilter(filters);
+        //统计底部数据
+        this.getStatisticsTable();
         // this.table.redraw();
     }
 

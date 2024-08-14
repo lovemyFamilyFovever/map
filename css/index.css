@@ -686,6 +686,7 @@ p.layer_type {
     display: flex;
     gap: 20px;
     z-index: 1005;
+    width: 740px;
 }
 
 .tabler_filter_item {
