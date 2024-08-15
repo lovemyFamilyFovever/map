@@ -25,7 +25,6 @@ var config = {
         tags: ["湿地", "郊区"],
         thumbnail: "/info/thumbnail/thumbnail.png",
         outFields: {
-            "所在县市区": "所在县（市、区）",
             "所在乡镇": "所在乡镇",
             "建设情况": "建设情况",
             "规划用途": "规划用途",
@@ -51,7 +50,6 @@ var config = {
         tags: ["水体", "郊区", "道路"],
         thumbnail: "/info/thumbnail/thumbnail.png",
         outFields: {
-            "所在县市区": "所在县（市、区）",
             "所在乡镇": "所在乡镇",
             "建设情况": "建设情况",
             "规划用途": "规划用途",
@@ -77,7 +75,6 @@ var config = {
         tags: ["郊区", "城市"],
         thumbnail: "/info/thumbnail/thumbnail.png",
         outFields: {
-            "所在县市区": "所在县（市、区）",
             "所在乡镇": "所在乡镇",
             "建设情况": "建设情况",
             "规划用途": "规划用途",
@@ -103,7 +100,6 @@ var config = {
         tags: ["水体", "郊区"],
         thumbnail: "/info/thumbnail/thumbnail.png",
         outFields: {
-            "所在县市区": "所在县（市、区）",
             "所在乡镇": "所在乡镇",
             "建设情况": "建设情况",
             "规划用途": "规划用途",
@@ -129,7 +125,6 @@ var config = {
         tags: ["城市", "建筑"],
         thumbnail: "/info/thumbnail/thumbnail.png",
         outFields: {
-            "所在县市区": "所在县（市、区）",
             "所在乡镇": "所在乡镇",
             "建设情况": "建设情况",
             "规划用途": "规划用途",
@@ -155,7 +150,6 @@ var config = {
         tags: ["城市", "建筑"],
         thumbnail: "/info/thumbnail/thumbnail.png",
         outFields: {
-            "所在县市区": "所在县（市、区）",
             "所在乡镇": "所在乡镇",
             "建设情况": "建设情况",
             "规划用途": "规划用途",

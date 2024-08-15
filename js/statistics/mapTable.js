@@ -238,9 +238,8 @@ class CustomTable {
         $('.table-wrapper-count').html(
             `
             共<b>${count > 999 ? '999+' : count}</b>条丨
-            面积:<b>${this.reduceSum("面积")}</b>公顷丨
-            宗地数:<b>${this.reduceSum("宗地数")}</b>宗丨
-            涉及企业数:<b>${this.reduceSum("涉及企业数")}</b>家丨
+            面积:<b>${this.reduceSum("面积_公顷")}</b>公顷丨
+            宗地数:<b>${this.reduceSum("宗地数_宗")}</b>宗丨
             面积:<b>${this.reduceSum("亩")}</b>亩
             `
         )
@@ -355,7 +354,6 @@ class CustomTable {
                     共<b>${count > 999 ? '999+' : count}</b>条丨
                     面积(公顷):<b></b>宗丨
                     宗地数(宗):<b></b>公顷丨
-                    涉及企业数(家):<b></b>家
                     面积(亩):<b></b>家
                 </div>
             </div>
