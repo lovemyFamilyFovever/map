@@ -18,7 +18,7 @@ class CustomTable {
         this.initTable();
     }
 
-    initTable() {
+    initTable(name) {
         // this.data = this.data || window.tabledata;
         // this.data = window.tabledata;
         // this.data = utils.ajaxRequest({
@@ -30,8 +30,9 @@ class CustomTable {
         //         console.log(data)
         //     },
         // })
+        const currentName = name || this.columnName
 
-        fetch('http://127.0.0.1:5000/query?table=GYYD0812&column=' + this.columnName)
+        fetch('http://150.158.76.25:88/query?table=GYYD0812&column=' + currentName)
             .then(response => response.json())
             .then(data => {
                 console.log(data)

@@ -11,7 +11,7 @@ logging.basicConfig(filename='logfile.log', level=logging.DEBUG, format='%(ascti
 # MDB文件路径
 
 # 建立连接
-mdb_file_path='E:\\chen\\map\\demo\\map.mdb'
+mdb_file_path='E:\\Mycode\\map\\demo\\map.mdb'
 def get_connection():
     conn_str = (
         r'DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};'
