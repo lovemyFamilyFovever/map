@@ -27,6 +27,7 @@
     <div class="project_name">
         <img src="imgs/shortcut/shortcut.png" alt="logo" style="vertical-align: sub;">
         徐州经济技术开发区工业企业低效用地分析系统
+        <input type="file" id="shp-file" multiple />
     </div>
     <div id="map"></div>
     <div class="left-tool">
@@ -43,6 +44,7 @@
             <div class="left-tool-item chart-container">
                 <img src="imgs/chart.png" alt="统计图" title="统计图" />
             </div>
+
         </div>
 
         <div class="left-tool-content">
@@ -186,10 +188,18 @@
 <script src="libs/template@4.8/template.js"></script>
 <script src="libs/perfectScrollbar/perfect-scrollbar.js"></script>
 
+<script src="https://unpkg.com/shpjs@3.4.0/dist/shp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.6.2/proj4.js"></script>
+<script src="https://unpkg.com/shapefile@0.6.6/dist/shapefile.js"></script>
 <!-- 加载leaflet.esri插件 -->
-<script src="libs/leaflet@1.7.1/leaflet.js"></script>
+<!-- <script src="libs/leaflet@1.7.1/leaflet.js"></script> -->
+<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+    integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+
 <script src="libs/esri-leaflet/esri-leaflet-2.5.0.js"></script>
 <script src="libs/LeafletMeasure/leaflet-geoman.min.js"></script>
+
+<!-- 加载shp文件插件 -->
 
 <script src="js/config.js"></script>
 <script src="js/util.js"></script>
@@ -206,6 +216,7 @@
 <!-- 定制化图表展示 -->
 <script src="libs/echart/echarts.5.5.min.js"></script>
 <script src="js/statistics/mapChart.js"></script>
+
 
 <script src="js/map.js"></script>
 <script src="js/index.js"></script>

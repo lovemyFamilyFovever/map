@@ -1,3 +1,52 @@
+document.getElementById('shp-file').addEventListener('change', function (event) {
+
+    const files = event.target.files;
+    let shpFile = null;
+    let dbfFile = null;
+
+    // 获取 shp 和 dbf 文件
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (file.name.endsWith('.shp')) {
+            shpFile = file;
+        } else if (file.name.endsWith('.dbf')) {
+            dbfFile = file;
+        }
+    }
+
+    if (shpFile && dbfFile) {
+        const readerShp = new FileReader();
+        const readerDbf = new FileReader();
+
+        readerShp.onload = function (event) {
+            const shpArrayBuffer = event.target.result;
+
+            readerDbf.onload = function (event) {
+                const dbfArrayBuffer = event.target.result;
+
+                shapefile.open(shpArrayBuffer, dbfArrayBuffer)
+                    .then(source => source.read()
+                        .then(function log(result) {
+                            if (result.done) return;
+
+                            // 将 GeoJSON 数据添加到地图上
+                            sfs.addGeoJSONToMap(result.value);
+
+                            return source.read().then(log);
+                        }))
+                    .catch(error => console.error(error));
+            };
+
+            readerDbf.readAsArrayBuffer(dbfFile);
+        };
+
+        readerShp.readAsArrayBuffer(shpFile);
+    } else {
+        alert('请上传有效的 .shp 和 .dbf 文件');
+    }
+});
+
+
 // 实例化使用
 const sfs = new MapObj(config.mapOptions)
 const mapObj = sfs.mapObj
@@ -23,9 +72,14 @@ var sortable = null;
 
 window.targetCoord = null
 
-loadBaseMap(satellite);// 加载底图
-loadMapLayers()//加载图层
-initEvent()// 首屏页面的事件注册
+
+$(document).ready(function () {
+    loadBaseMap(satellite);// 加载底图
+    loadMapLayers()//加载图层
+    initEvent()// 首屏页面的事件注册
+});
+
+
 
 // 加载底图
 function loadBaseMap(layer) {

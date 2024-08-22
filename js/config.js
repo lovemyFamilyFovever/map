@@ -1,8 +1,20 @@
 var config = {
-    defaultCatalog: '移动端',
+    defaultCatalog: 'PC',
     version: "Leaflet-1.7.1",
 
-    defaultDomin: 'https://mapservice.tdtah.cn/server1/rest/services',
+    mapOptions: {
+        minZoom: 1, //最小缩放值
+        maxZoom: 18, //最大缩放值
+        zoom: 7, //初始缩放值
+        attributionControl: false, //是否启用地图属性控件
+        zoomControl: true, //是否启用地图缩放控件
+        scaleControl: true,//是否启用比例尺控件 
+        toolListControl: true, //是否启用地图测量工具
+        initTooltips: true,//是否初始化右上角的工具栏
+        mousemoveLatlng: true,//是否显示鼠标滑动的坐标
+        // crs: L.CRS.EPSG3857, //坐标参考系统
+    },
+    center: [33.523079, 116.477051],
 
     "矢量底图": 'http://t0.tianditu.gov.cn/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=94062428027398766a1d0f3000b5dc6c',
     "矢量底图注记": 'http://t0.tianditu.gov.cn/DataServer?T=cva_w&x={x}&y={y}&l={z}&tk=94062428027398766a1d0f3000b5dc6c',
@@ -166,18 +178,7 @@ var config = {
         data: null
     }],
 
-    mapOptions: {
-        minZoom: 1, //最小缩放值
-        maxZoom: 18, //最大缩放值
-        zoom: 7, //初始缩放值
-        attributionControl: false, //是否启用地图属性控件
-        zoomControl: true, //是否启用地图缩放控件
-        scaleControl: true,//是否启用比例尺控件 
-        toolListControl: true, //是否启用地图测量工具
-        initTooltips: true,//是否初始化右上角的工具栏
-        mousemoveLatlng: true,//是否显示鼠标滑动的坐标
-    },
-    center: [33.523079, 116.477051],
+
 
 }
 
