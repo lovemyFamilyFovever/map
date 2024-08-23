@@ -19,20 +19,9 @@ class CustomTable {
     }
 
     initTable(name) {
-        // this.data = this.data || window.tabledata;
-        // this.data = window.tabledata;
-        // this.data = utils.ajaxRequest({
-        //     url: "http://127.0.0.1:5000/query?table=GYYD0812&column=东环街道",
-        //     success: function (data) {
-        //         console.log(data)
-        //     },
-        //     error: function (data) {
-        //         console.log(data)
-        //     },
-        // })
         const currentName = name || this.columnName
 
-        fetch('http://150.158.76.25:88/query?table=GYYD0812&column=' + currentName)
+        fetch('http://150.158.76.25:5000/query?table=GYYD0812&column=' + currentName)
             .then(response => response.json())
             .then(data => {
                 console.log(data)

@@ -96,15 +96,19 @@ const getMapModule = (function () {
                 }
             }).addTo(this.mapObj);
 
-            // 自动调整视图到图层范围
-            this.mapObj.once('layeradd', function () {
-                if (geoJsonLayer) {
-                    var center = geoJsonLayer.getBounds().getCenter();
-                    // 设置地图视图到图层中心点，并设置一个合适的缩放级别
-                    this.mapObj.setView(center, 12); // 14 是示例缩放级别，您需要根据实际情况调整
+            var center = geoJsonLayer.getBounds().getCenter();
+            // 设置地图视图到图层中心点，并设置一个合适的缩放级别
+            this.mapObj.setView(center, 12); // 14 是示例缩放级别，您需要根据实际情况调整
 
-                }
-            }.bind(this));
+            // // 自动调整视图到图层范围
+            // this.mapObj.once('layeradd', function () {
+            //     if (geoJsonLayer) {
+            //         var center = geoJsonLayer.getBounds().getCenter();
+            //         // 设置地图视图到图层中心点，并设置一个合适的缩放级别
+            //         this.mapObj.setView(center, 12); // 14 是示例缩放级别，您需要根据实际情况调整
+
+            //     }
+            // }.bind(this));
         }
 
         get

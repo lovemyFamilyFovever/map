@@ -27,7 +27,6 @@
     <div class="project_name">
         <img src="imgs/shortcut/shortcut.png" alt="logo" style="vertical-align: sub;">
         徐州经济技术开发区工业企业低效用地分析系统
-        <input type="file" id="shp-file" multiple />
     </div>
     <div id="map"></div>
     <div class="left-tool">
@@ -51,10 +50,7 @@
             <!-- 图层容器 -->
             <div class="layer_content">
                 <div class="layer_title"><img src="imgs/图层.svg" alt="" title="" />低效用地</div>
-                <div class="layer_drag_tool">
-                    <img src="imgs/changeIndexOff.svg" alt="拖拽" title="打开拖拽功能" class="changeIndexOff" />
-                    <img src="imgs/changeIndexOn.svg" alt="拖拽" title="关闭拖拽功能" class="changeIndexOn" />
-                </div>
+
                 <div class="layer_content_close close_btn">
                     <img src="imgs/close.svg" alt="关闭" title="关闭" />
                 </div>
@@ -139,35 +135,7 @@
             </a>
         </div>
     </div>
-    <!-- 加载图层列表 -->
-    <script id="layers-html" type="text/html">
 
-        <div class="layer_items">
-
-            <div class="layer_items_title"> </div>
-
-            {{each layerList as item i}} {{if item.showStatus!==0}}
-            <div class="layer_item" data-index="{{i}}">
-                <div class="layer_thumbnail">
-                    <!-- <img src="{{item.url}}{{item.thumbnail}}" alt="地块缩略图" class="thumbImg" /> -->
-                    <img src="./temp/2.jpg" alt="地块缩略图" class="thumbImg" />
-                </div>
-                <div class="layer_info">
-                    <p class="layer_name" title="地块名称">{{item.name}}</p>
-                    <p class="layer_desc" title="">{{item.description}}</p>
-                    <p class="layer_type" title="地块类型">{{item.type}}</p>
-                    <div class="layer_switch" data-index="{{i}}">
-                        <label class="switch">
-                            <input type="checkbox" />
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                </div>
-            </div>
-            {{/if}} {{/each}}
-        </div>
-
-    </script>
     <!-- 点击地图的弹窗 -->
     <script id="popupForm" type="text/html">
         <div class="popup_container">
@@ -181,10 +149,7 @@
 
 </body>
 
-<script src="temp/data.js"></script>
-
 <script src="libs/jquery/jquery_3.0.0.js"></script>
-<script src="libs/Sortable/Sortable.js"></script>
 <script src="libs/template@4.8/template.js"></script>
 <script src="libs/perfectScrollbar/perfect-scrollbar.js"></script>
 

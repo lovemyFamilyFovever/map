@@ -96,12 +96,6 @@ window.utils = {
     },
 
 
-
-    //获取显示的图层
-    getShowLayerList: function () {
-        return config.layerList.filter(layer => layer.showStatus !== 0);
-    },
-
     //获取指定图层的要显示的列
     getOutFieldsKey: function (index) {
         return Object.keys(config.layerList[index]["outFields"]);
