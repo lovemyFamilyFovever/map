@@ -1,6 +1,7 @@
 var config = {
     defaultCatalog: 'PC',
-    version: "Leaflet-1.7.1",
+    version: "0.35",
+    projectName: "徐州经济技术开发区工业企业低效用地分析系统",
 
     mapOptions: {
         minZoom: 1, //最小缩放值
@@ -25,32 +26,111 @@ var config = {
     "地形地图": 'http://t0.tianditu.gov.cn/DataServer?T=ter_w&x={x}&y={y}&l={z}&tk=94062428027398766a1d0f3000b5dc6c',
     "地形地图注记": 'http://t0.tianditu.gov.cn/DataServer?T=cta_w&x={x}&y={y}&l={z}&tk=94062428027398766a1d0f3000b5dc6c',
 
-    // layerList: [{
-    //     id: "0",
-    //     name: "大黄山街道",
-    //     // url: "https://mapservice.tdtah.cn/server1/rest/services/shidi/MapServer",
-    //     url: "http://gisserver.tianditu.gov.cn/TDTService/wfs",
-    //     layerIndex: 0,
-    //     showStatus: 1,
-    //     type: "Feature Layer",
-    //     description: "请在这里添加图层描述内容",
-    //     tags: ["湿地", "郊区"],
-    //     thumbnail: "/info/thumbnail/thumbnail.png",
-    //     outFields: {
-    //         "所在乡镇": "所在乡镇",
-    //         "建设情况": "建设情况",
-    //         "规划用途": "规划用途",
-    //         "分类": "分类",
-    //         "面积_公顷": "面积(公顷)",
-    //         // "占比": "占比",
-    //         "宗地数_宗": "宗地数(宗)",
-    //         // "涉及企业数": "涉及企业数(家)",
-    //         "亩": "亩",
-    //         "备注": "备注",
-    //     },
-    //     count: "",
-    //     area: "",
-    //     data: null
-    // }],
+    layerList: [{
+        layerId: "XZQ",
+        name: "行政区",
+        url: "http://150.158.76.25:5000/load_shp?file_path=XZQ",
+        show: true,
+        style: {
+            color: "red",
+            weight: 2,
+            opacity: 0.8
+        },
+        children: [{
+            layerId: "CJXZQ",
+            name: "村级行政区",
+            url: "http://150.158.76.25:5000/load_shp?file_path=CJXZQ",
+            show: false,
+            style: {
+                color: "#D8BFD8",
+                weight: 2,
+                opacity: 0.8
+            }
+        }, {
+            layerId: "ZJXZQ",
+            name: "镇级行政区",
+            url: "http://150.158.76.25:5000/load_shp?file_path=ZJXZQ",
+            show: false,
+            style: {
+                color: "#D81159",
+                weight: 2,
+                opacity: 0.8
+            }
+        }]
+    }, {
+        layerId: "XZJT",
+        name: "交通",
+        url: "http://150.158.76.25:5000/load_shp?file_path=XZJT",
+        show: false,
+        style: {
+            color: "#804d36",
+            weight: 2,
+            opacity: 0.8
+        }
+    }, {
+        layerId: "GYYD",
+        name: "工业用地",
+        url: "http://150.158.76.25:5000/load_shp?file_path=GYYD",
+        show: false,
+        style: {
+            color: "blue",
+            weight: 2,
+            opacity: 0.8
+        },
+        children: [{
+            layerId: "DXGYYD",
+            name: "低效工业用地",
+            url: "http://150.158.76.25:5000/load_shp?file_path=低效工业用地",
+            show: false,
+            style: {
+                color: "#4FB0C6",
+                weight: 2,
+                opacity: 0.8
+            }
+        }, {
+            layerId: "PQPHDK",
+            name: "片区盘活地块",
+            url: "http://150.158.76.25:5000/load_shp?file_path=片区盘活地块",
+            show: false,
+            style: {
+                color: "#0000FF",
+                weight: 2,
+                opacity: 0.8
+            }
+        }]
+    }, {
+        layerId: "PQFW",
+        name: "片区范围",
+        url: "http://150.158.76.25:5000/load_shp?file_path=片区范围",
+        show: false,
+        style: {
+            color: "#00FA9A",
+            weight: 2,
+            opacity: 0.8
+        }
+    }, {
+        layerId: "QYWZ",
+        name: "企业位置",
+        url: "http://150.158.76.25:5000/load_shp?file_path=QYWZ",
+        show: true,
+        style: {
+            color: "#4169E1",
+            weight: 2,
+            opacity: 0.8
+        }
+    }],
+    statisticsItems: [
+        { column: "所在乡镇", text: "所在乡镇", type: "string" },
+        // { column: "土地使用权人", text: "土地使用权人", type: "string" },
+        { column: "土地面积", text: "土地面积(亩)", type: "number" },
+        { column: "建设状况", text: "建设状况", type: "string" },
+        { column: "是否一地多企", text: "是否一地多企", type: "string" },
+        { column: "是否规上企业用地", text: "是否规上企业用地", type: "string" },
+        { column: "是否低效用地", text: "是否低效用地", type: "string" },
+        { column: "盘活方式", text: "盘活方式", type: "string" },
+        { column: "实施时间", text: "实施时间", type: "string" },
+        { column: "规划用途", text: "规划用途", type: "string" },
+        // { column: "使用期限", text: "使用权限", type: "string" },
+    ]
 }
 

@@ -1,0 +1,69 @@
+         // 添加图层到layerGroup
+            // let selectLayer = L.esri.featureLayer({
+            //     url: url,
+            //     simplifyFactor: 0.35,
+            //     precision: 5,
+            // }).addTo(layerGroup);
+
+            // addedLayers[index] = selectLayer; // 存储图层
+
+            //点击出现弹窗
+            // selectLayer.bindPopup(function (layer) {
+            //     return L.Util.template(
+            //         template('popupForm', layer.feature.properties),
+            //         layer.feature.properties
+            //     );
+            // });
+
+            //获取图层的源数据
+            // selectLayer.metadata(function (error, metadata) {
+            //     console.log(metadata);
+            // });
+
+            //查询图层的边界
+            // selectLayer.query().bounds(function (error, latlngbounds) {
+            //     if (error) {
+            //         console.log('Error running "Query" operation: ' + error);
+            //     }
+            //      sfs.getMap().fitBounds(latlngbounds);
+            // });
+
+            //查询要素的数量
+            // selectLayer.query()
+            //     .where("1=1")
+            //     .fields(utils.getOutFieldsKey(index))
+            //     .run((error, featureCollection) => {
+            //         //统计要素数量
+            //         if (featureCollection)
+            //             var count = featureCollection.features.length;
+
+            //         config.layerList[index]["data"] = featureCollection
+
+            //         //渲染表格+图表
+            //         new CustomTable(featureCollection, config.layerList[index]["name"], index, config.layerList[index]["outFields"])
+
+            //         new CustomChart('main-echart', featureCollection, config.layerList[index]["name"])
+            //     });
+
+            // 使用 eachLayer 方法迭代所有图层
+            // selectLayer.eachLayer(function (layer) {
+            //     var markerCoord = layer.getLatLng();
+            //     if (markerCoord.lat === targetCoord[0] && markerCoord.lng === targetCoord[1]) {
+            //         // 高亮样式（可以根据需求修改）
+            //         layer.setIcon(L.divIcon({ className: 'highlighted-marker' }));
+            //     }
+            // });
+
+            //鼠标滑过图层  样式发生变化
+            // let oldId;
+            // selectLayer.on("mouseout", function (e) {
+            //     selectLayer.resetStyle(oldId);
+            // });
+            // selectLayer.on("mouseover", function (e) {
+            //     oldId = e.layer.feature.id;
+            //     selectLayer.setFeatureStyle(e.layer.feature.id, {
+            //         color: "red",
+            //         weight: 3,
+            //         opacity: 1
+            //     });
+            // });

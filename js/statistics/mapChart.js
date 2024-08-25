@@ -6,28 +6,22 @@ class CustomChart {
         this.data = data;
 
         this.initChart();
-        this.renderChart();
         this.bindEvents();
         $('.chart-content').show()
     }
-
     initChart() {
-        $('.chart-content .title').html('<img src="imgs/图表.svg" alt="" title="" />' + this.title)
-    }
-
-    renderChart() {
         this.data = true
         if (this.data) {
             var chartDom = document.getElementById(this.container);
             this.Chart = echarts.init(chartDom);
             // 将 option 设置给图表
+            $('#main-echart .loading-container').hide()
             this.Chart.setOption(this.getBarOption());
             this.renderImg()
             this.getChartHtml()
         } else {
             this.getEmptyStatus()
         }
-
     }
 
     bindEvents() {

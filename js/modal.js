@@ -13,9 +13,21 @@ class Modal {
         $('body').append(modalHtml)
         this.container = $('.modal-mask')
         this.container.show()
+        this.container.find('.modal-input').focus();
     }
 
     bindEvents() {
+        // // 监听复选框的变化事件
+        // this.container.on('change', '#addDateCheckbox', () => {
+        //     let currentTitle = this.input.val()
+        //     let date = new Date()
+        //     if ($('#addDateCheckbox').is(":checked")) {
+        //         this.input.val(`${currentTitle} ${date.toLocaleDateString()}`)
+        //     } else {
+        //         let updatedTitle = currentTitle.replace(/\d{1,2}\/\d{1,2}\/\d{4}/, ''); // 使用正则表达式匹配日期部分
+        //         this.input.val(updatedTitle.trim());
+        //     }
+        // });
         this.container.on('click', '.modal-dialog-close, .modal-cancel-btn', this.closeModal.bind(this));
         this.container.on('click', '.modal-confirm-btn', this.confirmModal.bind(this));
     }
