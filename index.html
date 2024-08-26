@@ -5,12 +5,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport"
         content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
-    <title>徐州经济技术开发区工业企业低效用地分析系统</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google" value="notranslate" />
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <title></title>
     <meta name="description" content="我们的在线平台展示了市政府规划局开发全域低效用地的数量、面积和控件分布情况。欢迎探索和分析这些数据。" />
     <meta name="keywords" content="市政府规划局 低效用地 全域 在线平台 数量 面积 控件分布 数据展示 市政府数据 地区规划 城市发展" />
-    <meta name="google" value="notranslate" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="referrer" content="no-referrer-when-downgrade">
     <link rel="shortcut icon" href="imgs/shortcut/shortcut.svg" type="image/x-icon">
     <link rel="icon" type="image/svg+xml" href="imgs/shortcut/shortcut.svg">
     <link rel="icon" type="image/png" href="imgs/shortcut/shortcut.png">
@@ -57,12 +57,22 @@
         <div class="left-tool-content">
             <!-- 图层容器 -->
             <div class="layer_content">
-                <div class="layer_title"><img src="imgs/图层.svg" alt="" title="" />低效用地</div>
+                <div class="layer_title"><img src="imgs/图层.svg" alt="低效用地图层" title="低效用地图层" />低效用地</div>
                 <div class="layer_content_close close_btn">
                     <img src="imgs/close.svg" alt="关闭" title="关闭" />
                 </div>
                 <div class="layer_wrap"></div>
             </div>
+        </div>
+    </div>
+
+    <div class="right-tool">
+        <div class="attribute_content">
+            <div class="attribute_title"><img src="imgs/attribute.svg" alt="属性查询" title="属性查询" />属性查询</div>
+            <div class="attribute_content_close close_btn">
+                <img src="imgs/close.svg" alt="关闭" title="关闭" />
+            </div>
+            <div class="attribute_wrap"></div>
         </div>
     </div>
 
@@ -76,22 +86,11 @@
                 </div>
             </div>
             <div class="statistics-content-body">
-                <div class="statistics-items">
-                    <div class="loading-container">
-                        <div class="loader"></div>
-                    </div>
+                <div class="loading-container">
+                    <div class="loader"></div>
                 </div>
-                <div class="statistics-add-btn">
-                    <img src="imgs/add.svg" alt="添加">
-                    增加查询条件
-                </div>
+                <div class="statistics-items"></div>
             </div>
-
-            <div class="statistics-content-footer">
-                <div class="search_btn reset">重置</div>
-                <div class="search_btn confirm">查询</div>
-            </div>
-
         </div>
 
         <div class="table-content">
@@ -102,7 +101,7 @@
             <!-- 筛选显示的字段 -->
             <div class="table_column_filter_content">
                 <div class="table_column_filter_title">
-                    <span>筛选显示的字段</span>
+                    <span>筛选显示的字段(<span style="color:#327cff;">拖拽排序</span> )</span>
                     <div class="table_column_filter_colse close_btn">
                         <img src="imgs/close.svg" alt="关闭" title="关闭" />
                     </div>
@@ -116,10 +115,9 @@
                         <input id="select-none" type="radio" name="select-option" value="0" />
                         <label for="select-none">全不选</label>
                     </div>
-                    <div class="search_btn table_column_filter_comfirm_btn">确定</div>
                 </div>
-                <div class="table_column_filter_columns">
-                </div>
+                <div class="table_column_filter_columns"></div>
+                <div class="search_btn table_column_filter_comfirm_btn">确定</div>
             </div>
 
             <!-- 表格 -->
@@ -181,7 +179,7 @@
                             <div class="echart_download_text">下载</div>
                         </a>
                     </div>
-                    <div id="main-echart" style="width: 410px; height: 360px">
+                    <div id="main-echart" style="width: 22vw; height: 37vh">
                         <div class="loading-container">
                             <div class="loader"></div>
                         </div>
@@ -297,7 +295,6 @@
 <script src="libs/proj4js@2.6.2/proj4.js"></script>
 <script src="libs/shapefile@0.6.6/shapefile.js"></script>
 <!-- 加载leaflet.esri插件 -->
-
 <script src="libs/leaflet@1.9.3/leaflet.js"></script>
 <script src="libs/esri-leaflet/esri-leaflet-2.5.0.js"></script>
 <script src="libs/LeafletMeasure/leaflet-geoman.min.js"></script>
@@ -309,11 +306,13 @@
 <!-- 定制化图表展示 -->
 <script src="libs/echart/echarts.5.5.min.js"></script>
 <script src="js/statistics/mapChart.js"></script>
+<!-- 排序插件 -->
+<script src="libs/Sortable/Sortable.js"></script>
 
 <script src="js/config.js"></script>
 <script src="js/modal.js"></script>
 
-<script src="js/statistics/actions.js"></script>
+<script src="js/statistics/statistics.js"></script>
 <script src="js/statistics/mapTable.js"></script>
 <script src="js/map.js"></script>
 <script src="js/index.js"></script>

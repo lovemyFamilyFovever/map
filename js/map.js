@@ -153,17 +153,17 @@ class MapObj {
         geoJsonLayer.on('click', function (e) {
             // 获取点击的图斑的属性信息
             var properties = e.layer.feature.properties;
-
-            console.log(properties);
-            // // 将属性信息格式化为 HTML 字符串
-            // var infoHtml = '<h4>属性信息</h4>';
-            // for (var key in properties) {
-            //     if (properties.hasOwnProperty(key)) {
-            //         infoHtml += '<b>' + key + ':</b> ' + properties[key] + '<br>';
-            //     }
-            // }
-            // // 显示弹出窗口
-            // e.layer.bindPopup(infoHtml).openPopup();
+            var infoHtml = '<h4>属性信息</h4><div class="attr-wrap">';
+            for (var key in properties) {
+                if (properties.hasOwnProperty(key)) {
+                    infoHtml += `<p><span class="attr-key">${key}:</span><span class="attr-value">${properties[key]}</span></p>`;
+                }
+            }
+            infoHtml += '</div>';
+            // 显示弹出窗口
+            $('.attribute_wrap').html(infoHtml);
+            $('.attribute_content,.right-tool').show()
+            new PerfectScrollbar('.attribute_wrap');
         });
 
     }

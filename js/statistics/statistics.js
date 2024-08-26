@@ -1,5 +1,5 @@
 //渲染指定图层的表格
-class Actions {
+class Statistics {
     constructor() {
         this.init();
         this.statisticsScroll = null;
@@ -8,8 +8,21 @@ class Actions {
 
     init() {
         $(".statistics-items").append(this.renderHtml());
+
+        $('.statistics-content-body').append(`
+            <div class="statistics-add-btn">
+                    <img src="imgs/add.svg" alt="添加">
+                    增加查询条件
+                </div>`
+        );
+        $('.statistics-content').append(`
+            <div class="statistics-content-footer">
+                <div class="search_btn reset">重置</div>
+                <div class="search_btn confirm">查询</div>
+            </div>`
+        );
         this.bindEvent();
-        $('.statistics-items .loading-container').hide();
+        $('.statistics-content-body .loading-container').hide();
     }
 
     //绑定事件
@@ -29,8 +42,10 @@ class Actions {
             }
             $(this).siblings('.dropdown_list').toggle();
         });
+        //选择查询字段
         $('.statistics-items').on('click', '.statistics-item-column li', function () {
-            var value = $(this).parent().parent().siblings('input').val();
+            const $dom = $(this).parent().parent();
+            var value = $dom.siblings('input').val();
 
             let type = $(this).data('type');
             let column = $(this).data('column');
@@ -38,13 +53,13 @@ class Actions {
 
             if (value !== name) {
                 if (type) {
-                    $(this).parent().parent().siblings('input').attr('data-type', type).attr('data-column', column);
+                    $dom.siblings('input').attr('data-type', type).attr('data-column', column);
                 }
-                $(this).parent().parent().siblings('input').val(name)
-                $(this).parent().parent().parent().find('.statistics-item-condition input').val("");
-                $(this).parent().parent().parent().find('.statistics-item-column input').val("");
+                $dom.siblings('input').val(name)
+                $dom.parent().find('.statistics-item-condition input').val("");
+                $dom.parent().find('.statistics-item-column input').val("");
             }
-            $(this).parent().parent().hide();
+            $dom.hide();
         });
 
         //展示下拉列表-条件
@@ -64,6 +79,7 @@ class Actions {
                 $(this).siblings('.dropdown_list').toggle();
             }
         });
+        //选择条件
         $('.statistics-items').on('click', '.statistics-item-condition li', function () {
             let name = $(this).text().trim();
             $(this).parent().parent().siblings('input').val(name)
@@ -121,6 +137,7 @@ class Actions {
                 $(this).siblings('.dropdown_list').toggle();
             }
         });
+        //选择具体值
         $('.statistics-items').on('click', '.statistics-item-target li', function () {
             let $parent = $(this).parent().parent();
             if ($parent.parent().siblings('.statistics-item-condition').find('input').val() == "包含") {
@@ -131,15 +148,17 @@ class Actions {
                 } else {
                     var allChecked = true;
                     $parent.find('.column-static').each(function (e) {
-                        if (!$(e.target).is(':checked')) {
+                        if (!$(this).is(':checked')) {
                             allChecked = false;
                             return false; // 提前退出循环
                         }
                     });
+
                     if (allChecked) {
                         $parent.find('.column-static-all').prop('checked', true);
                         $parent.siblings('.target-input').val("全部")
                     } else {
+                        $parent.find('.column-static-all').prop('checked', false);
                         let nameString = "";
                         $parent.find('.column-static').each(function () {
                             if ($(this).is(':checked')) {
@@ -159,14 +178,8 @@ class Actions {
 
         //增加查询条件
         $('.statistics-add-btn').on('click', () => {
-
-            // let count = $('.statistics-item').length;
-            // if (count >= 7) {
-            //     this.statisticsScroll = new PerfectScrollbar('.statistics-items');
-            // } else {
-            //     this.statisticsScroll.destroy();
-            // }
             $(".statistics-items").append(this.renderHtml());
+            $('.statistics-item').length == 8 ? $('.statistics-add-btn').hide() : $('.statistics-add-btn').show();
         });
 
         //重置
@@ -211,6 +224,7 @@ class Actions {
         //删除
         $(".statistics-items").on("click", '.statistics-item-delete', function () {
             $(this).parent().remove();
+            $('.statistics-item').length < 8 ? $('.statistics-add-btn').show() : $('.statistics-add-btn').hide();
         });
     }
 

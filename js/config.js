@@ -112,7 +112,7 @@ var config = {
         layerId: "QYWZ",
         name: "企业位置",
         url: "http://150.158.76.25:5000/load_shp?file_path=QYWZ",
-        show: true,
+        show: false,
         style: {
             color: "#4169E1",
             weight: 2,

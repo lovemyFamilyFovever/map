@@ -3,6 +3,7 @@ class CustomTable {
     constructor() {
         this.table = null;
         this.columns = [];
+        this.sortable = null;
         this.downloadOptions = ['CSV', 'JSON', 'XLSX', 'PDF', 'HTML'];
         this.initTable();
     }
@@ -46,7 +47,7 @@ class CustomTable {
             this.getStatisticsTable();
             this.bindEvents();
 
-            new Actions();
+            new Statistics();
 
             new CustomChart('main-echart', [], "123")
 
@@ -68,7 +69,7 @@ class CustomTable {
             const $checkboxes = $('.table_column_filter_content input[type="checkbox"]');
             $checkboxes.prop('checked', true);
         });
-        // 点击筛选列名-清空按钮
+        // 点击筛选列名-全不选按钮
         $('#select-none').on('click', () => {
             const $checkboxes = $('.table_column_filter_content input[type="checkbox"]');
             $checkboxes.prop('checked', false);
@@ -89,6 +90,7 @@ class CustomTable {
             });
             this.table.setColumns(checkedCheckboxes);
             $('.table_column_filter_content').toggleClass('show');
+
         });
 
         // 点击下载按钮
@@ -122,7 +124,6 @@ class CustomTable {
             tempObjects[item.column] = item.column
 
         });
-
         // for (var key in objects) {
         for (var key in tempObjects) {
             let obj = {
@@ -137,15 +138,21 @@ class CustomTable {
                 name: key,
             });
         }
+
+        //初始化排序功能
         $('.table_column_filter_columns').append(columnsHtml)
-        new PerfectScrollbar('.table-content  .table_column_filter_columns')
+        this.sortable = new Sortable($('.table_column_filter_columns')[0], {
+            animation: 150,
+            forceFallback: true,
+        });
+        new PerfectScrollbar('.table_column_filter_columns')
+
         return this.columns
     }
 
     //统计结果，底部数据
     getStatisticsTable() {
         const count = this.table.getDataCount("active");
-
         var mj_gq = 0;
         var zd = 0;
         var yj_m = 0;
@@ -159,8 +166,7 @@ class CustomTable {
             `共 <b> ${count > 999 ? '999+' : count}</b> 条丨
             面积: <b>${mj_gq.toFixed(3)}</b>公顷丨
             宗地数: <b>${zd.toFixed(3)}</b>宗丨
-            面积: <b>${yj_m.toFixed(3)}</b>亩
-                `
+            面积: <b>${yj_m.toFixed(3)}</b>亩`
         )
     }
 
@@ -188,6 +194,7 @@ class CustomTable {
         // this.table.redraw();
     }
 
+    //获取空状态html
     getEmptyStatus() {
         return `
         <div class="table_panel" >
@@ -200,10 +207,6 @@ class CustomTable {
         </div>`
     }
 
-    getTable() {
-        return this.table;
-    }
-
     //获取指定列的唯一值
     getColumnUniqueValues(column) {
         const columns = this.table.getData('active').map(function (row, index) {
@@ -214,6 +217,7 @@ class CustomTable {
         return Array.from(new Set(columns));
     }
 
+    //过滤表格
     filterTable(filters) {
         if (filters.length > 0) {
             this.table.setFilter(filters);

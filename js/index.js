@@ -1,8 +1,11 @@
 $(document).ready(function () {
+
+    document.title = config.projectName;
     $('.project_name span').text(config.projectName)
-    sfs = new MapObj(config.mapOptions)  // 实例化地图对象
+
     customTable = new CustomTable();//实例化自定义图表
 
+    sfs = new MapObj(config.mapOptions)  // 实例化地图对象
     loadMapLayers()//加载图层
     initEvent()// 首屏页面的事件注册
 });
@@ -38,10 +41,9 @@ function initEvent() {
         $('.switchlayer-container').toggleClass('active')
     })
 
-    //显示隐藏 统计查询
-    $('.statistics-container').on('click', function () {
-        $('.statistics-content').toggle()
-        $('.statistics-container').toggleClass('active')
+    //隐藏 属性查询弹窗
+    $('.attribute_content_close').on('click', function () {
+        $('.right-tool').hide()
     })
 
     //显示隐藏 统计表
@@ -57,7 +59,7 @@ function initEvent() {
     })
 
     //关闭图层列表
-    $('.layer_content_close.close_btn').on('click', function () {
+    $('.layer_content_close').on('click', function () {
         $('.layer_content').hide()
         $('.switchlayer-container').toggleClass('active')
     })
