@@ -38,7 +38,7 @@
         <div class="left-tool-title">
             <!-- 加载图层 -->
             <div class="left-tool-item switchlayer-container">
-                <img src="imgs/more.png" alt="加载图层" title="加载图层" />
+                <img src="imgs/layers.png" alt="加载图层" title="加载图层" />
             </div>
             <!-- 统计查询 -->
             <div class="left-tool-item statistics-container active">
@@ -218,7 +218,7 @@
                 {{if item.children}}
                     <div class="layer_item" data-index="{{i}}">
                         <div class="layer_info">
-                            <p class="layer_name" title="地块名称">{{item.name}}</p>
+                            <p class="layer_name" title="地块名称">{{item.layerName}}</p>
                             <div class="layer_switch" data-index="{{i}}">
                                 <label class="switch">
                                     <input type="checkbox" {{item.show?'checked':""}} />
@@ -231,7 +231,7 @@
                     {{each item.children as child j}} 
                         <div class="layer_item layer_item_child" data-parent="{{i}}" data-index="{{j}}">
                             <div class="layer_info">
-                                <p class="layer_name" title="地块名称">{{child.name}}</p>
+                                <p class="layer_name" title="地块名称">{{child.layerName}}</p>
                                 <div class="layer_switch" data-parent="{{i}}" data-index="{{j}}">
                                     <label class="switch">
                                         <input type="checkbox" {{child.show?'checked':""}} />
@@ -244,7 +244,7 @@
                 {{else}}
                     <div class="layer_item" data-index="{{i}}">
                         <div class="layer_info">
-                            <p class="layer_name" title="地块名称">{{item.name}}</p>
+                            <p class="layer_name" title="地块名称">{{item.layerName}}</p>
                             <div class="layer_switch" data-index="{{i}}">
                                 <label class="switch">
                                     <input type="checkbox" {{item.show?'checked':""}} />
@@ -285,6 +285,7 @@
             </div>
         </div>
     </script>
+
 </body>
 <!-- 基础插件 -->
 <script src="libs/jquery/jquery_3.0.0.js"></script>

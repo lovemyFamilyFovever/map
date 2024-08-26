@@ -39,9 +39,10 @@ class MapObj {
 
         // 加载底图
         this.loadBaseMap();
-
         // 添加控件
         this.addControls();
+        //绑定点击事件
+        this.bindClickEvent();
     }
     // 加载底图
     loadBaseMap() {
@@ -67,21 +68,8 @@ class MapObj {
         }
         // 添加绘制控件 初始化右上角绘制测量工具栏
         if (this.options.toolListControl) {
-            this.mapObj.pm.addControls({
-                position: 'topright',
-                rotateMode: false,
-                drawMarker: false,          // 不显示绘制点的工具
-                drawPolygon: true,         // 显示绘制多边形的工具
-                drawPolyline: true,        // 显示绘制线段的工具
-                drawCircle: true,          // 不显示绘制圆的工具
-                drawCircleMarker: false,    // 不显示绘制圆形标记的工具
-                drawPolyline: false,        // 显示绘制线段的工具
-                editMode: false,            // 显示编辑模式工具
-                dragMode: true,            // 不显示拖拽模式工具
-                cutPolygon: false,          // 不显示剪切多边形的工具
-                removalMode: true,          // 显示删除工具
-                drawText: false,            // 隐藏插入文本的控件
-            });
+            const toolList = $.extend(true, { position: 'topright' }, config.mapOptions.toolList);
+            this.mapObj.pm.addControls(toolList);
             // 设置语言
             this.mapObj.pm.setLang('zh');
         }
@@ -109,7 +97,7 @@ class MapObj {
     }
 
     // 添加解析后的 GeoJSON 到地图上
-    addGeoJSONToMap(geoJson, layerId, style) {
+    addGeoJSONToMap(geoJson, objectData) {
 
         proj4.defs("EPSG:4539", "+proj=tmerc +lat_0=0 +lon_0=117 +k=1 +x_0=39500000 +y_0=0 +datum=CGCS2000 +units=m +no_defs"); // CGCS2000_3_Degree_GK_Zone_39
         proj4.defs("EPSG:3857", "+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs"); // Web Mercator
@@ -139,33 +127,17 @@ class MapObj {
                 });
             },
             style: function () {
-                return style;
+                return objectData.style;
             }
         })
-        geoJsonLayer.layerId = layerId; // 给图层添加唯一的 layerId
+        geoJsonLayer.layerId = objectData.layerId; // 给图层添加唯一的 layerId
+        geoJsonLayer.layerName = objectData.layerName; // 给图层添layerName
+
         geoJsonLayer.addTo(this.mapObj);
-        this.layerStore.set(layerId, geoJsonLayer); // 将图层存储到 layerStore 中
+        this.layerStore.set(objectData.layerId, geoJsonLayer); // 将图层存储到 layerStore 中
 
         var center = geoJsonLayer.getBounds().getCenter();
         this.mapObj.setView(center, 13);   // 设置地图视图到图层中心点，并设置一个合适的缩放级别 13
-
-        // 假设 geoJsonLayer 是你的 GeoJSON 图层
-        geoJsonLayer.on('click', function (e) {
-            // 获取点击的图斑的属性信息
-            var properties = e.layer.feature.properties;
-            var infoHtml = '<h4>属性信息</h4><div class="attr-wrap">';
-            for (var key in properties) {
-                if (properties.hasOwnProperty(key)) {
-                    infoHtml += `<p><span class="attr-key">${key}:</span><span class="attr-value">${properties[key]}</span></p>`;
-                }
-            }
-            infoHtml += '</div>';
-            // 显示弹出窗口
-            $('.attribute_wrap').html(infoHtml);
-            $('.attribute_content,.right-tool').show()
-            new PerfectScrollbar('.attribute_wrap');
-        });
-
     }
 
     // 获取当前添加的图层
@@ -209,12 +181,65 @@ class MapObj {
             layer.setStyle(style);
         }
     }
+    // 绑定点击事件
+    bindClickEvent() {
+        var that = this;
 
+        // 监听地图的点击事件
+        this.mapObj.on('click', function (e) {
+            let attributeSelectTitleHtml = "";
+            let attributeSelectInfoHtml = "";
 
+            var clickedLayers = [];
 
+            const layers = Array.from(that.layerStore.values());
 
+            layers.forEach(function (layer, index) {
+                attributeSelectTitleHtml += `<h3 data-title="${index}">${layer.layerName}</h3>`
 
+                let attributeSelectInfoItemHtml = "";
+                layer.eachLayer(function (layerItem) {
+                    let infoHtml = "";
+                    if (layerItem instanceof L.Polygon || layerItem instanceof L.Polyline) {
+                        // 检查点击的点是否在这个图层内
+                        if (layerItem.getBounds().contains(e.latlng)) {
+                            clickedLayers.push({
+                                layerItem: layerItem,
+                            });
+                            var properties = layerItem.feature.properties || {};
+                            for (var key in properties) {
+                                infoHtml += `<p><strong>${key}:</strong> ${properties[key] || '-'}</p>`
+                            }
+                        }
+                    } else if (layerItem instanceof L.Marker) {
+                        //  // 检查点击的 marker是否在这个图层内
+                        if (layerItem.getLatLng().equals(e.latlng)) {
+                            clickedLayers.push({
+                                layerItem: layerItem,
+                            });
+                            var properties = layerItem.feature.properties || {};
+                            for (var key in properties) {
+                                infoHtml += `<p><strong>${key}:</strong> ${properties[key] || '-'}</p>`
+                            }
+                        }
+                    }
+                    if (infoHtml != "") {
+                        attributeSelectInfoItemHtml += `<div class="select-attribute-detail">${infoHtml}</div>`
+                    }
+                });
+                attributeSelectInfoHtml += `<div class="select-attribute-info">${attributeSelectInfoItemHtml}</div>`
+            });
 
+            // 如果有多个图层被点击，显示它们的相关信息
+            if (clickedLayers.length > 0) {
+                $('.attribute_wrap').html(`
+                    <div class="attribute-select-title">${attributeSelectTitleHtml}</div>
+                    <div class="attribute-item-content">${attributeSelectInfoHtml}</div>
+                `);
 
+                $('.attribute_content,.right-tool').show()
+                new PerfectScrollbar('.attribute_wrap');
+            }
+        });
+    }
 }
-

@@ -185,6 +185,7 @@ class Statistics {
         //重置
         $('.statistics-content-footer .reset').on('click', () => {
             $('.statistics-item').slice(0).remove();
+            $('.statistics-add-btn').show();
             $(".statistics-items").append(this.renderHtml());
         });
 

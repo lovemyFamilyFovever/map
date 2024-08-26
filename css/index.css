@@ -357,7 +357,7 @@ a:hover {
 
 .layer_title img,
 .attribute_title img {
-    vertical-align: text-top;
+    vertical-align: bottom;
     padding-right: 6px;
 }
 
@@ -1358,11 +1358,8 @@ p.layer_name {
     opacity: 0.8;
 }
 
-
 .statistics-items {
-    height: 80%;
     position: relative;
-    height: 90%;
 }
 
 .statistics-item-target .dropdown_list input {

@@ -14,6 +14,21 @@ var config = {
         initTooltips: true,//是否初始化右上角的工具栏
         mousemoveLatlng: true,//是否显示鼠标滑动的坐标
         // crs: L.CRS.EPSG3857, //坐标参考系统
+        toolList: {
+            rotateMode: false,          // 不显示旋转模式工具
+            drawMarker: false,          // 不显示绘制点的工具
+            drawPolygon: true,          // 显示绘制多边形的工具
+            drawPolyline: true,         // 显示绘制线段的工具
+            drawCircle: true,           // 不显示绘制圆的工具
+            drawCircleMarker: false,    // 不显示绘制圆形标记的工具
+            drawPolyline: false,        // 显示绘制线段的工具
+            editMode: false,            // 显示编辑模式工具
+            dragMode: true,             // 不显示拖拽模式工具
+            cutPolygon: false,          // 不显示剪切多边形的工具
+            removalMode: true,          // 显示删除工具
+            drawText: false,            // 隐藏插入文本的控件
+        }
+
     },
     center: [33.523079, 116.477051],
 
@@ -28,7 +43,7 @@ var config = {
 
     layerList: [{
         layerId: "XZQ",
-        name: "行政区",
+        layerName: "行政区",
         url: "http://150.158.76.25:5000/load_shp?file_path=XZQ",
         show: true,
         style: {
@@ -38,19 +53,19 @@ var config = {
         },
         children: [{
             layerId: "CJXZQ",
-            name: "村级行政区",
+            layerName: "村级行政区",
             url: "http://150.158.76.25:5000/load_shp?file_path=CJXZQ",
             show: false,
             style: {
-                color: "#D8BFD8",
+                color: "#BBFFFF",
                 weight: 2,
                 opacity: 0.8
             }
         }, {
             layerId: "ZJXZQ",
-            name: "镇级行政区",
+            layerName: "镇级行政区",
             url: "http://150.158.76.25:5000/load_shp?file_path=ZJXZQ",
-            show: false,
+            show: true,
             style: {
                 color: "#D81159",
                 weight: 2,
@@ -59,9 +74,9 @@ var config = {
         }]
     }, {
         layerId: "XZJT",
-        name: "交通",
+        layerName: "交通",
         url: "http://150.158.76.25:5000/load_shp?file_path=XZJT",
-        show: false,
+        show: true,
         style: {
             color: "#804d36",
             weight: 2,
@@ -69,7 +84,7 @@ var config = {
         }
     }, {
         layerId: "GYYD",
-        name: "工业用地",
+        layerName: "工业用地",
         url: "http://150.158.76.25:5000/load_shp?file_path=GYYD",
         show: false,
         style: {
@@ -79,7 +94,7 @@ var config = {
         },
         children: [{
             layerId: "DXGYYD",
-            name: "低效工业用地",
+            layerName: "低效工业用地",
             url: "http://150.158.76.25:5000/load_shp?file_path=低效工业用地",
             show: false,
             style: {
@@ -89,7 +104,7 @@ var config = {
             }
         }, {
             layerId: "PQPHDK",
-            name: "片区盘活地块",
+            layerName: "片区盘活地块",
             url: "http://150.158.76.25:5000/load_shp?file_path=片区盘活地块",
             show: false,
             style: {
@@ -100,7 +115,7 @@ var config = {
         }]
     }, {
         layerId: "PQFW",
-        name: "片区范围",
+        layerName: "片区范围",
         url: "http://150.158.76.25:5000/load_shp?file_path=片区范围",
         show: false,
         style: {
@@ -110,7 +125,7 @@ var config = {
         }
     }, {
         layerId: "QYWZ",
-        name: "企业位置",
+        layerName: "企业位置",
         url: "http://150.158.76.25:5000/load_shp?file_path=QYWZ",
         show: false,
         style: {

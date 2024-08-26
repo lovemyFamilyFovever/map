@@ -1,5 +1,4 @@
 $(document).ready(function () {
-
     document.title = config.projectName;
     $('.project_name span').text(config.projectName)
 
@@ -15,13 +14,13 @@ async function loadMapLayers() {
 
     $(".layer_wrap").append(template('layers-html', config))
 
-    const showLayerList = config.layerList.filter(layer => layer.show === true);
+    const showLayerList = findShowTrueElements(config.layerList)
     // 使用Promise.all来处理多个并发请求
     Promise.all(showLayerList.map(layer => fetch(layer.url).then(response => response.json())))
         .then(dataArray => {
             dataArray.forEach((data, index) => {
                 console.log(`Data from URL ${showLayerList[index].url}`);
-                sfs.addGeoJSONToMap(data, showLayerList[index].layerId, showLayerList[index].style);
+                sfs.addGeoJSONToMap(data, showLayerList[index]);
             });
         })
         .catch(error => {
@@ -67,24 +66,18 @@ function initEvent() {
     $('.layer_switch input[type="checkbox"]').on('click', function () {
         const index = $(this).closest('.layer_switch').attr('data-index');
         const parentIndex = $(this).closest('.layer_switch').attr('data-parent');
-        let url = null;
-        let layerId = null;
-        let style = null;
 
+        let objectData = null;
         if (parentIndex) {
-            url = config.layerList[parentIndex].children[index].url;
-            layerId = config.layerList[parentIndex].children[index].layerId;
-            style = config.layerList[parentIndex].children[index].style
+            objectData = config.layerList[parentIndex].children[index]
         } else {
-            url = config.layerList[index].url;
-            layerId = config.layerList[index].layerId;
-            style = config.layerList[index].style
+            objectData = config.layerList[index]
         }
         if ($(this).prop('checked')) {
-            fetch(url)
+            fetch(objectData.url)
                 .then(response => response.json())
                 .then(data => {
-                    sfs.addGeoJSONToMap(data, layerId, style);
+                    sfs.addGeoJSONToMap(data, objectData);
                     new CustomChart('main-echart', [], "模拟图表")
                 })
                 .catch(error => {
@@ -92,7 +85,7 @@ function initEvent() {
                 });
         } else {
             // 从layerGroup中查找并删除图层
-            sfs.removeLayerById(layerId)
+            sfs.removeLayerById(objectData.layerId)
         }
     });
 
@@ -149,8 +142,6 @@ function initEvent() {
         }
     });
 
-
-
     //点击空白区域隐藏下拉框
     $(document).on('click', function (event) {
         var target = $(event.target);
@@ -161,4 +152,17 @@ function initEvent() {
         }
 
     });
+}
+
+//筛选出show为true的图层
+function findShowTrueElements(layerList = config.layerList) {
+    return layerList.reduce((acc, layer) => {
+        if (layer.show) {
+            acc.push(layer);
+        }
+        if (layer.children) {
+            acc.push(...findShowTrueElements(layer.children));
+        }
+        return acc;
+    }, []);
 }
