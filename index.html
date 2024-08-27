@@ -29,28 +29,28 @@
         <span></span>
 
 
-        <input type="color">
+        <!-- <input type="color">
 
-        <input type="range" class="range-level">
+        <input type="range" class="range-level"> -->
     </div>
     <div id="map"></div>
     <div class="left-tool">
         <div class="left-tool-title">
             <!-- 加载图层 -->
-            <div class="left-tool-item switchlayer-container">
-                <img src="imgs/layers.png" alt="加载图层" title="加载图层" />
+            <div class="left-tool-item switchlayer-container" title="切换图层">
+                <img src="imgs/layers.png" alt="加载图层" />
             </div>
             <!-- 统计查询 -->
-            <div class="left-tool-item statistics-container active">
-                <img src="imgs/form.svg" alt="统计查询" title="统计查询" />
+            <div class="left-tool-item statistics-container active" title="切换统计查询">
+                <img src="imgs/form.svg" alt="统计查询" />
             </div>
             <!-- 统计表 -->
-            <div class="left-tool-item table-container active">
-                <img src="imgs/table.png" alt="统计表" title="统计表" />
+            <div class="left-tool-item table-container active" title="切换统计表">
+                <img src="imgs/table.png" alt="统计表" />
             </div>
             <!-- 统计图 -->
-            <div class="left-tool-item chart-container active">
-                <img src="imgs/chart.png" alt="统计图" title="统计图" />
+            <div class="left-tool-item chart-container active" title="切换统计图">
+                <img src="imgs/chart.png" alt="统计图" />
             </div>
         </div>
 
@@ -58,8 +58,8 @@
             <!-- 图层容器 -->
             <div class="layer_content">
                 <div class="layer_title"><img src="imgs/图层.svg" alt="低效用地图层" title="低效用地图层" />低效用地</div>
-                <div class="layer_content_close close_btn">
-                    <img src="imgs/close.svg" alt="关闭" title="关闭" />
+                <div class="layer_content_close close_btn" title="关闭">
+                    <img src="imgs/close.svg" alt="关闭" />
                 </div>
                 <div class="layer_wrap"></div>
             </div>
@@ -69,8 +69,8 @@
     <div class="right-tool">
         <div class="attribute_content">
             <div class="attribute_title"><img src="imgs/attribute.svg" alt="属性查询" title="属性查询" />属性查询</div>
-            <div class="attribute_content_close close_btn">
-                <img src="imgs/close.svg" alt="关闭" title="关闭" />
+            <div class="attribute_content_close close_btn" title="关闭">
+                <img src="imgs/close.svg" alt="关闭" />
             </div>
             <div class="attribute_wrap"></div>
         </div>
@@ -81,8 +81,8 @@
         <div class="statistics-content">
             <div class="statistics-content-title">
                 <p>查询统计</p>
-                <div class="statistics-content-close close_btn">
-                    <img src="imgs/close.svg" alt="关闭" title="关闭" />
+                <div class="statistics-content-close close_btn" title="关闭">
+                    <img src="imgs/close.svg" alt="关闭" />
                 </div>
             </div>
             <div class="statistics-content-body">
@@ -94,16 +94,16 @@
         </div>
 
         <div class="table-content">
-            <div class="table-content-close close_btn">
-                <img src="imgs/close.svg" alt="关闭" title="关闭" />
+            <div class="table-content-close close_btn" title="关闭">
+                <img src="imgs/close.svg" alt="关闭" />
             </div>
 
             <!-- 筛选显示的字段 -->
             <div class="table_column_filter_content">
                 <div class="table_column_filter_title">
                     <span>筛选显示的字段(<span style="color:#327cff;">拖拽排序</span> )</span>
-                    <div class="table_column_filter_colse close_btn">
-                        <img src="imgs/close.svg" alt="关闭" title="关闭" />
+                    <div class="table_column_filter_colse close_btn" title="关闭">
+                        <img src="imgs/close.svg" alt="关闭" />
                     </div>
                 </div>
                 <div class="table_column_filter_action">
@@ -124,15 +124,15 @@
             <div class="table_panel">
                 <div class="table_panel_container">
 
-                    <div class="table_action_btn table_title_filter">
-                        <img src="imgs/filter_column.svg" alt="筛选字段" title="筛选字段" />
+                    <div class="table_action_btn table_title_filter" title="调整字段排列">
+                        <img src="imgs/filter_column.svg" alt="筛选字段" />
                         <div class="table_action_text">调整字段排列</div>
                     </div>
 
-                    <div class="table_action_btn table_download_btn">
+                    <div class="table_action_btn table_download_btn" title="下载">
                         <img src="imgs/download.svg" />
-                        <div class="table_action_text" alt="下载" title="下载">下载</div>
-                        <img src="imgs/dropdown.svg" class="dropdown_svg" />
+                        <div class="table_action_text">下载</div>
+                        <img src="imgs/dropdown.svg" class="dropdown_svg" alt="下载" />
                         <div class="dropdown_list">
                             <ul>
                                 <li class="download-csv">下载csv</li>
@@ -157,13 +157,13 @@
         </div>
 
         <div class="chart-content">
-            <div class="chart-content-close close_btn">
-                <img src="imgs/close.svg" alt="关闭" title="关闭" />
+            <div class="chart-content-close close_btn" title="关闭">
+                <img src="imgs/close.svg" alt="关闭" />
             </div>
             <div class="echart_container">
                 <div class="empty_chart">
                     <div class="empty_chart_image">
-                        <img src="imgs/empty_chart.svg" />
+                        <img src="imgs/empty_chart.svg" alt="暂无数据" />
                     </div>
                     <div class="empty_chart_text">没有查询到相关数据!</div>
                 </div>
@@ -174,12 +174,12 @@
                             <img src="imgs/line.svg" alt="切换折线图" title="切换折线图" class="line" />
                             <img src="imgs/bar.svg" alt="切换柱状图" title="切换柱状图" class="bar active" />
                         </div>
-                        <a class="echart_download" href="#">
+                        <a class="echart_download" href="#" title="下载图表">
                             <img src="imgs/download.svg" alt="下载图表" />
                             <div class="echart_download_text">下载</div>
                         </a>
                     </div>
-                    <div id="main-echart" style="width: 22vw; height: 37vh">
+                    <div id="main-echart" style="width: 16.35vw; height: 35vh">
                         <div class="loading-container">
                             <div class="loader"></div>
                         </div>
@@ -190,10 +190,10 @@
     </div>
 
     <div class="located_btn tool_btn" title="定位您的位置">
-        <img src="imgs/locate.svg" />
+        <img src="imgs/locate.svg" alt="定位" />
     </div>
     <div class="baselayer_btn tool_btn" title="切换底图">
-        <img src="imgs/baselayer.svg" />
+        <img src="imgs/baselayer.svg" alt="底图" />
     </div>
     <div class="common-panel layer-pop">
         <img src="imgs/close.svg" alt="关闭" class="close" title="关闭" />
@@ -215,45 +215,40 @@
     <script id="layers-html" type="text/html">
         <div class="layer_items">
             {{each layerList as item i}} 
-                {{if item.children}}
-                    <div class="layer_item" data-index="{{i}}">
+            <div class="layer_item" data-index="{{i}}">
+                <div class="layer_info">
+                    <p class="layer_name" title="地块名称">{{item.layerName}}</p>
+                    <div class="editLayerStyle" data-id="{{layerList.layerId}}">
+                        <img src="imgs/style.svg" alt="调整图层样式" title="调整图层样式"/>
+                    </div>
+                    <div class="layer_switch" data-index="{{i}}">
+                        <div class="layer_loading loader"></div>
+                        <label class="switch">
+                            <input type="checkbox" {{item.show?'checked':""}} />
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            {{if item.children}}
+                {{each item.children as child j}} 
+                    <div class="layer_item layer_item_child" data-parent="{{i}}" data-index="{{j}}">
                         <div class="layer_info">
-                            <p class="layer_name" title="地块名称">{{item.layerName}}</p>
-                            <div class="layer_switch" data-index="{{i}}">
+                            <p class="layer_name" title="地块名称">{{child.layerName}}</p>
+                            <div class="editLayerStyle"  data-id="{{layerList.layerId}}">
+                                <img src="imgs/style.svg" alt="调整图层样式" title="调整图层样式"/>
+                            </div>
+                            <div class="layer_switch" data-parent="{{i}}" data-index="{{j}}">
+                                <div class="layer_loading loader"></div>
                                 <label class="switch">
-                                    <input type="checkbox" {{item.show?'checked':""}} />
+                                    <input type="checkbox" {{child.show?'checked':""}} />
                                     <span class="slider"></span>
                                 </label>
                             </div>
                         </div>
                     </div>
-
-                    {{each item.children as child j}} 
-                        <div class="layer_item layer_item_child" data-parent="{{i}}" data-index="{{j}}">
-                            <div class="layer_info">
-                                <p class="layer_name" title="地块名称">{{child.layerName}}</p>
-                                <div class="layer_switch" data-parent="{{i}}" data-index="{{j}}">
-                                    <label class="switch">
-                                        <input type="checkbox" {{child.show?'checked':""}} />
-                                        <span class="slider"></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    {{/each}}
-                {{else}}
-                    <div class="layer_item" data-index="{{i}}">
-                        <div class="layer_info">
-                            <p class="layer_name" title="地块名称">{{item.layerName}}</p>
-                            <div class="layer_switch" data-index="{{i}}">
-                                <label class="switch">
-                                    <input type="checkbox" {{item.show?'checked':""}} />
-                                    <span class="slider"></span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                {{/if}}
+                {{/each}}
+            {{/if}}
             {{/each}}
         </div>
     </script>

@@ -45,6 +45,12 @@ function initEvent() {
         $('.right-tool').hide()
     })
 
+    //隐藏 查询统计弹窗
+    $('.statistics-container').on('click', function () {
+        $('.statistics-content').toggle()
+        $('.statistics-container').toggleClass('active')
+    })
+
     //显示隐藏 统计表
     $('.table-container').on('click', function () {
         $('.table-content').toggle()
@@ -74,11 +80,20 @@ function initEvent() {
             objectData = config.layerList[index]
         }
         if ($(this).prop('checked')) {
+
+            $(this).parent().hide();
+            $(this).parent().prev().show()
+
             fetch(objectData.url)
                 .then(response => response.json())
                 .then(data => {
+
                     sfs.addGeoJSONToMap(data, objectData);
                     new CustomChart('main-echart', [], "模拟图表")
+                    $(this).closest('.layer_switch').prev().addClass('active')
+
+                    $(this).parent().show();
+                    $(this).parent().prev().hide()
                 })
                 .catch(error => {
                     console.error('Error:', error);
@@ -86,6 +101,10 @@ function initEvent() {
         } else {
             // 从layerGroup中查找并删除图层
             sfs.removeLayerById(objectData.layerId)
+            $(this).closest('.layer_switch').prev().removeClass('active')
+
+            $(this).parent().show();
+            $(this).parent().prev().hide()
         }
     });
 
@@ -107,21 +126,22 @@ function initEvent() {
         $('.chart-container').toggleClass('active')
     })
 
-
-
     //点击空白区域隐藏下拉框
     $(document).on('click', function (event) {
         var target = $(event.target);
-
         const clickDom = '.dropdown_list,.table_action_btn,.dropdown-input-container,.dropdown_input';
-
         // 检查点击的元素是否在 .table-content 内部，且不是 .dropdown_list 内部
         if (!target.closest(clickDom).length) {
             // 如果不在 .table-content 内部，隐藏  .dropdown_list
             $('.dropdown_list').hide();
         }
-
     });
+
+    //点击图层显示 样式编辑弹窗
+    $('.editLayerStyle').on('click', function () {
+        //待补充
+    });
+
 }
 
 //筛选出show为true的图层

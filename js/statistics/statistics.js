@@ -33,7 +33,20 @@ class Statistics {
             if ($ul.html() == "") {
                 let html = "";
                 config.statisticsItems.forEach(item => {
-                    html += ` <li data-type="${item.type}" data-column="${item.column}">${item.text}</li>`
+
+                    // 查找除当前 input 外所有相同类名的 input 元素
+                    const $allInputs = $('.column-input.dropdown_input');
+                    const $otherInputs = $allInputs.not($(this));
+                    let foundInOtherInputs = false;
+                    $otherInputs.each(function () {
+                        if ($(this).val() === item.text) {
+                            foundInOtherInputs = true;
+                            return false; // 跳出当前循环
+                        }
+                    });
+                    if (!foundInOtherInputs) {
+                        html += `<li data-type="${item.type}" data-column="${item.column}">${item.text}</li>`;
+                    }
                 });
                 $ul.html(html)
 
@@ -47,8 +60,8 @@ class Statistics {
             const $dom = $(this).parent().parent();
             var value = $dom.siblings('input').val();
 
-            let type = $(this).data('type');
-            let column = $(this).data('column');
+            let type = $(this).attr('data-type');
+            let column = $(this).attr('data-column');
             let name = $(this).text().trim();
 
             if (value !== name) {
@@ -56,8 +69,11 @@ class Statistics {
                     $dom.siblings('input').attr('data-type', type).attr('data-column', column);
                 }
                 $dom.siblings('input').val(name)
-                $dom.parent().find('.statistics-item-condition input').val("");
-                $dom.parent().find('.statistics-item-column input').val("");
+                $dom.parent().siblings('.statistics-item-condition').find('input').val("");
+                $dom.parent().siblings('.statistics-item-condition').find('li').show();
+
+                $dom.parent().siblings('.statistics-item-target').find('input').val("").prop('readonly', true);
+                $dom.parent().siblings('.statistics-item-target').find('.dropdown_list').find('ul').empty();
             }
             $dom.hide();
         });
@@ -67,7 +83,7 @@ class Statistics {
             $('.dropdown_list').hide();
             const $column = $(this).parent().siblings('.statistics-item-column').find('input');
             const name = $column.val();
-            const type = $column.data('type');
+            const type = $column.attr('data-type');
 
             if (name !== "") {
                 if (type == "string") {
@@ -83,12 +99,15 @@ class Statistics {
         $('.statistics-items').on('click', '.statistics-item-condition li', function () {
             let name = $(this).text().trim();
             $(this).parent().parent().siblings('input').val(name)
+            const parent = $(this).parent().parent().parent()
 
             if (name == "=" || name == "&lt;" || name == "&gt;") {
-                $(this).parent().find('.statistics-item-target input').prop('readonly', true);
+                parent.siblings('.statistics-item-target').find('input').prop('readonly', true);
             } else {
-                $(this).parent().find('.statistics-item-target input').prop('readonly', false);
+                parent.siblings('.statistics-item-target').find('input').prop('readonly', false);
             }
+            parent.siblings('.statistics-item-target').find('input').val("");
+            parent.siblings('.statistics-item-target').find('.dropdown_list').find('ul').empty();
 
             $(this).parent().parent().hide();
         });
@@ -97,51 +116,50 @@ class Statistics {
         $('.statistics-items').on('click', '.statistics-item-target .target-input', function () {
             $('.dropdown_list').hide();
             const $input = $(this).parent().siblings('.statistics-item-column').find('input');
-            const column = $input.data('column');
-            const type = $input.data('type');
+            const condition = $(this).parent().siblings('.statistics-item-condition').find('input').val();
+            const column = $input.attr('data-column');
+            const type = $input.attr('data-type');
             const name = $input.val();
 
-            if (name == "") return;
+            if (name == "" || condition == "") return;
 
-            if ($(this).siblings('.dropdown_list').find('ul').html() == "") {
+            if (type == "string") {
                 const columns = customTable.getColumnUniqueValues(column).filter(item => item.trim() != "")
-
-                if (type == "string") {
-                    let html = "";
-                    if ($(this).parent().siblings('.statistics-item-condition').find('input').val() == "包含") {
-                        let count = $('.statistics-item-target').length;
+                let html = "";
+                if (condition == "包含") {
+                    let count = $('.statistics-item-target').length;
+                    html += `
+                            <li>
+                                <input type="checkbox" id="cbx-column-static-all-${count++}" class="column-static-all" data-name="全部" />
+                                <span>全部</span>
+                            </li>`;
+                    columns.forEach((item, i) => {
                         html += `
-                                <li>
-                                    <input type="checkbox" id="cbx-column-static-all-${count++}" class="column-static-all" data-name="全部" />
-                                    <span>全部</span>
-                                </li>`;
-                        columns.forEach((item, i) => {
-                            html += `
                                 <li>
                                     <input type="checkbox" class="column-static" data-name="${item}" />
                                     <span>${item}</span>
                                 </li>`;
-                        });
-                    } else {
-                        columns.forEach(item => {
-                            html += `<li>${item}</li>`;
-                        });
-                    }
-                    $(this).parent().find('.dropdown_list ul').html(html)
-
-                    var dom = $(this).parent().find('.dropdown_list');
-                    new PerfectScrollbar(dom[0]);
-                    $(this).siblings('.dropdown_list').toggle();
+                    });
+                } else {
+                    columns.forEach(item => {
+                        html += `<li>${item}</li>`;
+                    });
                 }
-            } else {
+                $(this).parent().find('.dropdown_list ul').html(html)
+
+                var dom = $(this).parent().find('.dropdown_list');
+                new PerfectScrollbar(dom[0]);
                 $(this).siblings('.dropdown_list').toggle();
+            } else {
+                $(this).parent().find('.dropdown_input').prop('readonly', false);
             }
+
         });
         //选择具体值
         $('.statistics-items').on('click', '.statistics-item-target li', function () {
             let $parent = $(this).parent().parent();
             if ($parent.parent().siblings('.statistics-item-condition').find('input').val() == "包含") {
-                if ($(this).find('input').data('name') == "全部") {
+                if ($(this).find('input').attr('data-name') == "全部") {
                     var status = $parent.find('.column-static-all').prop('checked')
                     $parent.find('.column-static').prop('checked', status);
                     $parent.siblings('.target-input').val(status ? "全部" : "")
@@ -162,8 +180,8 @@ class Statistics {
                         let nameString = "";
                         $parent.find('.column-static').each(function () {
                             if ($(this).is(':checked')) {
-                                if ($(this).data('name') != "全部")
-                                    nameString += $(this).data('name') + ',';
+                                if ($(this).attr('data-name') != "全部")
+                                    nameString += $(this).attr('data-name') + ',';
                             }
                         });
                         nameString = nameString.substring(0, nameString.length - 1);
@@ -182,14 +200,14 @@ class Statistics {
             $('.statistics-item').length == 8 ? $('.statistics-add-btn').hide() : $('.statistics-add-btn').show();
         });
 
-        //重置
+        //重置 按钮
         $('.statistics-content-footer .reset').on('click', () => {
             $('.statistics-item').slice(0).remove();
             $('.statistics-add-btn').show();
             $(".statistics-items").append(this.renderHtml());
         });
 
-        //查询
+        //查询 按钮
         $('.statistics-content-footer .confirm').on('click', () => {
             let uniqueCategories = [];
             $('.statistics-item').each((index, item) => {
@@ -204,8 +222,8 @@ class Statistics {
                     if ($condition.val() == "包含") {
                         values = [];
                         $(item).find('.column-static').each(function () {
-                            if ($(this).is(':checked') && $(this).data('name') != "全部") {
-                                values.push($(this).data('name'))
+                            if ($(this).is(':checked') && $(this).attr('data-name') != "全部") {
+                                values.push($(this).attr('data-name'))
                             }
                         });
                     } else {
@@ -213,13 +231,17 @@ class Statistics {
                     }
 
                     uniqueCategories.push({
-                        field: $column.data('column'),
+                        field: $column.attr('data-column'),
                         type: condition,
                         value: values
                     })
                 }
             });
             customTable.filterTable(uniqueCategories);
+
+            $('.table-content').show();
+            $('.table-container').addClass('active');
+
         });
 
         //删除

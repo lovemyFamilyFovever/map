@@ -72,7 +72,7 @@ class CustomChart {
             totalData.push(sum);
         }
         const series = [
-            '工业用地数量', '工业用地面积', '工业企业数量', '缺失经济数据企业', '规上企业'
+            '工业用地数量', '工业用地面积', '工业企业数量', '缺失经济数据企业'
         ].map((name, sid) => {
             return {
                 name,
@@ -92,14 +92,14 @@ class CustomChart {
         const barOption = {
             legend: {
                 top: 0,
-                data: ['工业用地数量', '工业用地面积', '工业企业数量', '缺失经济数据企业', '规上企业']
+                data: ['工业用地数量', '工业用地面积', '工业企业数量', '缺失经济数据企业']
             },
             tooltip: {},
             grid: {
-                left: 40,
+                left: 20,
                 right: 10,
                 top: 50,
-                bottom: 20
+                bottom: 30
             },
             yAxis: {
                 type: 'value'

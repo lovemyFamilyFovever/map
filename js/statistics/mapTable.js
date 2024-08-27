@@ -24,11 +24,12 @@ class CustomTable {
     renderTable(data) {
         this.table = new Tabulator(`#main-table`, {
             data,
-            height: "330px",
+            height: "34vh",
             layout: "fitData",
             pagination: true,
-            paginationSize: 20,
-            rowHeight: 27,
+            paginationSize: 10,
+            rowHeight: 20,
+            paginationButtonCount: 3, //设置分页按钮的数量
             placeholder: this.getEmptyStatus(),
             columnDefaults: {
                 hozAlign: 'center',
@@ -90,7 +91,6 @@ class CustomTable {
             });
             this.table.setColumns(checkedCheckboxes);
             $('.table_column_filter_content').toggleClass('show');
-
         });
 
         // 点击下载按钮
@@ -170,30 +170,6 @@ class CustomTable {
         )
     }
 
-    queryTable() {
-        const filters = [];
-        // 定义筛选条件和相应的字段映射
-        const filterFields = [
-            { selector: '.filter_area .search_input', field: '所在乡镇' },
-            { selector: '.filter_build .search_input', field: '建设情况' },
-            { selector: '.filter_user .search_input', field: '规划用途' },
-            { selector: '.filter_type .search_input', field: '分类' }
-        ];
-        // 遍历筛选条件
-        filterFields.forEach(({ selector, field }) => {
-            const value = $(selector).val().trim();
-            if (value) {
-                filters.push({ field, type: 'in', value: value.split(',') });
-            }
-        });
-
-        // 应用筛选条件
-        this.table.setFilter(filters);
-        //统计底部数据
-        this.getStatisticsTable();
-        // this.table.redraw();
-    }
-
     //获取空状态html
     getEmptyStatus() {
         return `
@@ -209,7 +185,7 @@ class CustomTable {
 
     //获取指定列的唯一值
     getColumnUniqueValues(column) {
-        const columns = this.table.getData('active').map(function (row, index) {
+        const columns = this.table.getData().map(function (row, index) {
             if (row[column] !== null && row[column] !== undefined) {
                 return row[column];
             }
