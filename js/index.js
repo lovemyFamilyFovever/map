@@ -107,46 +107,16 @@ function initEvent() {
         $('.chart-container').toggleClass('active')
     })
 
-    // 添加定位按钮点击事件
-    $('.located_btn').on('click', function () {
-        // 使用 Leaflet 的 locate 方法获取用户当前位置
-        sfs.mapObj.locate({ setView: true })
-    });
 
-    // 阻止图层面板点击事件冒泡
-    $('.layer-pop').on('click', function () {
-        return false
-    }).on('mouseover', function () {
-        return false
-    });
-    //展开 切换地图页面
-    $('.baselayer_btn.tool_btn').on('click', function () {
-        $('.common-panel.layer-pop').show()
-    })
-    //关闭 切换底图页面
-    $('.common-panel.layer-pop .close').on('click', function () {
-        $('.common-panel.layer-pop').hide()
-    })
-    // 图层底图选择
-    $('.layer-items a').on('click', function (e) {
-        $(this).siblings().removeClass('active')
-        $(this).addClass('active')
-        const id = $(this).attr('id')
-        // 切换地图类型
-        if (id == 'vec_type') {//矢量
-            sfs.switchLayers(satellite)
-        } else if (id == 'img_type') {//卫星
-            sfs.switchLayers(image)
-        } else if (id === 'ter_type') {//地形
-            sfs.switchLayers(terrain)
-        }
-    });
 
     //点击空白区域隐藏下拉框
     $(document).on('click', function (event) {
         var target = $(event.target);
+
+        const clickDom = '.dropdown_list,.table_action_btn,.dropdown-input-container,.dropdown_input';
+
         // 检查点击的元素是否在 .table-content 内部，且不是 .dropdown_list 内部
-        if (!target.closest('.dropdown_list,.table_action_btn,.stastic-item-input').length) {
+        if (!target.closest(clickDom).length) {
             // 如果不在 .table-content 内部，隐藏  .dropdown_list
             $('.dropdown_list').hide();
         }

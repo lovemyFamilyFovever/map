@@ -166,7 +166,6 @@ class MapObj {
             layer.bringToFront();
         }
     }
-
     //将某个图层放到最底层
     bringLayerToBack(layerId) {
         const layer = this.layerGroup.getLayer(layerId);
@@ -195,9 +194,10 @@ class MapObj {
             const layers = Array.from(that.layerStore.values());
 
             layers.forEach(function (layer, index) {
-                attributeSelectTitleHtml += `<h3 data-title="${index}">${layer.layerName}</h3>`
+                attributeSelectTitleHtml += `<li data-index="${index}">${layer.layerName}</li>`
 
                 let attributeSelectInfoItemHtml = "";
+                let start = 0;
                 layer.eachLayer(function (layerItem) {
                     let infoHtml = "";
                     if (layerItem instanceof L.Polygon || layerItem instanceof L.Polyline) {
@@ -211,9 +211,11 @@ class MapObj {
                                 infoHtml += `<p><strong>${key}:</strong> ${properties[key] || '-'}</p>`
                             }
                         }
-                    } else if (layerItem instanceof L.Marker) {
-                        //  // 检查点击的 marker是否在这个图层内
-                        if (layerItem.getLatLng().equals(e.latlng)) {
+                    } else if (layerItem instanceof L.Marker || layerItem instanceof L.CircleMarker) {
+                        // 检查点击的位置是否足够接近这个标记点
+                        const distanceThreshold = 100; // 以米为单位的距离阈值
+                        const distance = e.latlng.distanceTo(layerItem.getLatLng());
+                        if (distance <= distanceThreshold) {
                             clickedLayers.push({
                                 layerItem: layerItem,
                             });
@@ -224,21 +226,120 @@ class MapObj {
                         }
                     }
                     if (infoHtml != "") {
-                        attributeSelectInfoItemHtml += `<div class="select-attribute-detail">${infoHtml}</div>`
+                        attributeSelectInfoItemHtml += `
+                            <div class="select-attribute-detail-toggle">${layer.layerName}-${start++}</div>
+                            <div class="select-attribute-detail">
+                                ${infoHtml}
+                            </div>`
                     }
                 });
-                attributeSelectInfoHtml += `<div class="select-attribute-info">${attributeSelectInfoItemHtml}</div>`
+                if (attributeSelectInfoItemHtml == "") {
+                    attributeSelectInfoHtml += `
+                    <div class="select-attribute-info">
+                        <div class="empty_table">
+                            <div class="empty_table_image"><img src="imgs/empty_table.svg" /></div>
+                            <div class="empty_table_text">没有查询到相关数据!</div>
+                        </div>
+                    </div>`
+                } else {
+                    attributeSelectInfoHtml += `<div class="select-attribute-info">${attributeSelectInfoItemHtml}</div>`
+                }
             });
 
+            // dropdown-input-container
             // 如果有多个图层被点击，显示它们的相关信息
             if (clickedLayers.length > 0) {
                 $('.attribute_wrap').html(`
-                    <div class="attribute-select-title">${attributeSelectTitleHtml}</div>
+                    <div class="attribute-title-container dropdown-input-container">
+                        <input type="text" placeholder="请选择图层" readonly class="attribute-title-input dropdown_input">
+                        <img src="imgs/dropdown.svg" class="dropdown_svg">
+                        <div class="dropdown_list"><ul>${attributeSelectTitleHtml}</ul></div>
+                    </div>
                     <div class="attribute-item-content">${attributeSelectInfoHtml}</div>
                 `);
 
+                $('.attribute-title-input').val($('.attribute-title-container li:eq(0)').text());// 默认显示第一个图层的名称
+
+                $('.select-attribute-info:eq(0)').show();
+                $('.select-attribute-info:eq(0) .select-attribute-detail:eq(0)').addClass('active');
                 $('.attribute_content,.right-tool').show()
-                new PerfectScrollbar('.attribute_wrap');
+                new PerfectScrollbar('.attribute-item-content');
+            }
+        });
+
+        // 点击关闭按钮
+        $('.attribute_wrap').on('click', '.close-btn', function () {
+            $('.attribute_wrap').hide();
+        });
+
+        // 点击图层名称，显示图层属性列表
+        $('.attribute_wrap').on('click', '.dropdown_input', function () {
+            $(this).siblings('.dropdown_list').toggle();
+        });
+
+        // 点击图层名称，切换图层
+        $('.attribute_wrap').on('click', '.attribute-title-container li', function () {
+            if ($('.attribute-title-input').val() == $(this).text()) {
+                $('.attribute_content .dropdown_list').toggle();
+                return;
+            }
+
+            $('.attribute-title-input').val($(this).text());
+            $('.attribute_content .dropdown_list').toggle();
+
+            var index = $(this).data('index');
+            $('.select-attribute-detail').removeClass('active');
+            $('.select-attribute-info').hide();
+            $('.select-attribute-info:eq(' + index + ')').show();
+
+            $('.select-attribute-info:eq(' + index + ') .select-attribute-detail:eq(0)').addClass('active');
+        });
+
+        // 点击图层属性列表，展开图层片段
+        $('.attribute_wrap').on('click', '.select-attribute-detail-toggle', function () {
+            const selector = $(this).next('.select-attribute-detail');
+            // 动态获取内容的高度
+            if (selector.hasClass('active')) {
+                selector.removeClass('active');
+            } else {
+                $(this).siblings('.select-attribute-detail').removeClass('active')
+                selector.toggleClass('active');
+            }
+        });
+
+
+        // 添加定位按钮点击事件
+        $('.located_btn').on('click', function () {
+            // 使用 Leaflet 的 locate 方法获取用户当前位置
+            that.mapObj.locate({ setView: true })
+        });
+
+        // 阻止图层面板点击事件冒泡
+        $('.layer-pop').on('click', function () {
+            return false
+        }).on('mouseover', function () {
+            return false
+        });
+        //展开 切换地图页面
+        $('.baselayer_btn.tool_btn').on('click', function () {
+            $('.common-panel.layer-pop').show()
+        })
+        //关闭 切换底图页面
+        $('.common-panel.layer-pop .close').on('click', function () {
+            $('.common-panel.layer-pop').hide()
+        })
+        // 图层底图选择
+        $('.layer-items a').on('click', function (e) {
+            $(this).siblings().removeClass('active')
+            $(this).addClass('active')
+            const id = $(this).attr('id')
+            // 切换地图类型
+            if (id == 'vec_type') {//矢量
+                that.switchLayers(that.satellite)
+            } else if (id == 'img_type') {//卫星
+                that.switchLayers(that.image)
+            } else if (id === 'ter_type') {//地形
+                that.switchLayers(that.terrain)
             }
         });
     }

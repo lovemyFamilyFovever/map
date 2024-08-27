@@ -343,6 +343,10 @@ a:hover {
     padding: 10px 0 10px 0;
 }
 
+.table-content {
+    width: 38vw;
+}
+
 .layer_title, .attribute_title {
     font-size: 16px;
     font-weight: bolder;
@@ -361,9 +365,10 @@ a:hover {
     padding-right: 6px;
 }
 
-.table-content {
-    width: 43%;
+.select-attribute-info {
+    display: none;
 }
+
 
 .layer_wrap,
 .attribute_wrap {
@@ -371,6 +376,72 @@ a:hover {
     max-height: 78vh;
     position: relative;
     height: 36vh;
+}
+
+.attribute_wrap {
+    padding: unset;
+}
+
+.attribute-title-container .dropdown_list {
+    top: 20px;
+    bottom: unset;
+    left: 10px;
+    width: calc(100% - 30px);
+}
+
+.attribute-item-content {
+    margin: 5px 0;
+    position: relative;
+    height: 32vh;
+    padding: 0 10px;
+}
+
+.select-attribute-detail-toggle {
+    line-height: 30px;
+    padding: 0 5px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #fff;
+    background: #b9c2d2;
+    margin-bottom: 5px;
+    border-radius: 3px;
+}
+
+.select-attribute-detail-toggle:hover {
+    opacity: 0.9;
+}
+
+.select-attribute-detail {
+    overflow: hidden;
+    -webkit-transition: 0.3s all ease-in-out;
+    -o-transition: 0.3s all ease-in-out;
+    transition: 0.3s all ease-in-out;
+    max-height: 0;
+}
+
+.select-attribute-detail.active {
+    max-height: max-content;
+}
+
+.select-attribute-detail p {
+    display: flex;
+    line-height: 30px;
+    font-size: 12px;
+    padding: 0 5px;
+    -webkit-transition: 0.3s all ease-in-out;
+    -o-transition: 0.3s all ease-in-out;
+    transition: 0.3s all ease-in-out;
+    justify-content: space-between;
+}
+
+.select-attribute-detail p:nth-child(even) {
+    background: aliceblue;
+}
+
+.select-attribute-detail p:hover {}
+
+.select-attribute-detail p strong {
+    width: 90px;
 }
 
 .attr-wrap p {
@@ -541,7 +612,9 @@ p.layer_name {
     -webkit-box-direction: normal;
     -ms-flex-direction: row;
     justify-content: center;
-    width: 100%;
+    width: 80vw;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .empty_table,
@@ -561,7 +634,7 @@ p.layer_name {
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
-    height: 390px;
+    height: calc(39vh - 70px);
     width: 100%;
 }
 
@@ -590,12 +663,14 @@ p.layer_name {
     -ms-flex-align: center;
     align-items: center;
     margin-left: 10px;
+    position: relative;
 }
 
 .table_action_text {
     width: -webkit-max-content;
     width: -moz-max-content;
     width: max-content;
+    color: #333;
 }
 
 .table_action_btn img {
@@ -666,10 +741,11 @@ p.layer_name {
 .dropdown_list {
     display: none;
     position: absolute;
-    left: 112px;
-    bottom: 25px;
+    left: 0;
+    width: max-content;
+    bottom: 30px;
     margin-top: 10px;
-    z-index: 1;
+    z-index: 2;
     background: #ffffff;
     padding: 5px;
     border-radius: 10px;
@@ -687,9 +763,10 @@ p.layer_name {
 }
 
 .dropdown_list li {
-    font-size: 13px;
+    font-size: 12px;
     padding: 0 10px;
-    border-radius: 3px;
+    /* border-radius: 3px; */
+    font-weight: normal;
 }
 
 .table_tools_panel {
@@ -1239,7 +1316,7 @@ p.layer_name {
 
 /* 统计模块 */
 .statistics-content {
-    width: 16.35%;
+    width: 16.35vw;
     font-size: 12px;
 }
 
@@ -1253,7 +1330,6 @@ p.layer_name {
     min-height: calc(100% - 85px);
     height: calc(100% - 85px);
 }
-
 
 .statistics-content-footer {
     position: absolute;
@@ -1270,15 +1346,28 @@ p.layer_name {
     margin-bottom: 10px;
 }
 
-.statistics-item input {
+.dropdown-input-container {
+    position: relative;
+}
+
+.attribute-title-container {
+    padding: 0 10px;
+}
+
+.attribute-title-container .dropdown_input+img {
+    right: 15px;
+}
+
+.dropdown_input {
     width: 100%;
     background-color: #fff;
     background-image: none;
-    border-radius: 4px;
-    border: 1px solid #a5a8af;
+    border-radius: 5px;
+    border: 1px solid #9eabc8;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     color: #333;
+    font-weight: 700;
     display: inline-block;
     font-size: inherit;
     height: 25px;
@@ -1292,8 +1381,7 @@ p.layer_name {
 }
 
 .statistics-item .dropdown_list {
-    left: 0;
-    width: max-content;
+    /* left: 0; */
     max-height: 270px;
     z-index: 2;
 }
@@ -1320,7 +1408,7 @@ p.layer_name {
     cursor: pointer;
 }
 
-.statistics-item input+img {
+.dropdown_input+img {
     position: absolute;
     right: 5px;
     width: 12px;

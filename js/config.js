@@ -45,7 +45,7 @@ var config = {
         layerId: "XZQ",
         layerName: "行政区",
         url: "http://150.158.76.25:5000/load_shp?file_path=XZQ",
-        show: true,
+        show: false,
         style: {
             color: "red",
             weight: 2,
@@ -65,7 +65,7 @@ var config = {
             layerId: "ZJXZQ",
             layerName: "镇级行政区",
             url: "http://150.158.76.25:5000/load_shp?file_path=ZJXZQ",
-            show: true,
+            show: false,
             style: {
                 color: "#D81159",
                 weight: 2,

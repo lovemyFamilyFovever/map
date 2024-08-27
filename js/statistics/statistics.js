@@ -232,15 +232,15 @@ class Statistics {
     renderHtml() {
         return `
                 <div class="statistics-item">
-                    <div class="statistics-item-column stastic-item-input">
-                        <input type="text" placeholder="请选择" readonly class="column-input">
+                    <div class="statistics-item-column dropdown-input-container">
+                        <input type="text" placeholder="请选择" readonly class="column-input dropdown_input">
                         <img src="imgs/dropdown.svg" class="dropdown_svg">
                         <div class="dropdown_list">
                             <ul></ul>
                         </div>
                     </div>
-                    <div class="statistics-item-condition stastic-item-input">
-                        <input type="text" placeholder="选择" readonly class="condition-input">
+                    <div class="statistics-item-condition dropdown-input-container">
+                        <input type="text" placeholder="选择" readonly class="condition-input dropdown_input">
                         <img src="imgs/dropdown.svg" class="dropdown_svg">
                         <div class="dropdown_list">
                             <ul>
@@ -251,8 +251,8 @@ class Statistics {
                             </ul>
                         </div>
                     </div>
-                    <div class="statistics-item-target stastic-item-input">
-                        <input type="text" placeholder="请选择" readonly class="target-input">
+                    <div class="statistics-item-target dropdown-input-container">
+                        <input type="text" placeholder="请选择" readonly class="target-input dropdown_input">
                         <img src="imgs/dropdown.svg" class="dropdown_svg">
                         <div class="dropdown_list">
                             <ul></ul>
