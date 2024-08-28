@@ -234,7 +234,7 @@ a:hover {
 
 
 .layer_item {
-    width: 11vw;
+    /* width: 11vw; */
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -258,7 +258,7 @@ a:hover {
 
 .layer_item.layer_item_child {
     margin-left: 20px;
-    width: calc(11vw - 20px);
+    /* width: calc(11vw - 20px); */
 }
 
 /* 图层加载 */
@@ -276,7 +276,7 @@ a:hover {
     height: 70px;
     width: 70px;
     gap: 5px;
-    font-size: 14px;
+    font-size: 0.7rem;
     color: #fff;
     -webkit-transition: .3s;
     -o-transition: .3s;
@@ -325,9 +325,9 @@ a:hover {
 .right-tool {
     position: absolute;
     top: 60px;
-    right: 105px;
+    right: 10px;
     z-index: 1005;
-    width: 14vw;
+    width: 15vw;
 }
 
 .layer-content,
@@ -345,6 +345,10 @@ a:hover {
     display: none;
 }
 
+.attribute_content {
+    padding: 10px 0;
+}
+
 .left-tool .layer-content,
 .left-tool .statistics-content {
     border-radius: 0 10px 10px 0;
@@ -352,8 +356,8 @@ a:hover {
     left: -420px;
     transition: all 0.3s ease;
     display: block;
-    width: 12.35vw;
-    font-size: 12px;
+    width: 16.35vw;
+    font-size: 0.8rem;
     position: absolute;
 }
 
@@ -370,14 +374,18 @@ a:hover {
 .layer_title,
 .attribute-title,
 .statistics-title {
-    font-size: 14px;
+    font-size: 0.8rem;
     font-weight: bolder;
-    margin: 0 10px 8px 10px;
-    padding-bottom: 7px;
+    margin-bottom: 8px;
+    padding-bottom: 10px;
     border-bottom: 1px solid #f7f2f2;
     border-radius: 10px 10px 0 0;
     color: rgb(0 147 255);
     position: relative;
+}
+
+.attribute-title {
+    padding: 0 10px 8px 10px;
 }
 
 .layer_title img,
@@ -407,7 +415,7 @@ a:hover {
 .attribute-item-content {
     margin: 5px 0;
     position: relative;
-    height: 36vh;
+    height: 30vh;
     padding: 0 10px;
 }
 
@@ -420,6 +428,7 @@ a:hover {
     background: #b9c2d2;
     margin-bottom: 5px;
     border-radius: 3px;
+    font-size: 0.8rem;
 }
 
 .select-attribute-detail-toggle:hover {
@@ -497,7 +506,7 @@ a:hover {
 }
 
 p.layer_name {
-    font-size: 14px;
+    font-size: 0.8rem;
     color: #333;
 }
 
@@ -821,10 +830,10 @@ p.layer_name {
 }
 
 .close_btn {
-    width: 28px;
-    height: 28px;
+    width: 1.4rem;
+    height: 1.4rem;
     position: absolute;
-    right: 10px;
+    right: 12px;
     top: 8px;
     cursor: pointer;
     z-index: 2;
@@ -1340,6 +1349,7 @@ p.layer_name {
     display: flex;
     gap: 10px;
     margin-bottom: 10px;
+    align-items: center;
 }
 
 .statistics-item .dropdown_list {
@@ -1382,7 +1392,7 @@ p.layer_name {
 }
 
 .attribute-title-container span {
-    font-size: 14px;
+    font-size: 0.75rem;
 }
 
 .attribute-title-container>div {
@@ -1408,7 +1418,7 @@ p.layer_name {
     color: #333;
     font-weight: 700;
     display: inline-block;
-    font-size: inherit;
+    font-size: 0.75rem;
     height: 25px;
     line-height: 25px;
     outline: none;
