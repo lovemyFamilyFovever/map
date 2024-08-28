@@ -241,9 +241,7 @@ a:hover {
     padding: 5px 7px;
     margin-bottom: 6px;
     border: 1px solid #efEfef;
-    border-radius: 10px;
-    -webkit-box-shadow: 0 1px 2px rgb(0 0 0 / 60%);
-    box-shadow: 0 1px 2px rgb(0 0 0 / 60%);
+    border-radius: 3px;
     transition: all 0.3s ease-in-out;
 }
 
@@ -375,7 +373,7 @@ a:hover {
     padding: 0px 10px;
     max-height: 78vh;
     position: relative;
-    height: 36vh;
+    height: 33vh;
 }
 
 .attribute_wrap {
