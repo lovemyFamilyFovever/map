@@ -7,7 +7,7 @@ class CustomChart {
 
         this.initChart();
         this.bindEvents();
-        $('.chart-content').show()
+
     }
     initChart() {
         this.data = true

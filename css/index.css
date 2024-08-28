@@ -246,8 +246,8 @@ a:hover {
 }
 
 .layer_item:hover {
-    -webkit-box-shadow: 0 2px 1px rgb(0 0 0 / 60%);
-    box-shadow: 0 2px 1px rgb(0 0 0 / 60%);
+    -webkit-box-shadow: 0 1px 3px rgb(0 0 0 / 55%);
+    box-shadow: 0 1px 3px rgb(0 0 0 / 55%)
 }
 
 .layer_item.active {
@@ -262,18 +262,23 @@ a:hover {
 /* 图层加载 */
 .left-tool {
     position: absolute;
-    top: 75px;
-    left: 20px;
+    top: 60px;
+    bottom: 0;
+    left: 0;
     z-index: 1005;
+    /* background: #153553; */
     /* overflow: hidden; */
 }
 
 .left-tool .left-tool-item {
+    border-bottom: 1px solid #4b4b4b;
     overflow: hidden;
-    height: 40px;
-    width: 40px;
-    border-radius: 3px;
+    height: 70px;
+    width: 70px;
+    /* border-radius: 3px; */
+    font-size: 14px;
     background: #fff;
+    /* color: #fff; */
     -webkit-transition: .3s;
     -o-transition: .3s;
     transition: .3s;
@@ -286,35 +291,34 @@ a:hover {
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
-    margin-bottom: 10px;
+    /* margin-bottom: 10px; */
     padding: 5px;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     -webkit-box-shadow: 0 0 10px 0 rgba(20, 34, 67, .1);
     box-shadow: 0 0 10px 0 rgba(20, 34, 67, .1);
     cursor: pointer;
-}
-
-.left-tool .left-tool-item:hover {
-    background: #63b8f8;
-    opacity: 0.8;
+    flex-direction: column;
 }
 
 .left-tool .left-tool-item.active {
-    border: 2px solid #63b8f8;
+    background: #63b8f8;
+    color: #fff;
 }
 
 .left-tool-title {
     float: left;
+    background: #153553;
+    height: 100%;
 }
 
 .left-tool-content {
-    margin-left: 60px;
+    margin-left: 70px;
 }
 
 .right-tool {
     position: absolute;
-    top: 75px;
+    top: 60px;
     right: 105px;
     z-index: 1005;
     width: 14vw;
@@ -332,13 +336,16 @@ a:hover {
     -webkit-box-shadow: 0 2px 6px rgb(0 0 0 / 31%);
     box-shadow: 0 2px 6px rgb(0 0 0 / 31%);
     height: 38vh;
+    display: none;
 }
 
 .layer_content,
 .attribute_content {
     display: none;
+    border-radius: 0;
     font-size: 13px;
     padding: 10px 0 10px 0;
+    height: 50vh;
 }
 
 .table-content {
