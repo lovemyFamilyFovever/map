@@ -27,8 +27,6 @@
     <div class="project_name">
         <img src="imgs/shortcut/shortcut.png" alt="logo" style="vertical-align: sub;">
         <span></span>
-
-
         <!-- <input type="color">
 
         <input type="range" class="range-level"> -->
@@ -37,13 +35,13 @@
     <div class="left-tool">
         <div class="left-tool-title">
             <!-- 加载图层 -->
-            <div class="left-tool-item switchlayer-container" title="切换图层">
-                <img src="imgs/layers.png" alt="加载图层" />
+            <div class="left-tool-item layer-container" title="切换图层">
+                <img src="imgs/layers.svg" alt="加载图层" />
                 <span>数据中心</span>
             </div>
             <!-- 属性查询 -->
             <div class="left-tool-item attribute-container" title="属性查询">
-                <img src="imgs/attribute.svg" alt="属性查询" />
+                <img src="imgs/attribute.svg" alt="属性查询" style="width: 25px;" />
                 <span>属性查询</span>
             </div>
             <!-- 统计查询 -->
@@ -65,19 +63,39 @@
 
         <div class="left-tool-content">
             <!-- 图层容器 -->
-            <div class="layer_content">
-                <div class="layer_title"><img src="imgs/图层.svg" alt="低效用地图层" title="低效用地图层" />低效用地</div>
+            <div class="layer-content">
+                <div class="layer_title"><img src="imgs/layers.svg" alt="低效用地图层" title="低效用地图层" />低效用地数据中心</div>
                 <div class="layer_content_close close_btn" title="关闭">
                     <img src="imgs/close.svg" alt="关闭" />
                 </div>
                 <div class="layer_wrap"></div>
+            </div>
+
+            <!-- 查询统计 -->
+            <div class="statistics-content">
+                <div class="statistics-content-title">
+                    <div class="statistics-title"><img src="imgs/form.svg" alt="查询统计" title="查询统计" />查询统计</div>
+                    <div class="statistics-content-close close_btn" title="关闭">
+                        <img src="imgs/close.svg" alt="关闭" />
+                    </div>
+                </div>
+                <div class="statistics-content-body">
+                    <div class="loading-container">
+                        <div class="loader"></div>
+                    </div>
+                    <div class="statistics-items"></div>
+                </div>
+                <div class="statistics-content-footer">
+                    <div class="search_btn reset">重置</div>
+                    <div class="search_btn confirm">查询</div>
+                </div>
             </div>
         </div>
     </div>
 
     <div class="right-tool">
         <div class="attribute_content">
-            <div class="attribute_title"><img src="imgs/attribute.svg" alt="属性查询" title="属性查询" />属性查询</div>
+            <div class="attribute-title"><img src="imgs/attribute.svg" alt="属性查询" title="属性查询" />属性查询</div>
             <div class="attribute_content_close close_btn" title="关闭">
                 <img src="imgs/close.svg" alt="关闭" />
             </div>
@@ -86,21 +104,7 @@
     </div>
 
     <div class="bottom-tool">
-        <!-- 查询统计 -->
-        <div class="statistics-content">
-            <div class="statistics-content-title">
-                <p>查询统计</p>
-                <div class="statistics-content-close close_btn" title="关闭">
-                    <img src="imgs/close.svg" alt="关闭" />
-                </div>
-            </div>
-            <div class="statistics-content-body">
-                <div class="loading-container">
-                    <div class="loader"></div>
-                </div>
-                <div class="statistics-items"></div>
-            </div>
-        </div>
+
 
         <div class="table-content">
             <div class="table-content-close close_btn" title="关闭">
@@ -198,9 +202,6 @@
         </div>
     </div>
 
-    <div class="located_btn tool_btn" title="定位您的位置">
-        <img src="imgs/locate.svg" alt="定位" />
-    </div>
     <div class="baselayer_btn tool_btn" title="切换底图">
         <img src="imgs/baselayer.svg" alt="底图" />
     </div>
@@ -226,10 +227,7 @@
             {{each layerList as item i}} 
             <div class="layer_item" data-index="{{i}}">
                 <div class="layer_info">
-                    <p class="layer_name" title="地块名称">{{item.layerName}}</p>
-                    <div class="editLayerStyle" data-id="{{layerList.layerId}}">
-                        <img src="imgs/style.svg" alt="调整图层样式" title="调整图层样式"/>
-                    </div>
+                    <p class="layer_name" title="地块名称">{{item.layerName}}</p>                  
                     <div class="layer_switch" data-index="{{i}}">
                         <div class="layer_loading loader"></div>
                         <label class="switch">
@@ -243,10 +241,7 @@
                 {{each item.children as child j}} 
                     <div class="layer_item layer_item_child" data-parent="{{i}}" data-index="{{j}}">
                         <div class="layer_info">
-                            <p class="layer_name" title="地块名称">{{child.layerName}}</p>
-                            <div class="editLayerStyle"  data-id="{{layerList.layerId}}">
-                                <img src="imgs/style.svg" alt="调整图层样式" title="调整图层样式"/>
-                            </div>
+                            <p class="layer_name" title="地块名称">{{child.layerName}}</p>                           
                             <div class="layer_switch" data-parent="{{i}}" data-index="{{j}}">
                                 <div class="layer_loading loader"></div>
                                 <label class="switch">

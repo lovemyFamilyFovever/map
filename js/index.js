@@ -26,28 +26,40 @@ async function loadMapLayers() {
         .catch(error => {
             console.error('Error:', error);
         });
-
-    //格式化滚动条
-    new PerfectScrollbar('.layer_wrap');
 }
 
 // 首屏页面的事件注册
 function initEvent() {
 
     //显示隐藏 图层列表
-    $('.switchlayer-container').on('click', function () {
-        $('.layer_content').toggle()
-        $('.switchlayer-container').toggleClass('active')
+    $('.layer-container').on('click', function () {
+
+        $('.statistics-content').removeClass('active')
+        $('.statistics-container').removeClass('active')
+
+        $('.layer-content').toggleClass('active')
+        $('.layer-container').toggleClass('active');
     })
 
-    //隐藏 属性查询弹窗
-    $('.attribute_content_close').on('click', function () {
-        $('.right-tool').hide()
+    //显示隐藏 属性查询
+    $('.attribute-container').on('click', function () {
+        var mapContainer = document.getElementById('map');
+        if ($(this).hasClass('active')) {
+            $('.attribute-container').removeClass('active')
+            mapContainer.style.cursor = 'revert-layer';
+        } else {
+            $('.attribute-container').addClass('active')
+            mapContainer.style.cursor = 'help';
+        }
     })
 
     //隐藏 查询统计弹窗
     $('.statistics-container').on('click', function () {
-        $('.statistics-content').toggle()
+
+        $('.layer-content').removeClass('active')
+        $('.layer-container').removeClass('active')
+
+        $('.statistics-content').toggleClass('active')
         $('.statistics-container').toggleClass('active')
     })
 
@@ -65,8 +77,8 @@ function initEvent() {
 
     //关闭图层列表
     $('.layer_content_close').on('click', function () {
-        $('.layer_content').hide()
-        $('.switchlayer-container').toggleClass('active')
+        $('.layer-content').hide()
+        $('.layer-container').toggleClass('active')
     })
     // 绑定change事件  切换图层的显示和隐藏
     $('.layer_switch input[type="checkbox"]').on('click', function () {
@@ -108,9 +120,17 @@ function initEvent() {
         }
     });
 
+    //隐藏 属性查询弹窗
+    $('.attribute_content_close').on('click', function () {
+        $('.right-tool').hide();
+        $('.attribute-container').removeClass('active')
+        var mapContainer = document.getElementById('map');
+        mapContainer.style.cursor = 'revert-layer';
+    })
+
     //隐藏 统计查询
     $('.statistics-content-close').on('click', function () {
-        $('.statistics-content').hide()
+        $('.statistics-content').toggleClass('active')
         $('.statistics-container').toggleClass('active')
     })
 

@@ -17,15 +17,16 @@ var config = {
         toolList: {
             rotateMode: false,          // 不显示旋转模式工具
             drawMarker: false,          // 不显示绘制点的工具
-            drawPolygon: true,          // 显示绘制多边形的工具
-            drawPolyline: true,         // 显示绘制线段的工具
-            drawCircle: true,           // 不显示绘制圆的工具
+            drawRectangle: false,        // 不显示绘制矩形的工具
+            drawPolygon: false,          // 显示绘制多边形的工具
+            drawPolyline: false,         // 显示绘制线段的工具
+            drawCircle: false,           // 不显示绘制圆的工具
             drawCircleMarker: false,    // 不显示绘制圆形标记的工具
             drawPolyline: false,        // 显示绘制线段的工具
             editMode: false,            // 显示编辑模式工具
             dragMode: true,             // 不显示拖拽模式工具
             cutPolygon: false,          // 不显示剪切多边形的工具
-            removalMode: true,          // 显示删除工具
+            removalMode: false,          // 显示删除工具
             drawText: false,            // 隐藏插入文本的控件
         }
 
@@ -44,6 +45,7 @@ var config = {
     layerList: [{
         layerId: "XZQ",
         layerName: "行政区",
+        column: "XZQMC",
         url: "http://150.158.76.25:5000/load_shp?file_path=XZQ",
         show: false,
         style: {
@@ -52,18 +54,9 @@ var config = {
             opacity: 0.8
         },
         children: [{
-            layerId: "CJXZQ",
-            layerName: "村级行政区",
-            url: "http://150.158.76.25:5000/load_shp?file_path=CJXZQ",
-            show: false,
-            style: {
-                color: "#BBFFFF",
-                weight: 2,
-                opacity: 0.8
-            }
-        }, {
             layerId: "ZJXZQ",
             layerName: "镇级行政区",
+            column: "XZQMC",
             url: "http://150.158.76.25:5000/load_shp?file_path=ZJXZQ",
             show: false,
             style: {
@@ -71,10 +64,22 @@ var config = {
                 weight: 2,
                 opacity: 0.8
             }
+        }, {
+            layerId: "CJXZQ",
+            layerName: "村级行政区",
+            column: "ZLDWMC",
+            url: "http://150.158.76.25:5000/load_shp?file_path=CJXZQ",
+            show: false,
+            style: {
+                color: "#BBFFFF",
+                weight: 2,
+                opacity: 0.8
+            }
         }]
     }, {
         layerId: "XZJT",
         layerName: "交通",
+        column: "用地类型",
         url: "http://150.158.76.25:5000/load_shp?file_path=XZJT",
         show: true,
         style: {
@@ -85,6 +90,7 @@ var config = {
     }, {
         layerId: "GYYD",
         layerName: "工业用地",
+        column: "TDSYQR",
         url: "http://150.158.76.25:5000/load_shp?file_path=GYYD",
         show: false,
         style: {
@@ -95,6 +101,7 @@ var config = {
         children: [{
             layerId: "DXGYYD",
             layerName: "低效工业用地",
+            column: "PHPQMC",
             url: "http://150.158.76.25:5000/load_shp?file_path=低效工业用地",
             show: false,
             style: {
@@ -105,6 +112,7 @@ var config = {
         }, {
             layerId: "PQPHDK",
             layerName: "片区盘活地块",
+            column: "PHPQMC",
             url: "http://150.158.76.25:5000/load_shp?file_path=片区盘活地块",
             show: false,
             style: {
@@ -116,6 +124,7 @@ var config = {
     }, {
         layerId: "PQFW",
         layerName: "片区范围",
+        column: "盘活片区名",
         url: "http://150.158.76.25:5000/load_shp?file_path=片区范围",
         show: false,
         style: {
@@ -126,6 +135,7 @@ var config = {
     }, {
         layerId: "QYWZ",
         layerName: "企业位置",
+        column: "YDDWMC",
         url: "http://150.158.76.25:5000/load_shp?file_path=QYWZ",
         show: true,
         style: {
@@ -137,7 +147,7 @@ var config = {
     statisticsItems: [
         { column: "所在乡镇", text: "所在乡镇", type: "string" },
         // { column: "土地使用权人", text: "土地使用权人", type: "string" },
-        { column: "土地面积", text: "土地面积(亩)", type: "number" },
+        { column: "土地面积", text: "土地面积(亩)", type: "number" },//number类型的不进入查询条件
         { column: "建设状况", text: "建设状况", type: "string" },
         { column: "是否一地多企", text: "是否一地多企", type: "string" },
         { column: "是否规上企业用地", text: "是否规上企业用地", type: "string" },

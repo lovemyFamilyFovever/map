@@ -38,17 +38,13 @@ class MapObj {
         this.layerGroup = L.layerGroup().addTo(this.mapObj); // 初始化 layerGroup
 
         // 加载底图
-        this.loadBaseMap();
+        this.switchLayers(this.satellite);
         // 添加控件
         this.addControls();
         //绑定点击事件
         this.bindClickEvent();
-    }
-    // 加载底图
-    loadBaseMap() {
-        this.switchLayers(this.satellite);
-    }
 
+    }
     // 切换右下角工具栏的地图类型
     switchLayers(layer) {
         this.mapObj.removeLayer(this.satellite);
@@ -64,36 +60,36 @@ class MapObj {
         }
         // 添加比例尺控件 
         if (this.options.scaleControl) {
-            L.control.scale().addTo(this.mapObj);
+            L.control.scale({ position: 'bottomright' }).addTo(this.mapObj);
         }
         // 添加绘制控件 初始化右上角绘制测量工具栏
         if (this.options.toolListControl) {
-            const toolList = $.extend(true, { position: 'topright' }, config.mapOptions.toolList);
+            const toolList = $.extend(true, { position: 'bottomright' }, config.mapOptions.toolList);
             this.mapObj.pm.addControls(toolList);
             // 设置语言
             this.mapObj.pm.setLang('zh');
         }
 
-        if (this.options.mousemoveLatlng) {
-            // 定义一个变量存储坐标信息
-            var coords = L.control();
-            // 添加一个div来显示坐标  
-            coords.onAdd = function () {
-                let _this = this;
-                _this._div = L.DomUtil.create('div', 'coords');
-                return _this._div;
-            };
-            coords.update = function (evt) {
-                coords._div.innerHTML =
-                    '经度:' + evt.latlng.lng + '<br>' +
-                    '纬度:' + evt.latlng.lat;
-            };
-            this.mapObj.on('mousemove', coords.update);
+        // if (this.options.mousemoveLatlng) {
+        //     // 定义一个变量存储坐标信息
+        //     var coords = L.control();
+        //     // 添加一个div来显示坐标  
+        //     coords.onAdd = function () {
+        //         let _this = this;
+        //         _this._div = L.DomUtil.create('div', 'coords');
+        //         return _this._div;
+        //     };
+        //     coords.update = function (evt) {
+        //         coords._div.innerHTML =
+        //             '经度:' + evt.latlng.lng + '<br>' +
+        //             '纬度:' + evt.latlng.lat;
+        //     };
+        //     this.mapObj.on('mousemove', coords.update);
 
-            // 添加控件到地图
-            coords.addTo(this.mapObj);
-            coords.setPosition('bottomleft');
-        }
+        //     // 添加控件到地图
+        //     coords.addTo(this.mapObj);
+        //     coords.setPosition('bottomright');
+        // }
     }
 
     // 添加解析后的 GeoJSON 到地图上
@@ -186,6 +182,9 @@ class MapObj {
 
         // 监听地图的点击事件
         this.mapObj.on('click', function (e) {
+
+            if ($('.attribute-container.active').length == 0) return;
+
             let attributeSelectTitleHtml = "";
             let attributeSelectInfoHtml = "";
 
@@ -251,9 +250,12 @@ class MapObj {
             if (clickedLayers.length > 0) {
                 $('.attribute_wrap').html(`
                     <div class="attribute-title-container dropdown-input-container">
-                        <input type="text" placeholder="请选择图层" readonly class="attribute-title-input dropdown_input">
-                        <img src="imgs/dropdown.svg" class="dropdown_svg">
-                        <div class="dropdown_list"><ul>${attributeSelectTitleHtml}</ul></div>
+                        <span>选择图层:</span>
+                         <div>
+                            <input type="text" placeholder="请选择图层" readonly class="attribute-title-input dropdown_input">
+                            <img src="imgs/dropdown.svg" class="dropdown_svg">
+                            <div class="dropdown_list"><ul>${attributeSelectTitleHtml}</ul></div>
+                        </div>
                     </div>
                     <div class="attribute-item-content">${attributeSelectInfoHtml}</div>
                 `);
@@ -305,13 +307,6 @@ class MapObj {
                 $(this).siblings('.select-attribute-detail').removeClass('active')
                 selector.toggleClass('active');
             }
-        });
-
-
-        // 添加定位按钮点击事件
-        $('.located_btn').on('click', function () {
-            // 使用 Leaflet 的 locate 方法获取用户当前位置
-            that.mapObj.locate({ setView: true })
         });
 
         // 阻止图层面板点击事件冒泡
