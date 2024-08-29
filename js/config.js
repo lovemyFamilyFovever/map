@@ -46,7 +46,7 @@ var config = {
         layerName: "行政区",
         subtitle: "XZQMC",
         url: "http://150.158.76.25:5000/load_shp?file_path=XZQ",
-        show: false,
+        show: true,
         style: {
             color: "red",
             weight: 2,
@@ -54,9 +54,9 @@ var config = {
         },
         columns: [
             //column: 表格列名，field: 数据库字段名，statistics: 是否统计
-            { column: "行政区名称", field: "XZQMC", statistics: false },
-            { column: "长度", field: "Shape_Length", statistics: false },
-            { column: "面积", field: "Shape_Area", statistics: false },
+            { column: "行政区名称", field: "XZQMC", statistics: true },
+            { column: "长度", field: "Shape_Length", statistics: true },
+            { column: "面积", field: "Shape_Area", statistics: true },
         ],
         children: [{
             layerId: "ZJXZQ",
@@ -71,9 +71,10 @@ var config = {
             },
             columns: [
                 //column: 表格列名，field: 数据库字段名，statistics: 是否统计
-                { column: "行政区名称", field: "XZQMC", statistics: false },
-                { column: "长度", field: "Shape_Length", statistics: false },
-                { column: "面积", field: "Shape_Area", statistics: false },
+                { column: "行政区名称", field: "XZQMC", statistics: true },
+                { column: "导出面积", field: "DCMJ", statistics: true },
+                { column: "建设面积", field: "JSMJ", statistics: true },
+                { column: "县区代码", field: "县区代码", statistics: true },
             ],
         }, {
             layerId: "CJXZQ",
@@ -85,7 +86,14 @@ var config = {
                 color: "#BBFFFF",
                 weight: 2,
                 opacity: 0.8
-            }
+            },
+            columns: [
+                //column: 表格列名，field: 数据库字段名，statistics: 是否统计
+                { column: "地均单位名称", field: "DJDWMC", statistics: true },
+                { column: "导出面积", field: "DCMJ", statistics: true },
+                { column: "建设面积", field: "JSMJ", statistics: true },
+                { column: "县区代码", field: "县区代码", statistics: true },
+            ],
         }]
     }, {
         layerId: "XZJT",
@@ -97,7 +105,13 @@ var config = {
             color: "#804d36",
             weight: 2,
             opacity: 0.8
-        }
+        }, columns: [
+            //column: 表格列名，field: 数据库字段名，statistics: 是否统计
+            { column: "用地类型", field: "用地类型", statistics: true },
+            { column: "名称", field: "MC", statistics: true },
+            { column: "备注", field: "BZ", statistics: false },
+            { column: "原名称备份", field: "原名称备份", statistics: false },
+        ],
     }, {
         layerId: "GYYD",
         layerName: "工业用地",
@@ -133,7 +147,15 @@ var config = {
                 color: "#4FB0C6",
                 weight: 2,
                 opacity: 0.8
-            }
+            },
+            columns: [
+                //column: 表格列名，field: 数据库字段名，statistics: 是否统计
+                { column: "行政村", field: "SZC", statistics: true },
+                { column: "TDSYQR", field: "土地使用权人", statistics: true },
+                { column: "用地单位", field: "YDDW", statistics: false },
+                { column: "规划用途", field: "GHYT", statistics: false },
+                { column: "土地面积", field: "TDMJ", statistics: false },
+            ],
         }, {
             layerId: "PQPHDK",
             layerName: "片区盘活地块",
@@ -144,7 +166,12 @@ var config = {
                 color: "#0000FF",
                 weight: 2,
                 opacity: 0.8
-            }
+            },
+            columns: [
+                //column: 表格列名，field: 数据库字段名，statistics: 是否统计
+                { column: "行政村", field: "SZC", statistics: true },
+                { column: "所在乡镇", field: "SZXZ", statistics: false },
+            ],
         }]
     }, {
         layerId: "PQFW",
@@ -156,7 +183,12 @@ var config = {
             color: "#00FA9A",
             weight: 2,
             opacity: 0.8
-        }
+        },
+        columns: [
+            //column: 表格列名，field: 数据库字段名，statistics: 是否统计
+            { column: "盘活片区名", field: "盘活片区名", statistics: true },
+            { column: "行政区名称", field: "行政区名称", statistics: false },
+        ]
     }, {
         layerId: "QYWZ",
         layerName: "企业位置",
@@ -167,7 +199,15 @@ var config = {
             color: "#4169E1",
             weight: 2,
             opacity: 0.8
-        }
+        },
+        columns: [
+            //column: 表格列名，field: 数据库字段名，statistics: 是否统计
+            { column: "所在县", field: "所在县", statistics: true },
+            { column: "所在村", field: "所在村", statistics: true },
+            { column: "所在乡镇", field: "所在乡镇", statistics: true },
+            { column: "建设状况", field: "建设状况", statistics: true },
+            { column: "是否租用厂", field: "是否租用厂", statistics: true },
+        ]
     }],
 
 }

@@ -1,25 +1,69 @@
 //渲染指定图层的表格
 class Statistics {
     constructor() {
+        this.data = [];
+        this.columns = Array.from(sfs.layerStore.keys())
         this.init();
-        this.statisticsScroll = null;
-        this.currentShow = [];
+    }
+    init() {
+        if (sfs.layerStore.size == 0) {
+            $(".statistics-items").append(`
+                <div class="empty_table">
+                    <div class="empty_table_image">
+                        <img src="imgs/empty_table.svg" />
+                    </div>
+                <div class="empty_table_text">请先加载图层!</div>
+            </div>`);
+        } else {
+            $(".statistics-items .empty_table").hide();
+
+            this.data = this.findLayersByIds(this.columns)
+            this.renderTitle();
+            this.bindEvent();
+            $('.statistics-content-body .loading-container').hide();
+        }
     }
 
-    init() {
+    renderTitle() {
+        //渲染图层下拉选项的列表
+        let liHtml = "";
+        this.data.forEach((item, index) => {
+            liHtml += `<li data-layer-index="${index}"><span>${item.layerName}</span></li>`;
+        });
 
+        $('.statistics-layer-container ul').html(liHtml);
+        $('.statistics-title-input').val(this.data[0].layerName)
+
+        this.renderContent(this.data[0]);
+    }
+
+    renderContent(obj) {
         let html = ""
-        config.layerList[2].columns.forEach((item, index) => {
-            if (item.type != "number")
+        obj.columns.forEach((item, index) => {
+            if (item.statistics)
                 html += this.renderHtml(item.column, item.type, index);
         });
-        $(".statistics-items").append(html);
-        this.bindEvent();
-        $('.statistics-content-body .loading-container').hide();
+        $(".statistics-items").html(html);
     }
 
     //绑定事件
     bindEvent() {
+        let that = this;
+        //展示下拉列表-图层
+        $('.statistics-title-input').on('click', function () {
+            $('.statistics-layer-container .dropdown_list').show();
+        });
+
+        //选择图层 统计查询列表
+        $('.statistics-layer-container .dropdown_list').on('click', 'li', function () {
+            const index = $(this).index();
+            const layerName = $(this).find('span').text();
+            $('.statistics-title-input').val(layerName);
+            $('.statistics-layer-container .dropdown_list').hide();
+            that.renderContent(that.data[index]);
+        });
+
+
         //展示下拉列表-具体值
         $('.statistics-items').on('click', '.statistics-item-target .target-input', function () {
             $('.statistics-items .dropdown_list').hide();
@@ -77,11 +121,11 @@ class Statistics {
                     $parent.siblings('.target-input').val(nameString)
                 }
             }
-
         });
 
         //重置 按钮
         $('.statistics-content-footer .reset').on('click', () => {
+            $('.statistics-item .dropdown_input').val("");
             $('.statistics-item .dropdown_list ul').empty();
         });
 
@@ -98,7 +142,6 @@ class Statistics {
                             values.push($(this).attr('data-column'))
                         }
                     });
-
                     uniqueCategories.push({
                         field: $target.attr('data-column'),
                         type: 'in',
@@ -110,7 +153,6 @@ class Statistics {
 
             $('.table-content').show();
             $('.table-container').addClass('active');
-
         });
     }
 
@@ -121,7 +163,7 @@ class Statistics {
                          ${column}
                     </div>
                     <div class="statistics-item-target dropdown-input-container">
-                        <input type="text" placeholder="请选择" data-column="${column}" data-index="${index}" class="target-input dropdown_input">
+                    <input type="text" placeholder="请选择" data-column="${column}" data-index="${index}" class="target-input dropdown_input">
                         <img src="imgs/dropdown.svg" class="dropdown_svg">
                         <div class="dropdown_list">
                             <ul></ul>
@@ -129,4 +171,24 @@ class Statistics {
                     </div>
                 </div>`
     }
+
+
+    findLayersByIds(ids, layerList = config.layerList) {
+        const result = [];
+        for (const layer of layerList) {
+            if (ids.includes(layer.layerId)) {
+                result.push({ ...layer, children: null });
+            }
+            if (layer.children) {
+                const childrenResult = this.findLayersByIds(ids, layer.children);
+                if (childrenResult.length > 0) {
+                    layer.children = childrenResult;
+                    result.push(layer);
+                }
+            }
+        }
+        return result;
+    }
+
+
 }

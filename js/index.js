@@ -22,6 +22,7 @@ async function loadMapLayers() {
                 console.log(`Data from URL ${showLayerList[index].url}`);
                 sfs.addGeoJSONToMap(data, showLayerList[index]);
             });
+            new Statistics(); // 实例化统计面板
         })
         .catch(error => {
             console.error('Error:', error);
@@ -102,6 +103,7 @@ function initEvent() {
                 .then(data => {
 
                     sfs.addGeoJSONToMap(data, objectData);
+                    new Statistics(); // 实例化统计面板
                     new CustomChart('main-echart', [], "模拟图表")
                     $(this).closest('.layer_switch').prev().addClass('active')
 

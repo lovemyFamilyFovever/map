@@ -135,6 +135,7 @@ class MapObj {
 
         var center = geoJsonLayer.getBounds().getCenter();
         this.mapObj.setView(center, 13);   // 设置地图视图到图层中心点，并设置一个合适的缩放级别 13
+
     }
 
     // 获取当前添加的图层

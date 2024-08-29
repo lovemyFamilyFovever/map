@@ -78,9 +78,14 @@
                 </div>
 
                 <div class="statistics-layer-container dropdown-input-container">
-                    <input type="text" placeholder="请选择" readonly class="statistics-title-input dropdown_input">
-                    <img src="imgs/dropdown.svg" class="dropdown_svg">
-                    <div class="dropdown_list">
+                    <div class="statistics-select-layer">
+                        <span>请选择图层：</span>
+                        <div>
+                            <input type="text" placeholder="请选择" readonly class="statistics-title-input dropdown_input">
+                            <img src="imgs/dropdown.svg" class="dropdown_svg">
+                        </div>
+                    </div>
+                    <div class="dropdown_list" style="left: 40%;">
                         <ul>
                         </ul>
                     </div>
@@ -90,7 +95,53 @@
                     <div class="loading-container">
                         <div class="loader"></div>
                     </div>
+                    <!-- 查询字段 -->
+                    <div class="statistics-column-wrap statistics-card">查询字段</div>
                     <div class="statistics-items"></div>
+                    <!-- 分组统计 -->
+                    <div class="statistics-group-wrap statistics-card">分组统计</div>
+                    <div class="statistics-group-wrap-content">
+                        <div class="statistics-item">
+                            <div class="dropdown-input-container">分组字段</div>
+                            <div class="dropdown-input-container">
+                                <input type="text" placeholder="请选择" class="group-input dropdown_input">
+                                <img src="imgs/dropdown.svg" class="dropdown_svg">
+                                <div class="dropdown_list" style="display: none;">
+                                    <ul></ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="statistics-item">
+                            <div class="dropdown-input-container">统计字段</div>
+                            <div class="dropdown-input-container">
+                                <input type="text" placeholder="请选择" class="group-input dropdown_input">
+                                <img src="imgs/dropdown.svg" class="dropdown_svg">
+                                <div class="dropdown_list" style="display: none;">
+                                    <ul></ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="statistics-item">
+                            <div class="dropdown-input-container">统计类型</div>
+                            <div class="dropdown-input-container">
+                                <input type="text" placeholder="请选择" class="group-input dropdown_input">
+                                <img src="imgs/dropdown.svg" class="dropdown_svg">
+                                <div class="dropdown_list" style="display: none;">
+                                    <ul></ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="statistics-item">
+                            <div class="dropdown-input-container">图表类型</div>
+                            <div class="dropdown-input-container">
+                                <input type="text" placeholder="请选择" class="group-input dropdown_input">
+                                <img src="imgs/dropdown.svg" class="dropdown_svg">
+                                <div class="dropdown_list" style="display: none;">
+                                    <ul></ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="statistics-content-footer">
                     <div class="search_btn reset">重置</div>
@@ -108,7 +159,7 @@
             </div>
             <div class="attribute-wrap">
                 <div class="attribute-tree-container"></div>
-                <div class="attribute-information-container"></div>
+                <div class="attribute-info-container"></div>
             </div>
         </div>
     </div>

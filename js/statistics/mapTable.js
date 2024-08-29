@@ -45,10 +45,8 @@ class CustomTable {
         this.table.on("tableBuilt", () => {
             $('.table-wrapper .loading-container').hide();
             new PerfectScrollbar('.table_panel .tabulator-tableholder');
-            this.getStatisticsTable();
+            // this.getStatisticsTable();
             this.bindEvents();
-
-            new Statistics();
 
             new CustomChart('main-echart', [], "123")
 
@@ -119,13 +117,13 @@ class CustomTable {
         var columnsHtml = "";
         var index = 0;
 
-        // let tempObjects = {};
-        // config.statisticsItems.forEach(item => {
-        //     tempObjects[item.column] = item.column
+        let tempObjects = {};
+        config.layerList[2].columns.forEach(item => {
+            tempObjects[item.column] = item.column
 
-        // });
+        });
         // for (var key in objects) {
-        for (var key in objects) {
+        for (var key in tempObjects) {
             let obj = {
                 title: key,
                 field: key,
@@ -164,9 +162,9 @@ class CustomTable {
 
         $('.table-wrapper-count').html(
             `共 <b> ${count > 999 ? '999+' : count}</b> 条丨
-            面积: <b>${mj_gq.toFixed(3)}</b>公顷丨
-            宗地数: <b>${zd.toFixed(3)}</b>宗丨
-            面积: <b>${yj_m.toFixed(3)}</b>亩`
+            面积(公顷): <b>${mj_gq.toFixed(4)}</b>丨
+            宗地数(宗): <b>${zd}</b>丨
+            面积(亩): <b>${yj_m.toFixed(2)}</b>`
         )
     }
 

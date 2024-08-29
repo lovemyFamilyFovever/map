@@ -2,18 +2,33 @@ class Attribute {
     constructor(data) {
         this.data = data;
         this.init();
-        this.bindEvent();
     }
-
     // 初始化属性统计
     init() {
+        this.destroy(); // 先销毁可能存在的旧实例
         $('.attribute-wrap .attribute-tree-container').html(this.getListHtml())
         $('.attribute_content').show()
+
+        $('.attribute-tree-container').show();
+        $('.attribute-info-container').hide();
+
         new PerfectScrollbar('.attribute-item-content');
+        this.bindEvent();
+    }
+    // 销毁方法
+    destroy() {
+        // 移除已绑定的事件，避免多次绑定
+        $('.attribute-wrap').off('click', '.dropdown_input');
+        $('.attribute-wrap').off('click', '.attribute-title-container li');
+        $('.attribute-wrap').off('click', '.select-attribute-toggle');
+        $('.attribute-wrap').off('click', '.select-attribute-detail li');
+        $('.attribute-wrap').off('click', '.attribute-info-back');
     }
 
     // 绑定事件
     bindEvent() {
+
+        var that = this;
 
         // 点击图层名称，显示图层属性列表
         $('.attribute-wrap').on('click', '.dropdown_input', function () {
@@ -30,45 +45,70 @@ class Attribute {
             $('.attribute-title-input').val($(this).text());
             $('.attribute_content .dropdown_list').toggle();
 
-            var index = $(this).data('index');
-            $('.select-attribute-detail').removeClass('active');
-            $('.select-attribute-info').hide();
-            $('.select-attribute-info:eq(' + index + ')').show();
-
-            $('.select-attribute-info:eq(' + index + ') .select-attribute-detail:eq(0)').addClass('active');
-        });
-
-        // 点击图层属性列表，展开图层片段
-        $('.attribute-wrap').on('click', '.select-attribute-toggle', function () {
-            const selector = $(this).next('.select-attribute-detail');
-            // 动态获取内容的高度
-            if (selector.hasClass('active')) {
-                selector.removeClass('active');
+            var index = $(this).index();
+            let number = 0;
+            if (index == 0) {
+                $('.select-attribute-info').show();
+                that.data.forEach((item, i) => {
+                    if (item.children.length > 0) {
+                        number += item.children.length;
+                    }
+                });
             } else {
-                $(this).siblings('.select-attribute-detail').removeClass('active')
-                selector.toggleClass('active');
+                $('.select-attribute-info:eq(' + (index - 1) + ')').show().siblings().hide();
+                number = $('.select-attribute-info[data-index="' + (index - 1) + '"] b').text()
             }
+            $('.attribute-title-count b').text(number)
         });
 
+        // 点击图层属性列表，展开隐藏图层片段
+        $('.attribute-wrap').on('click', '.select-attribute-toggle', function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+            $(this).siblings('.select-attribute-detail').toggleClass('active');
+            this.classList.toggle('active');
+        });
+
+        // 点击图层属性列表，显示详细信息
+        $('.attribute-wrap').on('click', '.select-attribute-detail li', function (e) {
+            const i = $(this).closest('.select-attribute-info').attr('data-index');
+            const j = $(this).attr('data-index');
+
+            const data = that.data[i].children[j].feature.properties;
+            const subtitle = that.data[i].children[j].feature.properties[that.data[i].subtitle];
+
+            $('.attribute-tree-container').hide();
+            $('.attribute-info-container').html(that.getInfoHtml(data, subtitle)).show();
+
+            new PerfectScrollbar('.attribute-info-content');
+        })
+
+        //返回上一级
+        $('.attribute-wrap').on('click', '.attribute-info-back', function (e) {
+            $('.attribute-info-container').hide();
+            $('.attribute-tree-container').show();
+        });
     }
 
     getListHtml() {
+        let number = 0;
         let attributeSelectTitleHtml = "";
         let attributeSelectInfoHtml = "";
-        this.data.forEach(item => {
+        this.data.forEach((item, i) => {
             attributeSelectTitleHtml += `<li data-index="${item.name}">${item.name}</li>`
             if (item.children.length > 0) {
                 attributeSelectInfoHtml += `
-                 <div class="select-attribute-info">
-                    <img src="imgs/right.svg" alt="" class="select-attribute-toggle active" />
+                 <div class="select-attribute-info" data-index="${i}">
+                    <img src="imgs/right.svg" alt="展开隐藏" class="select-attribute-toggle active" />
                     <div class="select-attribute-title">
                         <img src="imgs/folder.svg" alt="folder" />
-                        <span class="select-attribute-name">${item.name}</span>
+                        <span class="select-attribute-name">${item.name} (共 <b>${item.children.length}</b> 个图形)</span>
                     </div>
-                    <div class="select-attribute-detail">
+                    <div class="select-attribute-detail active">
                         <ul>`
-                item.children.forEach(child => {
-                    attributeSelectInfoHtml += `<li>${child.feature.properties[item.subtitle]}</li>`
+                item.children.forEach((child, j) => {
+                    number++;
+                    attributeSelectInfoHtml += `<li data-index="${j}"><img src="imgs/图斑.svg" alt="图斑" /> ${child.feature.properties[item.subtitle]}</li>`
                 })
                 attributeSelectInfoHtml += `
                         </ul>
@@ -90,12 +130,28 @@ class Attribute {
                 </div>
             </div>
         </div>
-        <div class="attribute-item-content">${attributeSelectInfoHtml}</div>
-        `
+        <div class="attribute-title-count"><span>找到的要素数: <b>${number}</b> </span></div>
+        <div class="attribute-item-content">${attributeSelectInfoHtml}</div>`
     }
 
+    getInfoHtml(data, subtitle) {
+        let attributeInfoContentHtml = `
+            <div class="attribute-info-item">
+                <span class="attribute-info-name">属性</span>
+                <span class="attribute-info-name">值</span>
+            </div>`;
 
-
-
-
+        for (var key in data) {
+            attributeInfoContentHtml += `
+            <div class="attribute-info-item">
+                <span class="attribute-info-name">${key}</span>
+                <span class="attribute-info-name">${data[key]}</span>
+            </div>`
+        }
+        return `
+            <div class="attribute-info-title">
+                <span class="attribute-info-back"><img src="imgs/tree.svg" alt="图斑" />图形列表</span><img src="imgs/right.svg" alt="间隔" /> ${subtitle}
+            </div>
+            <div class="attribute-info-content">${attributeInfoContentHtml}</div>`
+    }
 }
