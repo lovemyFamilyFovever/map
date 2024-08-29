@@ -9,7 +9,7 @@ class Statistics {
     init() {
 
         let html = ""
-        config.statisticsItems.forEach((item, index) => {
+        config.layerList[2].columns.forEach((item, index) => {
             if (item.type != "number")
                 html += this.renderHtml(item.column, item.type, index);
         });
@@ -40,9 +40,10 @@ class Statistics {
                     <span>${item}</span>
                 </li>`;
             });
+
             $(this).siblings('.dropdown_list').find('ul').html(html)
             $(this).siblings('.dropdown_list').toggle();
-
+            new PerfectScrollbar($(this).siblings('.dropdown_list')[0]);
         });
         //选择具体值
         $('.statistics-items').on('click', '.statistics-item-target li', function () {

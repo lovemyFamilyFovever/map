@@ -119,13 +119,13 @@ class CustomTable {
         var columnsHtml = "";
         var index = 0;
 
-        let tempObjects = {};
-        config.statisticsItems.forEach(item => {
-            tempObjects[item.column] = item.column
+        // let tempObjects = {};
+        // config.statisticsItems.forEach(item => {
+        //     tempObjects[item.column] = item.column
 
-        });
+        // });
         // for (var key in objects) {
-        for (var key in tempObjects) {
+        for (var key in objects) {
             let obj = {
                 title: key,
                 field: key,

@@ -128,6 +128,7 @@ class MapObj {
         })
         geoJsonLayer.layerId = objectData.layerId; // 给图层添加唯一的 layerId
         geoJsonLayer.layerName = objectData.layerName; // 给图层添layerName
+        geoJsonLayer.subtitle = objectData.subtitle; // 给图层添subtitle
 
         geoJsonLayer.addTo(this.mapObj);
         this.layerStore.set(objectData.layerId, geoJsonLayer); // 将图层存储到 layerStore 中
@@ -184,129 +185,33 @@ class MapObj {
         this.mapObj.on('click', function (e) {
 
             if ($('.attribute-container.active').length == 0) return;
-
-            let attributeSelectTitleHtml = "";
-            let attributeSelectInfoHtml = "";
-
-            var clickedLayers = [];
-
-            const layers = Array.from(that.layerStore.values());
-
+            let data = []
+            const layers = Array.from(that.layerStore.values());// 获取当前打开的图层数组
             layers.forEach(function (layer, index) {
-                attributeSelectTitleHtml += `<li data-index="${index}">${layer.layerName}</li>`
-
-                let attributeSelectInfoItemHtml = "";
-                let start = 0;
+                data.push({
+                    index: index,
+                    name: layer.layerName,
+                    layerId: layer.layerId,
+                    subtitle: layer.subtitle,
+                    children: []
+                })
                 layer.eachLayer(function (layerItem) {
-                    let infoHtml = "";
                     if (layerItem instanceof L.Polygon || layerItem instanceof L.Polyline) {
                         // 检查点击的点是否在这个图层内
                         if (layerItem.getBounds().contains(e.latlng)) {
-                            clickedLayers.push({
-                                layerItem: layerItem,
-                            });
-                            var properties = layerItem.feature.properties || {};
-                            for (var key in properties) {
-                                infoHtml += `<p><strong>${key}:</strong> ${properties[key] || '-'}</p>`
-                            }
+                            data[index].children.push(layerItem);
                         }
                     } else if (layerItem instanceof L.Marker || layerItem instanceof L.CircleMarker) {
                         // 检查点击的位置是否足够接近这个标记点
                         const distanceThreshold = 100; // 以米为单位的距离阈值
                         const distance = e.latlng.distanceTo(layerItem.getLatLng());
                         if (distance <= distanceThreshold) {
-                            clickedLayers.push({
-                                layerItem: layerItem,
-                            });
-                            var properties = layerItem.feature.properties || {};
-                            for (var key in properties) {
-                                infoHtml += `<p><strong>${key}:</strong> ${properties[key] || '-'}</p>`
-                            }
+                            data[index].children.push(layerItem);
                         }
                     }
-                    if (infoHtml != "") {
-                        attributeSelectInfoItemHtml += `
-                            <div class="select-attribute-detail-toggle">${layer.layerName}-${start++}</div>
-                            <div class="select-attribute-detail">
-                                ${infoHtml}
-                            </div>`
-                    }
                 });
-                if (attributeSelectInfoItemHtml == "") {
-                    attributeSelectInfoHtml += `
-                    <div class="select-attribute-info">
-                        <div class="empty_table">
-                            <div class="empty_table_image"><img src="imgs/empty_table.svg" /></div>
-                            <div class="empty_table_text">没有查询到相关数据!</div>
-                        </div>
-                    </div>`
-                } else {
-                    attributeSelectInfoHtml += `<div class="select-attribute-info">${attributeSelectInfoItemHtml}</div>`
-                }
             });
-
-            // dropdown-input-container
-            // 如果有多个图层被点击，显示它们的相关信息
-            if (clickedLayers.length > 0) {
-                $('.attribute_wrap').html(`
-                    <div class="attribute-title-container dropdown-input-container">
-                        <span>选择图层:</span>
-                         <div>
-                            <input type="text" placeholder="请选择图层" readonly class="attribute-title-input dropdown_input">
-                            <img src="imgs/dropdown.svg" class="dropdown_svg">
-                            <div class="dropdown_list"><ul>${attributeSelectTitleHtml}</ul></div>
-                        </div>
-                    </div>
-                    <div class="attribute-item-content">${attributeSelectInfoHtml}</div>
-                `);
-
-                $('.attribute-title-input').val($('.attribute-title-container li:eq(0)').text());// 默认显示第一个图层的名称
-
-                $('.select-attribute-info:eq(0)').show();
-                $('.select-attribute-info:eq(0) .select-attribute-detail:eq(0)').addClass('active');
-                $('.attribute_content,.right-tool').show()
-                new PerfectScrollbar('.attribute-item-content');
-            }
-        });
-
-        // 点击关闭按钮
-        $('.attribute_wrap').on('click', '.close-btn', function () {
-            $('.attribute_wrap').hide();
-        });
-
-        // 点击图层名称，显示图层属性列表
-        $('.attribute_wrap').on('click', '.dropdown_input', function () {
-            $(this).siblings('.dropdown_list').toggle();
-        });
-
-        // 点击图层名称，切换图层
-        $('.attribute_wrap').on('click', '.attribute-title-container li', function () {
-            if ($('.attribute-title-input').val() == $(this).text()) {
-                $('.attribute_content .dropdown_list').toggle();
-                return;
-            }
-
-            $('.attribute-title-input').val($(this).text());
-            $('.attribute_content .dropdown_list').toggle();
-
-            var index = $(this).data('index');
-            $('.select-attribute-detail').removeClass('active');
-            $('.select-attribute-info').hide();
-            $('.select-attribute-info:eq(' + index + ')').show();
-
-            $('.select-attribute-info:eq(' + index + ') .select-attribute-detail:eq(0)').addClass('active');
-        });
-
-        // 点击图层属性列表，展开图层片段
-        $('.attribute_wrap').on('click', '.select-attribute-detail-toggle', function () {
-            const selector = $(this).next('.select-attribute-detail');
-            // 动态获取内容的高度
-            if (selector.hasClass('active')) {
-                selector.removeClass('active');
-            } else {
-                $(this).siblings('.select-attribute-detail').removeClass('active')
-                selector.toggleClass('active');
-            }
+            new Attribute(data);// 实例化属性面板
         });
 
         // 阻止图层面板点击事件冒泡

@@ -43,6 +43,7 @@ function initEvent() {
 
     //显示隐藏 属性查询
     $('.attribute-container').on('click', function () {
+        if (sfs.layerStore.size == 0) return;
         var mapContainer = document.getElementById('map');
         if ($(this).hasClass('active')) {
             $('.attribute-container').removeClass('active')
@@ -122,7 +123,7 @@ function initEvent() {
 
     //隐藏 属性查询弹窗
     $('.attribute_content_close').on('click', function () {
-        $('.right-tool').hide();
+        $('.attribute_content').hide();
         $('.attribute-container').removeClass('active')
         var mapContainer = document.getElementById('map');
         mapContainer.style.cursor = 'revert-layer';

@@ -27,9 +27,6 @@
     <div class="project_name">
         <img src="imgs/shortcut/shortcut.png" alt="logo" style="vertical-align: sub;">
         <span></span>
-        <!-- <input type="color">
-
-        <input type="range" class="range-level"> -->
     </div>
     <div id="map"></div>
     <div class="left-tool">
@@ -46,8 +43,8 @@
             </div>
             <!-- 统计查询 -->
             <div class="left-tool-item statistics-container" title="切换统计查询">
-                <img src="imgs/form.svg" alt="统计查询" />
-                <span>统计查询</span>
+                <img src="imgs/statistics.svg" alt="统计查询" />
+                <span>查询统计</span>
             </div>
             <!-- 统计表 -->
             <div class="left-tool-item table-container" title="切换统计表">
@@ -74,11 +71,21 @@
             <!-- 查询统计 -->
             <div class="statistics-content">
                 <div class="statistics-content-title">
-                    <div class="statistics-title"><img src="imgs/form.svg" alt="查询统计" title="查询统计" />查询统计</div>
+                    <div class="statistics-title"><img src="imgs/statistics.svg" alt="查询统计" title="查询统计" />查询统计</div>
                     <div class="statistics-content-close close_btn" title="关闭">
                         <img src="imgs/close.svg" alt="关闭" />
                     </div>
                 </div>
+
+                <div class="statistics-layer-container dropdown-input-container">
+                    <input type="text" placeholder="请选择" readonly class="statistics-title-input dropdown_input">
+                    <img src="imgs/dropdown.svg" class="dropdown_svg">
+                    <div class="dropdown_list">
+                        <ul>
+                        </ul>
+                    </div>
+                </div>
+
                 <div class="statistics-content-body">
                     <div class="loading-container">
                         <div class="loader"></div>
@@ -99,7 +106,10 @@
             <div class="attribute_content_close close_btn" title="关闭">
                 <img src="imgs/close.svg" alt="关闭" />
             </div>
-            <div class="attribute_wrap"></div>
+            <div class="attribute-wrap">
+                <div class="attribute-tree-container"></div>
+                <div class="attribute-information-container"></div>
+            </div>
         </div>
     </div>
 
@@ -311,6 +321,7 @@
 <script src="js/config.js"></script>
 <script src="js/modal.js"></script>
 
+<script src="js/statistics/attribute.js"></script>
 <script src="js/statistics/statistics.js"></script>
 <script src="js/statistics/mapTable.js"></script>
 <script src="js/map.js"></script>

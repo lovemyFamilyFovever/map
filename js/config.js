@@ -29,7 +29,6 @@ var config = {
             removalMode: false,          // 显示删除工具
             drawText: false,            // 隐藏插入文本的控件
         }
-
     },
     center: [33.523079, 116.477051],
 
@@ -45,7 +44,7 @@ var config = {
     layerList: [{
         layerId: "XZQ",
         layerName: "行政区",
-        column: "XZQMC",
+        subtitle: "XZQMC",
         url: "http://150.158.76.25:5000/load_shp?file_path=XZQ",
         show: false,
         style: {
@@ -53,21 +52,33 @@ var config = {
             weight: 2,
             opacity: 0.8
         },
+        columns: [
+            //column: 表格列名，field: 数据库字段名，statistics: 是否统计
+            { column: "行政区名称", field: "XZQMC", statistics: false },
+            { column: "长度", field: "Shape_Length", statistics: false },
+            { column: "面积", field: "Shape_Area", statistics: false },
+        ],
         children: [{
             layerId: "ZJXZQ",
             layerName: "镇级行政区",
-            column: "XZQMC",
+            subtitle: "XZQMC",
             url: "http://150.158.76.25:5000/load_shp?file_path=ZJXZQ",
             show: false,
             style: {
                 color: "#D81159",
                 weight: 2,
                 opacity: 0.8
-            }
+            },
+            columns: [
+                //column: 表格列名，field: 数据库字段名，statistics: 是否统计
+                { column: "行政区名称", field: "XZQMC", statistics: false },
+                { column: "长度", field: "Shape_Length", statistics: false },
+                { column: "面积", field: "Shape_Area", statistics: false },
+            ],
         }, {
             layerId: "CJXZQ",
             layerName: "村级行政区",
-            column: "ZLDWMC",
+            subtitle: "ZLDWMC",
             url: "http://150.158.76.25:5000/load_shp?file_path=CJXZQ",
             show: false,
             style: {
@@ -79,7 +90,7 @@ var config = {
     }, {
         layerId: "XZJT",
         layerName: "交通",
-        column: "用地类型",
+        subtitle: "用地类型",
         url: "http://150.158.76.25:5000/load_shp?file_path=XZJT",
         show: true,
         style: {
@@ -90,7 +101,7 @@ var config = {
     }, {
         layerId: "GYYD",
         layerName: "工业用地",
-        column: "TDSYQR",
+        subtitle: "TDSYQR",
         url: "http://150.158.76.25:5000/load_shp?file_path=GYYD",
         show: false,
         style: {
@@ -98,10 +109,24 @@ var config = {
             weight: 2,
             opacity: 0.8
         },
+        columns: [
+            //column: 表格列名，field: 数据库字段名，statistics: 是否统计
+            { column: "所在乡镇", field: "所在乡镇", statistics: true },
+            { column: "土地使用权人", field: "土地使用权人", statistics: true },
+            { column: "土地面积", field: "土地面积(亩)", statistics: false },
+            { column: "建设状况", field: "建设状况", statistics: true },
+            { column: "是否一地多企", field: "是否一地多企", statistics: true },
+            { column: "是否规上企业用地", field: "是否规上企业用地", statistics: true },
+            { column: "是否低效用地", field: "是否低效用地", statistics: true },
+            { column: "盘活方式", field: "盘活方式", statistics: true },
+            { column: "实施时间", field: "实施时间", statistics: true },
+            { column: "规划用途", field: "规划用途", statistics: true },
+            { column: "使用期限", field: "使用权限", statistics: true },
+        ],
         children: [{
             layerId: "DXGYYD",
             layerName: "低效工业用地",
-            column: "PHPQMC",
+            subtitle: "PHPQMC",
             url: "http://150.158.76.25:5000/load_shp?file_path=低效工业用地",
             show: false,
             style: {
@@ -112,7 +137,7 @@ var config = {
         }, {
             layerId: "PQPHDK",
             layerName: "片区盘活地块",
-            column: "PHPQMC",
+            subtitle: "PHPQMC",
             url: "http://150.158.76.25:5000/load_shp?file_path=片区盘活地块",
             show: false,
             style: {
@@ -124,7 +149,7 @@ var config = {
     }, {
         layerId: "PQFW",
         layerName: "片区范围",
-        column: "盘活片区名",
+        subtitle: "盘活片区名",
         url: "http://150.158.76.25:5000/load_shp?file_path=片区范围",
         show: false,
         style: {
@@ -135,27 +160,15 @@ var config = {
     }, {
         layerId: "QYWZ",
         layerName: "企业位置",
-        column: "YDDWMC",
+        subtitle: "YDDWMC",
         url: "http://150.158.76.25:5000/load_shp?file_path=QYWZ",
-        show: true,
+        show: false,
         style: {
             color: "#4169E1",
             weight: 2,
             opacity: 0.8
         }
     }],
-    statisticsItems: [
-        { column: "所在乡镇", text: "所在乡镇", type: "string" },
-        // { column: "土地使用权人", text: "土地使用权人", type: "string" },
-        { column: "土地面积", text: "土地面积(亩)", type: "number" },//number类型的不进入查询条件
-        { column: "建设状况", text: "建设状况", type: "string" },
-        { column: "是否一地多企", text: "是否一地多企", type: "string" },
-        { column: "是否规上企业用地", text: "是否规上企业用地", type: "string" },
-        { column: "是否低效用地", text: "是否低效用地", type: "string" },
-        { column: "盘活方式", text: "盘活方式", type: "string" },
-        { column: "实施时间", text: "实施时间", type: "string" },
-        { column: "规划用途", text: "规划用途", type: "string" },
-        // { column: "使用期限", text: "使用权限", type: "string" },
-    ]
+
 }
 
