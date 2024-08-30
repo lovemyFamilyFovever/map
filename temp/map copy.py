@@ -28,9 +28,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.ERROR)
 logger.addHandler(handler)
 
-
 # 建立连接
-# MDB文件路径
 mdb_file_path='C:\\map\\map.mdb'
 def get_connection():
     conn_str = (
@@ -39,16 +37,11 @@ def get_connection():
     )
     return pyodbc.connect(conn_str)
 
-# 查询数据库表并返回结果。
-# :param table_name: 要查询的表名
-# :param column_name: 可选，要查询的列名
-# :param column_value: 可选，列的值
-# :return: 查询结果列表
+# 查询数据库表并返回结果
 def query_table(table_name, columns=None):
     conn = get_connection()
     cursor = conn.cursor()
 
-    # 如果没有指定列名，则查询所有列
     if columns:
         columns_str = ", ".join(columns)
     else:
@@ -68,50 +61,19 @@ def query_table(table_name, columns=None):
 
     return results
 
-# Flask路由，用于处理查询请求
-# :return: JSON格式的查询结果
-@app.route('/query', methods=['POST'])
-def get_data():
-    data = request.get_json()
-    table_name = data.get('table_name')
-    columns = data.get('columns')
-
-    query_result = query_table(table_name, columns)
-    return jsonify(query_result)
-
-
 # 新增的查询数据的函数
 def query_aggregated_data(table_name, select_column, calc_column, calc_type, group_column, where_conditions):
     conn = get_connection()
     cursor = conn.cursor()
 
     # 构建 WHERE 子句
-    where_clause = ""  # 初始化 where_clause 为空字符串
     if where_conditions:
-        where_clauses = []
-        for col, values in where_conditions.items():
-            if isinstance(values, list):
-                values_str = ", ".join([f"'{val}'" for val in values])
-                where_clauses.append(f"{col} IN ({values_str})")
-            else:
-                where_clauses.append(f"{col} = '{values}'")
-        where_clause = " AND ".join(where_clauses)
-
-    # 根据 calc_type 设置别名
-    alias = {
-        "AVG": "平均数",
-        "SUM": "总和",
-        "COUNT": "计数"
-    }.get(calc_type.upper(), "")  # 默认别名为空字符串
+        where_clause = " AND ".join([f"{col}='{val}'" for col, val in where_conditions.items()])
+    else:
+        where_clause = ""
 
     # 构建 SQL 查询语句
-    query = f"SELECT {select_column}, {calc_type.upper()}({calc_column})"
-  
-    if alias:  # 如果有别名，添加 AS 子句
-        query += f" AS {alias}"
-
-    query += f" FROM {table_name}"
-    
+    query = f"SELECT {select_column}, {calc_type.upper()}({calc_column}) FROM {table_name}"
     if where_clause:
         query += f" WHERE {where_clause}"
     if group_column:
@@ -130,11 +92,21 @@ def query_aggregated_data(table_name, select_column, calc_column, calc_type, gro
 
     return results
 
+# Flask路由，用于处理查询请求
+@app.route('/query', methods=['POST'])
+def get_data():
+    data = request.get_json()
+    table_name = data.get('table_name')
+    columns = data.get('columns')
+
+    query_result = query_table(table_name, columns)
+    return jsonify(query_result)
+
 # 新增的 Flask 路由，用于处理聚合查询请求
 @app.route('/group', methods=['POST'])
 def get_aggregated_data():
     data = request.get_json()
-    table_name = data.get('tableName')
+    table_name = data.get('table_name')
     select_column = data.get('selectColumn')
     calc_column = data.get('calcColumn')
     calc_type = data.get('calcType')
@@ -144,46 +116,5 @@ def get_aggregated_data():
     query_result = query_aggregated_data(table_name, select_column, calc_column, calc_type, group_column, where_conditions)
     return jsonify(query_result)
 
-# 将Shapefile文件转换为GeoJSON格式的函数
-# :param shp_file_path: Shapefile文件的路径
-# :return: GeoJSON格式的地图数据
-def shp_to_geojson(shp_file_path):
-    # 读取Shapefile文件
-    try:
-        reader = shapefile.Reader(shp_file_path, encoding='gbk')
-        fields = [x[0] for x in reader.fields][1:]
-        records = reader.records()
-        shps = [s.__geo_interface__ for s in reader.shapes()]
-
-        # 将shp转换为GeoJSON格式
-        geojson = {"type": "FeatureCollection", "features": []}
-        for i, shp in enumerate(shps):
-            geojson["features"].append({
-                "type": "Feature",
-                "geometry": shp,
-                "properties": dict(zip(fields, records[i]))
-            })
-
-        return geojson
-    except Exception as e:
-        logger.error(f"Error converting Shapefile to GeoJSON: {shp_file_path}\nError: {str(e)}")
-        raise
-
-# Flask路由，用于处理加载Shapefile文件的请求
-# :return: JSON格式的查询结果
-@app.route('/load_shp')
-def load_shp():
-     # 从URL参数获取Shapefile文件的路径
-    shp_file_path = request.args.get('file_path')
-
-    if shp_file_path:
-        try:
-            geojson_data = shp_to_geojson('shp/'+shp_file_path+'.shp')
-            return jsonify(geojson_data)
-        except Exception as e:
-            return jsonify({"error": str(e)}), 500
-    else:
-        return jsonify({"error": "file_path parameter is missing"}), 400
-
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000,debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)

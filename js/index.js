@@ -1,8 +1,6 @@
 $(document).ready(function () {
     document.title = config.projectName;
-    $('.project_name span').text(config.projectName)
-
-    // customTable = new CustomTable();//实例化自定义图表
+    $('.project_name span').text(config.projectName);
 
     sfs = new MapObj(config.mapOptions)  // 实例化地图对象
     loadMapLayers()//加载图层

@@ -2,6 +2,7 @@ class Attribute {
     constructor(data) {
         this.data = data;
         this.init();
+        this.originalStyles = new Map(); // 用于保存每个图层的初始样式
     }
     // 初始化属性统计
     init() {
@@ -27,7 +28,6 @@ class Attribute {
 
     // 绑定事件
     bindEvent() {
-
         var that = this;
 
         // 点击图层名称，显示图层属性列表
@@ -93,11 +93,17 @@ class Attribute {
     }
 
     locateLayerOnMap(layer) {
+
+        // 首先恢复所有图层的初始样式
+        this.restoreOriginalStyles();
+
         let map = sfs.mapObj
         if (!layer.feature || !layer.feature.geometry) {
             console.error("Invalid layer or geometry");
             return;
         }
+
+        this.saveOriginalStyle(layer); // 保存当前图层的初始样式
 
         const geometry = layer.feature.geometry;
         const type = geometry.type;
@@ -105,68 +111,77 @@ class Attribute {
         const fromProj = proj4("EPSG:4539");  // CGCS2000
         const toProj = proj4("EPSG:3857");    // WGS84 Web Mercator
 
-        const convertCoords = (coord) => {
-            if (!Array.isArray(coord) || coord.length < 2) {
-                console.error("Invalid coordinate format");
-                return null;
-            }
-            const [x, y] = coord;
-            if (!isFinite(x) || !isFinite(y)) {
-                console.error("Coordinates must be finite numbers");
-                return null;
-            }
-            return proj4(fromProj, toProj, [x, y]);
-        };
-
         if (type === "Point") {
             const coordinates = geometry.coordinates;
-            const convertedCoords = convertCoords(coordinates);
-            if (convertedCoords) {
-                const latLng = L.CRS.EPSG3857.unproject(L.point(convertedCoords[0], convertedCoords[1]));
-                map.setView(latLng, 15); // 设置地图中心并放大到适当的级别
-            }
-        } else if (type === "LineString" || type === "Polygon") {
-            const coordinates = (type === "Polygon") ? geometry.coordinates.flat(2) : geometry.coordinates;
+            // 将CGCS2000的坐标转换为Web Mercator坐标
+            const [x, y] = proj4(fromProj, toProj, [coordinates[0], coordinates[1]]);
+            const latLng = L.CRS.EPSG3857.unproject(L.point(x, y));
+            map.setView(latLng, 18); // 设置地图中心并放大到适当的级别
+        } else if (type === "LineString") {
+            const coordinates = geometry.coordinates;
             const latLngs = coordinates.map(coord => {
-                const convertedCoords = convertCoords(coord);
-                if (convertedCoords) {
-                    return L.CRS.EPSG3857.unproject(L.point(convertedCoords[0], convertedCoords[1]));
-                }
-                return null;
-            }).filter(latLng => latLng !== null);
+                const [x, y] = proj4(fromProj, toProj, coord);
+                return L.CRS.EPSG3857.unproject(L.point(x, y));
+            });
+            const bounds = L.latLngBounds(latLngs);
+            // 将地图视角调整为包含整个边界框
+            map.fitBounds(bounds, {
+                padding: [50, 50], // 设置边距，上下左右各50像素
+            });
+        } else if (type === "Polygon") {
+            // 如果是面图层
+            const coordinates = geometry.coordinates[0];
 
-            if (latLngs.length > 0) {
-                const bounds = L.latLngBounds(latLngs);
-                map.fitBounds(bounds); // 将地图视角调整为包含整个边界框
-                map.setZoom(14);
-            }
-
+            const latLngs = coordinates.map(coord => {
+                const [x, y] = proj4(fromProj, toProj, coord);
+                return L.CRS.EPSG3857.unproject(L.point(x, y));
+            });
+            const bounds = L.latLngBounds(latLngs);
+            // 将地图视角调整为包含整个边界框
+            map.fitBounds(bounds, {
+                padding: [50, 50], // 设置边距，上下左右各50像素
+            });
         } else {
             console.warn("Unsupported geometry type: " + type);
         }
 
         // 监听地图缩放结束的事件
-        map.once('zoomend', function () {
-            // 假设 layer 是你的目标图层
-            let originalStyle = layer.options; // 保存原始样式
-
-            // 创建一个闪烁效果
-            function blinkLayer() {
-                layer.setStyle({ color: 'red', opacity: 1 }); // 改变样式
-                setTimeout(() => {
-                    layer.setStyle({ opacity: 0 }); // 隐藏
-                }, 500); // 半秒钟后隐藏
-
-                setTimeout(() => {
-                    layer.setStyle(originalStyle); // 恢复原始样式
-                }, 1000); // 一秒钟后恢复原始样式
-            }
-
-            // 调用闪烁函数
-            blinkLayer();
-        });
+        function blinkLayer(times, interval) {
+            let count = 0;
+            layer.setStyle({ color: 'red', opacity: 1 }); // 改变样式
+            const blink = setInterval(() => {
+                if (count >= times) {
+                    clearInterval(blink);
+                    layer.setStyle({ opacity: 1 }); // 最后恢复原始样式
+                } else {
+                    layer.setStyle({ opacity: count % 2 === 0 ? 0 : 1 });
+                    count++;
+                }
+            }, interval);
+        }
+        // 调用闪烁函数，闪烁4次（实际显示两次，隐藏两次），间隔250ms
+        blinkLayer(4, 250);
     }
 
+    // 保存图层的初始样式
+    saveOriginalStyle(layer) {
+        if (!this.originalStyles.has(layer._leaflet_id)) {
+            this.originalStyles.set(layer._leaflet_id, {
+                color: layer.options.color,
+                opacity: layer.options.opacity,
+            });
+        }
+    }
+
+    // 恢复图层的初始样式
+    restoreOriginalStyles() {
+        this.originalStyles.forEach((style, id) => {
+            const layer = sfs.mapObj._layers[id];
+            if (layer) {
+                layer.setStyle(style);
+            }
+        });
+    }
 
     getListHtml() {
         let number = 0;

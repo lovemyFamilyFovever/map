@@ -41,10 +41,11 @@ class Statistics {
         //渲染图层下拉选项的列表
         let liHtml = "";
         this.data.forEach((item, index) => {
-            liHtml += `<li data-layer-index="${index}"><span>${item.layerName}</span></li>`;
+            liHtml += `<li data-layerid="${item.layerId}"><span>${item.layerName}</span></li>`;
         });
         $('.statistics-layer-container ul').html(liHtml);
         $('.statistics-title-input').val(this.data[0].layerName)
+        $('.statistics-title-input').attr('data-layerid', this.data[0].layerId);
     }
 
     renderContent(obj) {
@@ -61,26 +62,25 @@ class Statistics {
         let that = this;
         //展示下拉列表-图层
         $('.statistics-title-input').on('click', function () {
-            $('.statistics-layer-container .dropdown_list').show();
+            $('.statistics-layer-container .dropdown_list').toggle();
         });
 
         //选择图层 统计查询列表
         $('.statistics-layer-container .dropdown_list').on('click', 'li', function () {
+            $('.dropdown_list').hide();
             const layerName = $(this).find('span').text();
             if ($('.statistics-title-input').val() == layerName) return;
 
             const index = $(this).index();
             $('.statistics-title-input').val(layerName);
-            $('.statistics-layer-container .dropdown_list').hide();
+            $('.statistics-title-input').attr('data-layerid', that.data[index].layerId);
             that.renderContent(that.data[index]);
 
             that.customTable = new CustomTable(that.data[index]);//实例化自定义图表
         });
 
-
         //展示下拉列表-具体值
         $('.statistics-items').on('click', '.statistics-item-target .target-input', function () {
-            $('.statistics-items .dropdown_list').hide();
             const field = $(this).attr('data-field');
             let index = $(this).attr('data-index');
 
@@ -92,11 +92,12 @@ class Statistics {
                     <span>全部</span>
                 </li>`;
             columns.forEach(item => {
-                html += `
-                <li>
-                    <input type="checkbox" class="column-static" data-field="${item}" />
-                    <span>${item}</span>
-                </li>`;
+                if (item)
+                    html += `
+                    <li>
+                        <input type="checkbox" class="column-static" data-field="${item}" />
+                        <span>${item}</span>
+                    </li>`;
             });
 
             $(this).siblings('.dropdown_list').find('ul').html(html)
@@ -137,33 +138,95 @@ class Statistics {
             }
         });
 
+        //分组字段 按钮 + 统计字段 按钮
+        $('.group-input input,.statistic-input input').on('click', function () {
+            const $dropdown_list = $(this).parent().find('.dropdown_list');
+            let html = "";
+            $('.statistics-item-column').each((index, item) => {
+                html += `<li data-field="${$(item).attr('data-field')}">${item.innerText.trim()}</li>`
+            });
+            $dropdown_list.find('ul').html(html)
+            $dropdown_list.toggle();
+            new PerfectScrollbar($dropdown_list[0]);
+        })
+        //分组字段 选择 + 统计字段 选择 + 统计类型 选择 + 图表类型 选择
+        $('.group-input,.statistic-input,.calc-input,.chart-input ').on('click', 'li', function () {
+            $(this).parent().parent().siblings('.dropdown_input').val($(this).text()).attr('data-field', $(this).attr('data-field'));
+            $(this).parent().parent().toggle();
+        });
+
+        //统计类型 按钮 + 图表类型 按钮
+        $('.calc-input input,.chart-input input').on('click', function () {
+            $(this).siblings('.dropdown_list').toggle();
+        })
         //重置 按钮
         $('.statistics-content-footer .reset').on('click', () => {
             $('.statistics-item .dropdown_input').val("");
-            $('.statistics-item .dropdown_list ul').empty();
         });
 
         //查询 按钮
         $('.statistics-content-footer .confirm').on('click', that.debounce(() => {
-            let uniqueCategories = [];
-            $('.statistics-item').each((index, item) => {
-                const $target = $(item).find('.target-input');
 
-                if ($target.val()) {
-                    let values = [];
-                    $(item).find('.column-static').each(function () {
-                        if ($(this).is(':checked') && $(this).attr('data-field') != "全部") {
-                            values.push($(this).attr('data-field'))
-                        }
-                    });
-                    uniqueCategories.push({
-                        field: $target.attr('data-field'),
-                        type: 'in',
-                        value: values
-                    })
+            let groupColumn = true;
+            $('.statistics-group-wrap-content .dropdown_input').each((index, item) => {
+                if (item.value.trim() == "") {
+                    groupColumn = false;
+                    return false;
                 }
             });
-            that.customTable.filterTable(uniqueCategories);
+
+            if (!groupColumn) {
+                let uniqueCategories = [];
+                $('.statistics-item').each((index, item) => {
+                    const $target = $(item).find('.target-input');
+
+                    if ($target.val()) {
+                        let values = [];
+                        $(item).find('.column-static').each(function () {
+                            if ($(this).is(':checked') && $(this).attr('data-field') != "全部") {
+                                values.push($(this).attr('data-field'))
+                            }
+                        });
+                        uniqueCategories.push({
+                            field: $target.attr('data-field'),
+                            type: 'in',
+                            value: values
+                        })
+                    }
+                });
+                that.customTable.filterTable(uniqueCategories);
+            } else {
+                // requestData = {
+                //     selectColumn: "column1",
+                //     calcColumn: "column2",
+                //     calcType: "count",
+                //     groupColumn: "column1",
+                //     where: {
+                //         column2: ["a","b"],
+                //         column: ["c"],
+                //         // 可能还有别的更多的列
+                //     }
+                // }
+                let groupFields = {
+                    tableName: $('.statistics-title-input').attr('data-layerid'),
+                    selectColumn: $('.group-input .dropdown_input').attr('data-field'),
+                    calcColumn: $('.statistic-input .dropdown_input').attr('data-field'),
+                    calcType: $('.calc-input .dropdown_input').attr('data-field'),
+                    groupColumn: $('.group-input .dropdown_input').attr('data-field'),
+                    chartType: $('.chart-input .dropdown_input').attr('data-field'),
+                    where: {}
+                };
+
+                $('.statistics-item-target .target-input').each((index, item) => {
+                    let arry = []
+                    if ($(item).val() && $(item).val() != "全部") {
+                        arry.push($(item).val());
+                    }
+                    if (arry.length > 0)
+                        groupFields.where[$(item).attr('data-field')] = arry;
+                });
+                new CustomTable(null, groupFields)
+            }
 
             $('.table-content').show();
             $('.table-container').addClass('active');
@@ -172,18 +235,16 @@ class Statistics {
 
     renderHtml(item, index = 0) {
         return `
-                <div class="statistics-item">
-                    <div class="statistics-item-column dropdown-input-container">
-                         ${item.column}
+            <div class="statistics-item">
+                <div class="statistics-item-column dropdown-input-container" data-field="${item.field}">${item.title}</div>
+                <div class="statistics-item-target dropdown-input-container">
+                <input type="text" placeholder="请选择" data-field="${item.field}" data-index="${index}" class="target-input dropdown_input" readonly>
+                    <img src="imgs/dropdown.svg" class="dropdown_svg">
+                    <div class="dropdown_list">
+                        <ul></ul>
                     </div>
-                    <div class="statistics-item-target dropdown-input-container">
-                    <input type="text" placeholder="请选择" data-field="${item.field}" data-index="${index}" class="target-input dropdown_input">
-                        <img src="imgs/dropdown.svg" class="dropdown_svg">
-                        <div class="dropdown_list">
-                            <ul></ul>
-                        </div>
-                    </div>
-                </div>`
+                </div>
+            </div>`
     }
 
     findLayersByIds(ids, layerList = config.layerList) {
@@ -191,7 +252,9 @@ class Statistics {
         function searchLayers(layers) {
             for (let layer of layers) {
                 if (ids.includes(layer.layerId)) {
-                    result.push(layer);
+                    if (layer.layerId !== "XZQ") {
+                        result.push(layer);
+                    }
                 }
                 if (layer.children) {
                     searchLayers(layer.children);
@@ -201,6 +264,7 @@ class Statistics {
         searchLayers(layerList);
         return result;
     }
+
 
     getColumnUnique(field) {
         return this.customTable.getColumnUniqueValues(field)

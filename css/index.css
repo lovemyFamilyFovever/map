@@ -332,7 +332,7 @@ a:hover {
     border-radius: 10px;
     -webkit-box-shadow: 0 2px 6px rgb(0 0 0 / 31%);
     box-shadow: 0 2px 6px rgb(0 0 0 / 31%);
-    height: 38vh;
+    height: 37vh;
     display: none;
 }
 
@@ -392,13 +392,11 @@ a:hover {
 
 .attribute_content {
     padding: 10px 0;
-    height: 45vh;
+    height: 49vh;
 }
 
 .attribute-info-content {
-    padding-right: 10px;
-    position: relative;
-    height: 38vh;
+    height: 43vh;
 }
 
 .attribute-info-container {
@@ -434,7 +432,7 @@ a:hover {
 .attribute-info-item {
     display: flex;
     justify-content: flex-start;
-    line-height: 1.6rem;
+    line-height: 1.4rem;
     padding: 0 10px;
 }
 
@@ -480,9 +478,8 @@ a:hover {
 }
 
 .attribute-item-content {
-    margin: 0 0px 0px 10px;
-    position: relative;
-    height: 34vh;
+    padding: 0 0px 0px 10px;
+    height: 38vh;
 }
 
 .select-attribute-info {
@@ -717,7 +714,7 @@ p.layer_name {
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
-    height: calc(39vh - 70px);
+    height: calc(37vh - 70px);
     width: 100%;
 }
 
@@ -826,6 +823,8 @@ p.layer_name {
     position: absolute;
     left: 0;
     width: max-content;
+    min-width: 100%;
+    box-sizing: border-box;
     top: 30px;
     margin-top: 10px;
     z-index: 9999;
@@ -868,16 +867,20 @@ p.layer_name {
     margin-bottom: 6px;
 }
 
+.table_panel {
+    height: 100%;
+}
+
 .table-wrapper {
-    height: 35vh;
+    height: calc(100% - 30px);
 }
 
 .table-wrapper-count {
     position: absolute;
-    bottom: 10px;
+    bottom: 5px;
     left: 15px;
     font-size: 13px;
-    line-height: 33px;
+    line-height: 1.5rem;
 }
 
 .updown_svg {
@@ -1319,13 +1322,11 @@ p.layer_name {
     padding: 10px;
     font-size: 12px;
     z-index: 2;
-    height: 100%;
     border-radius: 0 10px 10px 0;
     -webkit-box-shadow: 0 2px 6px rgb(0 0 0 / 31%);
     box-shadow: 0 2px 6px rgb(0 0 0 / 31%);
     transition: all 0.4s ease;
     opacity: 0;
-    height: 41vh;
     overflow: hidden;
     padding-bottom: 20px;
     box-sizing: border-box;
@@ -1489,6 +1490,11 @@ p.layer_name {
     flex: 1;
 }
 
+.statistics-title-input {
+    font-weight: bold;
+    color: #000;
+}
+
 .dropdown_input {
     width: 100%;
     border: 1px solid #9eabc8;
@@ -1500,6 +1506,7 @@ p.layer_name {
     outline: none;
     padding: 0px 22px 0 6px;
     cursor: pointer;
+    border-radius: 3px;
 }
 
 .dropdown_input:hover {
