@@ -105,26 +105,41 @@ class Attribute {
         const fromProj = proj4("EPSG:4539");  // CGCS2000
         const toProj = proj4("EPSG:3857");    // WGS84 Web Mercator
 
+        const convertCoords = (coord) => {
+            if (!Array.isArray(coord) || coord.length < 2) {
+                console.error("Invalid coordinate format");
+                return null;
+            }
+            const [x, y] = coord;
+            if (!isFinite(x) || !isFinite(y)) {
+                console.error("Coordinates must be finite numbers");
+                return null;
+            }
+            return proj4(fromProj, toProj, [x, y]);
+        };
+
         if (type === "Point") {
-            // 如果是点图层
             const coordinates = geometry.coordinates;
-            const [x, y] = proj4(fromProj, toProj, coordinates);
-            const latLng = L.CRS.EPSG3857.unproject(L.point(x, y));
-            map.setView(latLng, 15); // 设置地图中心并放大到适当的级别
+            const convertedCoords = convertCoords(coordinates);
+            if (convertedCoords) {
+                const latLng = L.CRS.EPSG3857.unproject(L.point(convertedCoords[0], convertedCoords[1]));
+                map.setView(latLng, 15); // 设置地图中心并放大到适当的级别
+            }
         } else if (type === "LineString" || type === "Polygon") {
-            // 如果是线或面图层
-            const coordinates = geometry.coordinates.flat(); // 获取所有坐标点
-
+            const coordinates = (type === "Polygon") ? geometry.coordinates.flat(2) : geometry.coordinates;
             const latLngs = coordinates.map(coord => {
-                const [x, y] = proj4(fromProj, toProj, coord);
-                return L.CRS.EPSG3857.unproject(L.point(x, y));
-            });
+                const convertedCoords = convertCoords(coord);
+                if (convertedCoords) {
+                    return L.CRS.EPSG3857.unproject(L.point(convertedCoords[0], convertedCoords[1]));
+                }
+                return null;
+            }).filter(latLng => latLng !== null);
 
-            // const latLngs = coordinates.map(coord => [coord[1], coord[0]]);
-            const bounds = L.latLngBounds(latLngs);
-
-            map.fitBounds(bounds); // 将地图视角调整为包含整个边界框
-            map.setZoom(14);
+            if (latLngs.length > 0) {
+                const bounds = L.latLngBounds(latLngs);
+                map.fitBounds(bounds); // 将地图视角调整为包含整个边界框
+                map.setZoom(14);
+            }
 
         } else {
             console.warn("Unsupported geometry type: " + type);
