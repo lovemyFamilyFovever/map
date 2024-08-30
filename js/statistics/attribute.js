@@ -81,6 +81,8 @@ class Attribute {
             $('.attribute-info-container').html(that.getInfoHtml(data, subtitle)).show();
 
             new PerfectScrollbar('.attribute-info-content');
+
+            that.locateLayerOnMap(that.data[i].children[j]);
         })
 
         //返回上一级
@@ -89,6 +91,67 @@ class Attribute {
             $('.attribute-tree-container').show();
         });
     }
+
+    locateLayerOnMap(layer) {
+        let map = sfs.mapObj
+        if (!layer.feature || !layer.feature.geometry) {
+            console.error("Invalid layer or geometry");
+            return;
+        }
+
+        const geometry = layer.feature.geometry;
+        const type = geometry.type;
+
+        const fromProj = proj4("EPSG:4539");  // CGCS2000
+        const toProj = proj4("EPSG:3857");    // WGS84 Web Mercator
+
+        if (type === "Point") {
+            // 如果是点图层
+            const coordinates = geometry.coordinates;
+            const [x, y] = proj4(fromProj, toProj, coordinates);
+            const latLng = L.CRS.EPSG3857.unproject(L.point(x, y));
+            map.setView(latLng, 15); // 设置地图中心并放大到适当的级别
+        } else if (type === "LineString" || type === "Polygon") {
+            // 如果是线或面图层
+            const coordinates = geometry.coordinates.flat(); // 获取所有坐标点
+
+            const latLngs = coordinates.map(coord => {
+                const [x, y] = proj4(fromProj, toProj, coord);
+                return L.CRS.EPSG3857.unproject(L.point(x, y));
+            });
+
+            // const latLngs = coordinates.map(coord => [coord[1], coord[0]]);
+            const bounds = L.latLngBounds(latLngs);
+
+            map.fitBounds(bounds); // 将地图视角调整为包含整个边界框
+            map.setZoom(14);
+
+        } else {
+            console.warn("Unsupported geometry type: " + type);
+        }
+
+        // 监听地图缩放结束的事件
+        map.once('zoomend', function () {
+            // 假设 layer 是你的目标图层
+            let originalStyle = layer.options; // 保存原始样式
+
+            // 创建一个闪烁效果
+            function blinkLayer() {
+                layer.setStyle({ color: 'red', opacity: 1 }); // 改变样式
+                setTimeout(() => {
+                    layer.setStyle({ opacity: 0 }); // 隐藏
+                }, 500); // 半秒钟后隐藏
+
+                setTimeout(() => {
+                    layer.setStyle(originalStyle); // 恢复原始样式
+                }, 1000); // 一秒钟后恢复原始样式
+            }
+
+            // 调用闪烁函数
+            blinkLayer();
+        });
+    }
+
 
     getListHtml() {
         let number = 0;

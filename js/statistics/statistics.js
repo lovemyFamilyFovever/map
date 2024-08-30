@@ -2,10 +2,12 @@
 class Statistics {
     constructor() {
         this.data = [];
+        this.customTable = null;
         this.columns = Array.from(sfs.layerStore.keys())
         this.init();
     }
     init() {
+        this.destroy(); // 先销毁可能存在的旧实例
         if (sfs.layerStore.size == 0) {
             $(".statistics-items").append(`
                 <div class="empty_table">
@@ -18,10 +20,21 @@ class Statistics {
             $(".statistics-items .empty_table").hide();
 
             this.data = this.findLayersByIds(this.columns)
+            this.customTable = new CustomTable(this.data[0]);//实例化自定义图表
             this.renderTitle();
+            this.renderContent(this.data[0]);
             this.bindEvent();
             $('.statistics-content-body .loading-container').hide();
         }
+    }
+
+    // 销毁方法
+    destroy() {
+        // 移除已绑定的事件，避免多次绑定
+        $('.statistics-title-input').off('click',)
+        $('.statistics-layer-container .dropdown_list').off('click', 'li')
+        $('.statistics-items').off('click', '.statistics-item-target .target-input')
+        $('.statistics-items').off('click', '.statistics-item-target li')
     }
 
     renderTitle() {
@@ -30,18 +43,15 @@ class Statistics {
         this.data.forEach((item, index) => {
             liHtml += `<li data-layer-index="${index}"><span>${item.layerName}</span></li>`;
         });
-
         $('.statistics-layer-container ul').html(liHtml);
         $('.statistics-title-input').val(this.data[0].layerName)
-
-        this.renderContent(this.data[0]);
     }
 
     renderContent(obj) {
         let html = ""
         obj.columns.forEach((item, index) => {
             if (item.statistics)
-                html += this.renderHtml(item.column, item.type, index);
+                html += this.renderHtml(item, index);
         });
         $(".statistics-items").html(html);
     }
@@ -56,31 +66,35 @@ class Statistics {
 
         //选择图层 统计查询列表
         $('.statistics-layer-container .dropdown_list').on('click', 'li', function () {
-            const index = $(this).index();
             const layerName = $(this).find('span').text();
+            if ($('.statistics-title-input').val() == layerName) return;
+
+            const index = $(this).index();
             $('.statistics-title-input').val(layerName);
             $('.statistics-layer-container .dropdown_list').hide();
             that.renderContent(that.data[index]);
+
+            that.customTable = new CustomTable(that.data[index]);//实例化自定义图表
         });
 
 
         //展示下拉列表-具体值
         $('.statistics-items').on('click', '.statistics-item-target .target-input', function () {
             $('.statistics-items .dropdown_list').hide();
-            const column = $(this).attr('data-column');
+            const field = $(this).attr('data-field');
             let index = $(this).attr('data-index');
 
-            const columns = customTable.getColumnUniqueValues(column).filter(item => item.trim() != "")
+            const columns = that.getColumnUnique(field)
             let html = "";
             html += `
                 <li>
-                    <input type="checkbox" id="cbx-column-static-all-${index++}" class="column-static-all" data-column="全部" />
+                    <input type="checkbox" id="cbx-column-static-all-${index++}" class="column-static-all" data-field="全部" />
                     <span>全部</span>
                 </li>`;
             columns.forEach(item => {
                 html += `
                 <li>
-                    <input type="checkbox" class="column-static" data-column="${item}" />
+                    <input type="checkbox" class="column-static" data-field="${item}" />
                     <span>${item}</span>
                 </li>`;
             });
@@ -92,7 +106,7 @@ class Statistics {
         //选择具体值
         $('.statistics-items').on('click', '.statistics-item-target li', function () {
             let $parent = $(this).parent().parent();
-            if ($(this).find('input').attr('data-column') == "全部") {
+            if ($(this).find('input').attr('data-field') == "全部") {
                 var status = $parent.find('.column-static-all').prop('checked')
                 $parent.find('.column-static').prop('checked', status);
                 $parent.siblings('.target-input').val(status ? "全部" : "")
@@ -113,8 +127,8 @@ class Statistics {
                     let nameString = "";
                     $parent.find('.column-static').each(function () {
                         if ($(this).is(':checked')) {
-                            if ($(this).attr('data-column') != "全部")
-                                nameString += $(this).attr('data-column') + ',';
+                            if ($(this).attr('data-field') != "全部")
+                                nameString += $(this).attr('data-field') + ',';
                         }
                     });
                     nameString = nameString.substring(0, nameString.length - 1);
@@ -130,7 +144,7 @@ class Statistics {
         });
 
         //查询 按钮
-        $('.statistics-content-footer .confirm').on('click', () => {
+        $('.statistics-content-footer .confirm').on('click', that.debounce(() => {
             let uniqueCategories = [];
             $('.statistics-item').each((index, item) => {
                 const $target = $(item).find('.target-input');
@@ -138,32 +152,32 @@ class Statistics {
                 if ($target.val()) {
                     let values = [];
                     $(item).find('.column-static').each(function () {
-                        if ($(this).is(':checked') && $(this).attr('data-column') != "全部") {
-                            values.push($(this).attr('data-column'))
+                        if ($(this).is(':checked') && $(this).attr('data-field') != "全部") {
+                            values.push($(this).attr('data-field'))
                         }
                     });
                     uniqueCategories.push({
-                        field: $target.attr('data-column'),
+                        field: $target.attr('data-field'),
                         type: 'in',
                         value: values
                     })
                 }
             });
-            customTable.filterTable(uniqueCategories);
+            that.customTable.filterTable(uniqueCategories);
 
             $('.table-content').show();
             $('.table-container').addClass('active');
-        });
+        }, 300));
     }
 
-    renderHtml(column = "", type = "", index = 0) {
+    renderHtml(item, index = 0) {
         return `
                 <div class="statistics-item">
                     <div class="statistics-item-column dropdown-input-container">
-                         ${column}
+                         ${item.column}
                     </div>
                     <div class="statistics-item-target dropdown-input-container">
-                    <input type="text" placeholder="请选择" data-column="${column}" data-index="${index}" class="target-input dropdown_input">
+                    <input type="text" placeholder="请选择" data-field="${item.field}" data-index="${index}" class="target-input dropdown_input">
                         <img src="imgs/dropdown.svg" class="dropdown_svg">
                         <div class="dropdown_list">
                             <ul></ul>
@@ -172,23 +186,34 @@ class Statistics {
                 </div>`
     }
 
-
     findLayersByIds(ids, layerList = config.layerList) {
         const result = [];
-        for (const layer of layerList) {
-            if (ids.includes(layer.layerId)) {
-                result.push({ ...layer, children: null });
-            }
-            if (layer.children) {
-                const childrenResult = this.findLayersByIds(ids, layer.children);
-                if (childrenResult.length > 0) {
-                    layer.children = childrenResult;
+        function searchLayers(layers) {
+            for (let layer of layers) {
+                if (ids.includes(layer.layerId)) {
                     result.push(layer);
+                }
+                if (layer.children) {
+                    searchLayers(layer.children);
                 }
             }
         }
+        searchLayers(layerList);
         return result;
     }
 
+    getColumnUnique(field) {
+        return this.customTable.getColumnUniqueValues(field)
+    }
 
+    // 防抖函数
+    debounce(fn, delay) {
+        let timer = null;
+        return function (...args) {
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+                fn.apply(this, args);
+            }, delay);
+        };
+    }
 }

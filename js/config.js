@@ -56,7 +56,7 @@ var config = {
             //column: 表格列名，field: 数据库字段名，statistics: 是否统计
             { column: "行政区名称", field: "XZQMC", statistics: true },
             { column: "长度", field: "Shape_Length", statistics: true },
-            { column: "面积", field: "Shape_Area", statistics: true },
+            { column: "面积", field: "Shape_Area", statistics: false },
         ],
         children: [{
             layerId: "ZJXZQ",
@@ -72,8 +72,8 @@ var config = {
             columns: [
                 //column: 表格列名，field: 数据库字段名，statistics: 是否统计
                 { column: "行政区名称", field: "XZQMC", statistics: true },
-                { column: "导出面积", field: "DCMJ", statistics: true },
-                { column: "建设面积", field: "JSMJ", statistics: true },
+                { column: "导出面积", field: "DCMJ", statistics: false },
+                { column: "建设面积", field: "JSMJ", statistics: false },
                 { column: "县区代码", field: "县区代码", statistics: true },
             ],
         }, {
@@ -90,8 +90,8 @@ var config = {
             columns: [
                 //column: 表格列名，field: 数据库字段名，statistics: 是否统计
                 { column: "地均单位名称", field: "DJDWMC", statistics: true },
-                { column: "导出面积", field: "DCMJ", statistics: true },
-                { column: "建设面积", field: "JSMJ", statistics: true },
+                { column: "导出面积", field: "DCMJ", statistics: false },
+                { column: "建设面积", field: "JSMJ", statistics: false },
                 { column: "县区代码", field: "县区代码", statistics: true },
             ],
         }]
@@ -109,7 +109,7 @@ var config = {
             //column: 表格列名，field: 数据库字段名，statistics: 是否统计
             { column: "用地类型", field: "用地类型", statistics: true },
             { column: "名称", field: "MC", statistics: true },
-            { column: "备注", field: "BZ", statistics: false },
+            { column: "备注", field: "备注", statistics: false },
             { column: "原名称备份", field: "原名称备份", statistics: false },
         ],
     }, {
@@ -138,7 +138,7 @@ var config = {
             { column: "使用期限", field: "使用权限", statistics: true },
         ],
         children: [{
-            layerId: "DXGYYD",
+            layerId: "低效工业用地",
             layerName: "低效工业用地",
             subtitle: "PHPQMC",
             url: "http://150.158.76.25:5000/load_shp?file_path=低效工业用地",
@@ -151,13 +151,13 @@ var config = {
             columns: [
                 //column: 表格列名，field: 数据库字段名，statistics: 是否统计
                 { column: "行政村", field: "SZC", statistics: true },
-                { column: "TDSYQR", field: "土地使用权人", statistics: true },
+                { column: "TDSYQR", field: "TDSYQR", statistics: true },
                 { column: "用地单位", field: "YDDW", statistics: false },
-                { column: "规划用途", field: "GHYT", statistics: false },
+                { column: "规划用途", field: "GHYT", statistics: true },
                 { column: "土地面积", field: "TDMJ", statistics: false },
             ],
         }, {
-            layerId: "PQPHDK",
+            layerId: "片区盘活地块",
             layerName: "片区盘活地块",
             subtitle: "PHPQMC",
             url: "http://150.158.76.25:5000/load_shp?file_path=片区盘活地块",
@@ -170,11 +170,11 @@ var config = {
             columns: [
                 //column: 表格列名，field: 数据库字段名，statistics: 是否统计
                 { column: "行政村", field: "SZC", statistics: true },
-                { column: "所在乡镇", field: "SZXZ", statistics: false },
+                { column: "所在乡镇", field: "SZXZ", statistics: true },
             ],
         }]
     }, {
-        layerId: "PQFW",
+        layerId: "片区范围",
         layerName: "片区范围",
         subtitle: "盘活片区名",
         url: "http://150.158.76.25:5000/load_shp?file_path=片区范围",
@@ -202,11 +202,19 @@ var config = {
         },
         columns: [
             //column: 表格列名，field: 数据库字段名，statistics: 是否统计
-            { column: "所在县", field: "所在县", statistics: true },
-            { column: "所在村", field: "所在村", statistics: true },
-            { column: "所在乡镇", field: "所在乡镇", statistics: true },
-            { column: "建设状况", field: "建设状况", statistics: true },
-            { column: "是否租用厂", field: "是否租用厂", statistics: true },
+            { column: "所在县", field: "SZX", statistics: true },
+            { column: "所在村", field: "SZC", statistics: true },
+            { column: "所在乡镇", field: "SZXZ", statistics: true },
+            { column: "建设状况", field: "JSZK", statistics: true },
+            { column: "是否规上企业", field: "SFGSQY", statistics: true },
+            { column: "是否租用厂", field: "SFZYC", statistics: true },
+            { column: "土地使用权人", field: "TDSYQR", statistics: true },
+            { column: "是否高新技术产业", field: "SFGXJSQY", statistics: true },
+            { column: "是否低效用地企业", field: "SFDX", statistics: true },
+            { column: "上缴税费2021", field: "SJSF2021", statistics: false },
+            { column: "上缴税费2022", field: "SJSF2022", statistics: false },
+            { column: "上缴税费2023", field: "SJSF2023", statistics: false },
+            { column: "行业类别", field: "HYLB", statistics: true },
         ]
     }],
 

@@ -2,7 +2,7 @@ $(document).ready(function () {
     document.title = config.projectName;
     $('.project_name span').text(config.projectName)
 
-    customTable = new CustomTable();//实例化自定义图表
+    // customTable = new CustomTable();//实例化自定义图表
 
     sfs = new MapObj(config.mapOptions)  // 实例化地图对象
     loadMapLayers()//加载图层
@@ -120,6 +120,8 @@ function initEvent() {
 
             $(this).parent().show();
             $(this).parent().prev().hide()
+
+            new Statistics(); // 实例化统计面板
         }
     });
 
