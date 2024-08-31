@@ -5,6 +5,8 @@
 
 html {
     font-size: 20px;
+    width: 100%;
+    height: 100%;
 }
 
 body {
@@ -1380,6 +1382,8 @@ p.layer_name {
 }
 
 .search_btn {
+    border: none;
+    outline: none;
     background: #327CFF;
     color: #fff;
     width: 80px;
@@ -1562,4 +1566,118 @@ p.layer_name {
     width: 6rem;
     line-height: 0.7rem;
     font-size: 0.7rem;
+}
+
+
+/* 登录页样式 */
+.login-container {
+    background: url(../imgs/login/bg.jpg) no-repeat;
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-box {
+    width: 64%;
+    background: #fff;
+    height: 80%;
+    border-radius: 10px;
+    display: flex;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    color: white;
+    text-align: center;
+    overflow: hidden;
+}
+
+.login-bg {
+    flex: 0 0 60%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-logo {
+    position: absolute;
+    left: .5rem;
+    top: .5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.login-form {
+    flex: 0 0 40%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* background: #d9dde9; */
+    position: relative;
+    background-image: linear-gradient(0deg, #dfe9f3 0%, #ffffff 100%);
+}
+
+.login-logo-text {
+    color: #333;
+}
+
+.login-form input {
+    border: 1px solid #bcb2b2;
+    width: 100%;
+    line-height: 1.8rem;
+    border-radius: 7px;
+    text-indent: 1.8rem;
+}
+
+.login-form input:focus-visible {
+    border-color: #4e99f6;
+    outline: #4e99f6;
+}
+
+.login-input {
+    position: relative;
+    margin-bottom: 2.5rem;
+    width: 255px;
+}
+
+.login-input span {
+    position: absolute;
+    color: #333;
+    font-size: 0.65rem;
+    left: 0;
+    top: -1.2rem;
+    letter-spacing: 1px;
+}
+
+.login-input img {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+}
+
+.login-form input:focus-visible {
+    border-color: #4e99f6;
+    outline: #4e99f6;
+}
+
+.login-remember {
+    color: #bfbbd2;
+    font-size: 0.65rem;
+}
+
+.login-btn-wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.login-remember:hover {
+    text-decoration: underline;
+    cursor: pointer;
 }
