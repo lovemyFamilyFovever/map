@@ -8,6 +8,7 @@ class MapObj {
         this.terrain = null;
         this.layerStore = new Map(); // 新增 layerGroup 属性
         this.initMap(options);
+        this.attribute = null;
     }
 
     initMap(options) {
@@ -135,7 +136,6 @@ class MapObj {
 
         var center = geoJsonLayer.getBounds().getCenter();
         this.mapObj.setView(center, 13);   // 设置地图视图到图层中心点，并设置一个合适的缩放级别 13
-
     }
 
     // 获取当前添加的图层
@@ -212,7 +212,11 @@ class MapObj {
                     }
                 });
             });
-            new Attribute(data);// 实例化属性面板
+            if (that.attribute) {
+                that.attribute.restoreOriginalStyles()
+            }
+            that.attribute = new Attribute(data);// 实例化属性面板
+
         });
 
         // 阻止图层面板点击事件冒泡

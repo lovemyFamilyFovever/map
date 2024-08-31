@@ -46,10 +46,24 @@ function initEvent() {
         var mapContainer = document.getElementById('map');
         if ($(this).hasClass('active')) {
             $('.attribute-container').removeClass('active')
-            mapContainer.style.cursor = 'revert-layer';
+
+            // 移除悬浮的文本
+            $('#hover-text').remove();
+            $(document).off('mousemove.hoverText'); // 取消鼠标移动事件
         } else {
             $('.attribute-container').addClass('active')
-            mapContainer.style.cursor = 'help';
+
+            // 创建悬浮文本的 div
+            var hoverText = $('<div id="hover-text">点击获取图斑属性</div>');
+            $('body').append(hoverText);
+
+            // 监听鼠标移动事件，让文本跟随鼠标
+            $(document).on('mousemove.hoverText', function (e) {
+                hoverText.css({
+                    top: e.clientY + 10 + 'px',  // 距离鼠标光标下方 10 像素
+                    left: e.clientX + 10 + 'px'  // 距离鼠标光标右侧 10 像素
+                });
+            });
         }
     })
 

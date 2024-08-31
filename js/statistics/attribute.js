@@ -15,6 +15,7 @@ class Attribute {
 
         new PerfectScrollbar('.attribute-item-content');
         this.bindEvent();
+
     }
     // 销毁方法
     destroy() {
@@ -91,7 +92,6 @@ class Attribute {
             $('.attribute-tree-container').show();
         });
 
-
         //隐藏 属性查询弹窗
         $('.attribute_content_close').on('click', function () {
             $('.attribute_content').hide();
@@ -99,6 +99,11 @@ class Attribute {
             var mapContainer = document.getElementById('map');
             mapContainer.style.cursor = 'revert-layer';
             that.restoreOriginalStyles(); // 恢复所有图层的初始样式
+
+            // 移除悬浮的文本
+            $('#hover-text').remove();
+            $(document).off('mousemove.hoverText'); // 取消鼠标移动事件
+
         })
 
     }
