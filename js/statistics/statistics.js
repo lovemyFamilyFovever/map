@@ -62,18 +62,19 @@ class Statistics {
         let that = this;
         //展示下拉列表-图层
         $('.statistics-title-input').on('click', function () {
+            $('.dropdown_list').hide();
             $('.statistics-layer-container .dropdown_list').toggle();
         });
 
         //选择图层 统计查询列表
         $('.statistics-layer-container .dropdown_list').on('click', 'li', function () {
-            $('.dropdown_list').hide();
             const layerName = $(this).find('span').text();
             if ($('.statistics-title-input').val() == layerName) return;
 
             const index = $(this).index();
             $('.statistics-title-input').val(layerName);
             $('.statistics-title-input').attr('data-layerid', that.data[index].layerId);
+            $('.statistics-layer-container .dropdown_list').hide();
             that.renderContent(that.data[index]);
 
             that.customTable = new CustomTable(that.data[index]);//实例化自定义图表
@@ -81,6 +82,7 @@ class Statistics {
 
         //展示下拉列表-具体值
         $('.statistics-items').on('click', '.statistics-item-target .target-input', function () {
+            $('.dropdown_list').hide();
             const field = $(this).attr('data-field');
             let index = $(this).attr('data-index');
 
@@ -140,6 +142,7 @@ class Statistics {
 
         //分组字段 按钮 + 统计字段 按钮
         $('.group-input input,.statistic-input input').on('click', function () {
+            $('.dropdown_list').hide();
             const $dropdown_list = $(this).parent().find('.dropdown_list');
             let html = "";
             $('.statistics-item-column').each((index, item) => {
@@ -149,16 +152,19 @@ class Statistics {
             $dropdown_list.toggle();
             new PerfectScrollbar($dropdown_list[0]);
         })
+
+        //统计类型 按钮 + 图表类型 按钮
+        $('.calc-input input,.chart-input input').on('click', function () {
+            $('.dropdown_list').hide();
+            $(this).siblings('.dropdown_list').toggle();
+        })
         //分组字段 选择 + 统计字段 选择 + 统计类型 选择 + 图表类型 选择
         $('.group-input,.statistic-input,.calc-input,.chart-input ').on('click', 'li', function () {
             $(this).parent().parent().siblings('.dropdown_input').val($(this).text()).attr('data-field', $(this).attr('data-field'));
             $(this).parent().parent().toggle();
         });
 
-        //统计类型 按钮 + 图表类型 按钮
-        $('.calc-input input,.chart-input input').on('click', function () {
-            $(this).siblings('.dropdown_list').toggle();
-        })
+
         //重置 按钮
         $('.statistics-content-footer .reset').on('click', () => {
             $('.statistics-item .dropdown_input').val("");
@@ -214,7 +220,7 @@ class Statistics {
                     selectColumnName: $('.group-input .dropdown_input').val(),
                     calcColumn: $('.statistic-input .dropdown_input').attr('data-field'),
                     calcType: $('.calc-input .dropdown_input').attr('data-field'),
-                    groupColumn: $('.group-input .dropdown_input').attr('data-field'),
+                    calcTypeName: $('.calc-input .dropdown_input').val(),
                     chartType: $('.chart-input .dropdown_input').attr('data-field'),
                     where: {}
                 };

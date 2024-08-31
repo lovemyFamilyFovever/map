@@ -42,7 +42,8 @@ class CustomTable {
                 this.renderTable([])
                 alert(data.msg)
             } else {
-                this.renderTable(data)
+                // 翻转数组，解决前端分页问题
+                this.renderTable(data.reverse())
             }
         }).catch(error => {
             console.error('请求出错:', error);
@@ -111,7 +112,7 @@ class CustomTable {
             this.bindEvents();
 
             if (this.groupFields) {
-                new CustomChart(data)
+                new CustomChart(data, this.groupFields)
             }
         });
         // 当提示用户下载文件时，将触发downloadFull回调。

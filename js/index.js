@@ -122,13 +122,13 @@ function initEvent() {
         }
     });
 
-    //隐藏 属性查询弹窗
-    $('.attribute_content_close').on('click', function () {
-        $('.attribute_content').hide();
-        $('.attribute-container').removeClass('active')
-        var mapContainer = document.getElementById('map');
-        mapContainer.style.cursor = 'revert-layer';
-    })
+    // //隐藏 属性查询弹窗
+    // $('.attribute_content_close').on('click', function () {
+    //     $('.attribute_content').hide();
+    //     $('.attribute-container').removeClass('active')
+    //     var mapContainer = document.getElementById('map');
+    //     mapContainer.style.cursor = 'revert-layer';
+    // })
 
     //隐藏 统计查询
     $('.statistics-content-close').on('click', function () {

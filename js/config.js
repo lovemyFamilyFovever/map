@@ -151,7 +151,7 @@ var config = {
             columns: [
                 //title: 表格列名，field: 数据库字段名，statistics: 是否统计
                 { title: "行政村", field: "SZC", statistics: true },
-                { title: "TDSYQR", field: "TDSYQR", statistics: true },
+                { title: "土地使用权人", field: "TDSYQR", statistics: true },
                 { title: "用地单位", field: "YDDW", statistics: false },
                 { title: "规划用途", field: "GHYT", statistics: true },
                 { title: "土地面积", field: "TDMJ", statistics: false },

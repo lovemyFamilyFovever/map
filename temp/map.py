@@ -83,7 +83,7 @@ def get_data():
     return jsonify(query_result)
 
 # 新增的查询数据的函数
-def query_aggregated_data(table_name, select_column, select_column_name,calc_column, calc_type, group_column, where_conditions):
+def query_aggregated_data(table_name, select_column, select_column_name,calc_column, calc_type, where_conditions):
     conn = get_connection()
     cursor = conn.cursor()
 
@@ -116,8 +116,8 @@ def query_aggregated_data(table_name, select_column, select_column_name,calc_col
     
     if where_clause:
         query += f" WHERE {where_clause}"
-    if group_column:
-        query += f" GROUP BY {group_column}"
+    
+    query += f" GROUP BY {select_column}"
 
     logger.info("---------")
     results = ""
@@ -146,10 +146,9 @@ def get_aggregated_data():
     select_column_name = data.get('selectColumnName')
     calc_column = data.get('calcColumn')
     calc_type = data.get('calcType')
-    group_column = data.get('groupColumn')
     where_conditions = data.get('where', {})
 
-    query_result = query_aggregated_data(table_name, select_column,select_column_name, calc_column, calc_type, group_column, where_conditions)
+    query_result = query_aggregated_data(table_name, select_column,select_column_name, calc_column, calc_type, where_conditions)
     return jsonify(query_result)
 
 # 将Shapefile文件转换为GeoJSON格式的函数

@@ -1,30 +1,34 @@
 //渲染指定图层的表格
 class CustomChart {
-    constructor(data) {
+    constructor(data, groupFields) {
         this.data = data;
+        this.groupFields = groupFields;
         this.container = 'main-echart';
         this.title = "低效用地";
         this.initChart();
     }
 
     initChart() {
-        this.data = true
+        $('#main-echart .loading-container').hide()
+        $('.empty_chart').hide()
         if (this.data) {
             var chartDom = document.getElementById(this.container);
             this.Chart = echarts.init(chartDom);
             // 将 option 设置给图表
-            $('#main-echart .loading-container').hide()
-            this.Chart.setOption(this.getBarOption());
+
+            const chartType = this.groupFields.chartType;
+            $('.echart_type img[data-type="' + chartType + '"]').addClass('active')
+            this.Chart.setOption(this.getOption(chartType));
             this.renderImg()
-            this.getChartHtml()
         } else {
             this.getEmptyStatus()
         }
+        $('.chart-content').show()
         this.bindEvents();
     }
 
     bindEvents() {
-        var self = this;
+        var that = this;
         //关闭图表弹窗
         $('.chart-content-close').on('click', function () {
             $('.chart-content').hide()
@@ -33,184 +37,150 @@ class CustomChart {
         //切换图表
         $('.echart_type img').on('click', function () {
             if ($(this).hasClass('active')) {
-                return
+                return;
             } else {
                 $(this).addClass('active').siblings().removeClass('active')
                 // 清除之前的图表
-                self.Chart.clear();
+                that.Chart.clear();
                 // 切换图表类型
-                if ($(this).hasClass('pie')) {
-                    self.currentOption = self.getPieOption();
-                } else if ($(this).hasClass('line')) {
-                    self.currentOption = self.getLineOption();
-                } else {
-                    self.currentOption = self.getBarOption();
-                }
-                // 更新图表
-                self.Chart.setOption(self.currentOption);
-                self.renderImg()
+                const chartType = $(this).attr('data-type')
+                that.Chart.setOption(that.getOption(chartType));
+                that.renderImg()
             }
         })
     }
 
-    getBarOption() {
+    // 获取图表配置项-柱状图
+    getOption(chartType) {
+        const selectColumnName = this.groupFields.selectColumnName;
+        const calcTypeName = this.groupFields.calcTypeName;
 
-        const rawData = [
-            [100, 302, 301, 334, 390, 330],
-            [320, 132, 101, 134, 90, 230],
-            [220, 182, 191, 234, 290, 330],
-            [150, 212, 201, 154, 190, 330],
-            [820, 832, 901, 934, 1290, 1330]
-        ];
-        const totalData = [];
-        for (let i = 0; i < rawData[0].length; ++i) {
-            let sum = 0;
-            for (let j = 0; j < rawData.length; ++j) {
-                sum += rawData[j][i];
-            }
-            totalData.push(sum);
+        if (chartType == 'bar') {
+            return getBarOption(this.data)
+        } else if (chartType == 'line') {
+            return getLineOption(this.data)
+        } else {
+            return getPieOption(this.data)
         }
-        const series = [
-            '工业用地数量', '工业用地面积', '工业企业数量', '缺失经济数据企业'
-        ].map((name, sid) => {
-            return {
-                name,
-                type: 'bar',
-                stack: 'total',
-                barWidth: '60%',
-                label: {
-                    show: true,
-                    formatter: (params) => Math.round(params.value * 1000) / 10 + '%'
-                },
-                data: rawData[sid].map((d, did) =>
-                    totalData[did] <= 0 ? 0 : d / totalData[did]
-                )
-            };
-        });
 
-        const barOption = {
-            legend: {
-                top: 0,
-                data: ['工业用地数量', '工业用地面积', '工业企业数量', '缺失经济数据企业']
-            },
-            tooltip: {},
-            grid: {
-                left: 20,
-                right: 10,
-                top: 50,
-                bottom: 30
-            },
-            yAxis: {
-                type: 'value'
-            },
-            xAxis: {
-                type: 'category',
-                data: ['工业用地数量', '工业用地面积', '工业企业数量', '缺失经济数据企业数量', '规上企业用地数量', '规上企业用地面积']
-            },
-            series
-        };
-        return barOption
-    }
-    getLineOption() {
-        let lineOption = {
-            tooltip: {
-                trigger: 'axis'
-            },
-            legend: {
-                top: 10,
-                data: ['Email', 'Union Ads', 'Video Ads', 'Direct']
-            },
-            grid: {
-                left: 10,
-                right: 10,
-                top: 50,
-                bottom: 20,
-                containLabel: true
-            },
-            xAxis: {
-                type: 'category',
-                boundaryGap: false,
-                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-            },
-            yAxis: {
-                type: 'value'
-            },
-            series: [
-                {
-                    name: 'Email',
-                    type: 'line',
-                    stack: 'Total',
-                    data: [120, 132, 101, 134, 90, 230]
+        // 获取图表配置项-柱状图
+        function getBarOption(data) {
+            return {
+                tooltip: {},
+                legend: {
+                    data: [calcTypeName]
                 },
-                {
-                    name: 'Union Ads',
-                    type: 'line',
-                    stack: 'Total',
-                    data: [220, 182, 191, 234, 290, 330]
-                },
-                {
-                    name: 'Video Ads',
-                    type: 'line',
-                    stack: 'Total',
-                    data: [150, 232, 201, 154, 190, 330]
-                },
-                {
-                    name: 'Direct',
-                    type: 'line',
-                    stack: 'Total',
-                    data: [320, 332, 301, 334, 390, 330]
-                },
-                {
-                    name: 'Search Engine',
-                    type: 'line',
-                    stack: 'Total',
-                    data: [820, 932, 901, 934, 1290, 1330]
-                }
-            ]
-        };
-        return lineOption
-    }
-    getPieOption() {
-        let pieOption = {
-            tooltip: {
-                trigger: 'item'
-            },
-            legend: {
-                top: '5%',
-                left: 'center'
-            },
-            series: [
-                {
-                    name: 'Access From',
-                    type: 'pie',
-                    radius: ['40%', '70%'],
-                    avoidLabelOverlap: false,
-                    label: {
-                        show: false,
-                        position: 'center'
-                    },
-                    emphasis: {
-                        label: {
-                            show: true,
-                            fontSize: 40,
-                            fontWeight: 'bold'
+                xAxis: {
+                    type: 'category',
+                    data: data.map(item => item[selectColumnName]),
+                    axisLabel: {
+                        formatter: function (value) {
+                            // 每行最多显示4个字符
+                            const maxCharsPerLine = 4; // 每行字符数
+                            let formattedValue = '';
+                            for (let i = 0; i < value.length; i += maxCharsPerLine) {
+                                formattedValue += value.substring(i, i + maxCharsPerLine) + '\n';
+                            }
+                            return formattedValue;
                         }
-                    },
-                    labelLine: {
-                        show: false
-                    },
-                    data: [
-                        { value: 1048, name: 'Search Engine' },
-                        { value: 735, name: 'Direct' },
-                        { value: 580, name: 'Email' },
-                        { value: 484, name: 'Union Ads' },
-                        { value: 300, name: 'Video Ads' }
-                    ]
-                }
-            ]
-        };
-        return pieOption
+                    }
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    top: "10%",
+                    containLabel: true
+                },
+                series: [{
+                    name: calcTypeName,
+                    type: 'bar',
+                    data: data.map(item => item[calcTypeName]),
+                }]
+            }
+        }
+        // 获取图表配置项-折线图
+        function getLineOption(data) {
+            return {
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: [calcTypeName]
+                },
+                xAxis: {
+                    type: 'category',
+                    data: data.map(item => item[selectColumnName]),
+                    axisLabel: {
+                        formatter: function (value) {
+                            // 每行最多显示4个字符
+                            const maxCharsPerLine = 4; // 每行字符数
+                            let formattedValue = '';
+                            for (let i = 0; i < value.length; i += maxCharsPerLine) {
+                                formattedValue += value.substring(i, i + maxCharsPerLine) + '\n';
+                            }
+                            return formattedValue;
+                        }
+                    }
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    top: "14%",
+                    containLabel: true
+                },
+                series: [{
+                    name: calcTypeName,
+                    type: 'line',
+                    data: data.map(item => item[calcTypeName]),
+                    smooth: true // 平滑曲线
+                }]
+            }
+        }
+        // 获取图表配置项-饼图
+        function getPieOption(data) {
+            return {
+                tooltip: {
+                    trigger: 'item'
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    top: "15%",
+                    containLabel: true
+                },
+                legend: {
+                    orient: 'vertical',
+                    left: 'left'
+                },
+                series: [{
+                    name: selectColumnName,
+                    type: 'pie',
+                    radius: '50%',
+                    data: data.map(item => ({
+                        name: item[selectColumnName],
+                        value: item[calcTypeName]
+                    })),
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }]
+            };
+        }
     }
+
 
     //渲染图表下载项
     renderImg() {
@@ -232,10 +202,6 @@ class CustomChart {
         $('.echart_body').hide()
     }
 
-    getChartHtml() {
-        $('.empty_chart').hide()
-        $('.echart_body').show()
-    }
 }
 
 
