@@ -20,12 +20,12 @@ log_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'log', log_f
 
 # 配置日志记录
 handler = TimedRotatingFileHandler(log_file, when='D', interval=1, backupCount=30, encoding='utf-8')
-handler.setLevel(logging.ERROR)
+handler.setLevel(logging.INFO)
 formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 handler.setFormatter(formatter)
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.ERROR)
+logger.setLevel(logging.INFO)
 logger.addHandler(handler)
 
 
@@ -55,16 +55,19 @@ def query_table(table_name, columns=None):
         columns_str = "*"
 
     query = f"SELECT {columns_str} FROM {table_name}"
+    logger.info("---------")
     try:
         cursor.execute(query)
         columns = [column[0] for column in cursor.description]
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        logger.info(f"SQL execution info: {query}")
     except Exception as e:
         logger.error(f"SQL execution error: {query}\nError: {str(e)}")
         raise
     finally:
         cursor.close()
         conn.close()
+        logger.info("---------")
 
     return results
 
@@ -79,9 +82,8 @@ def get_data():
     query_result = query_table(table_name, columns)
     return jsonify(query_result)
 
-
 # 新增的查询数据的函数
-def query_aggregated_data(table_name, select_column, calc_column, calc_type, group_column, where_conditions):
+def query_aggregated_data(table_name, select_column, select_column_name,calc_column, calc_type, group_column, where_conditions):
     conn = get_connection()
     cursor = conn.cursor()
 
@@ -91,7 +93,7 @@ def query_aggregated_data(table_name, select_column, calc_column, calc_type, gro
         where_clauses = []
         for col, values in where_conditions.items():
             if isinstance(values, list):
-                values_str = ", ".join([f"'{val}'" for val in values])
+                values_str = ", ".join([f"'{val}'" for val in values]) 
                 where_clauses.append(f"{col} IN ({values_str})")
             else:
                 where_clauses.append(f"{col} = '{values}'")
@@ -101,11 +103,11 @@ def query_aggregated_data(table_name, select_column, calc_column, calc_type, gro
     alias = {
         "AVG": "平均数",
         "SUM": "总和",
-        "COUNT": "计数"
+        "COUNT": "总数"
     }.get(calc_type.upper(), "")  # 默认别名为空字符串
 
     # 构建 SQL 查询语句
-    query = f"SELECT {select_column}, {calc_type.upper()}({calc_column})"
+    query = f"SELECT {select_column} AS {select_column_name} , {calc_type.upper()}({calc_column})"
   
     if alias:  # 如果有别名，添加 AS 子句
         query += f" AS {alias}"
@@ -117,16 +119,21 @@ def query_aggregated_data(table_name, select_column, calc_column, calc_type, gro
     if group_column:
         query += f" GROUP BY {group_column}"
 
+    logger.info("---------")
+    results = ""
     try:
         cursor.execute(query)
         columns = [column[0] for column in cursor.description]
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        logger.info(f"SQL execution info: {query}")
     except Exception as e:
+        error_code = getattr(e, 'args', [None])[0] if e.args else 'Unknown error'
         logger.error(f"SQL execution error: {query}\nError: {str(e)}")
-        raise
+        results = {"type":"error","msg": "数据字段查询错误", "code": error_code}  # 发生错误时返回错误信息
     finally:
         cursor.close()
         conn.close()
+        logger.info("---------")
 
     return results
 
@@ -136,12 +143,13 @@ def get_aggregated_data():
     data = request.get_json()
     table_name = data.get('tableName')
     select_column = data.get('selectColumn')
+    select_column_name = data.get('selectColumnName')
     calc_column = data.get('calcColumn')
     calc_type = data.get('calcType')
     group_column = data.get('groupColumn')
     where_conditions = data.get('where', {})
 
-    query_result = query_aggregated_data(table_name, select_column, calc_column, calc_type, group_column, where_conditions)
+    query_result = query_aggregated_data(table_name, select_column,select_column_name, calc_column, calc_type, group_column, where_conditions)
     return jsonify(query_result)
 
 # 将Shapefile文件转换为GeoJSON格式的函数

@@ -196,6 +196,7 @@ class Statistics {
                 });
                 that.customTable.filterTable(uniqueCategories);
             } else {
+                // select column1,count(column2) from table  where column2="a" and column='b' group by column1;
                 // requestData = {
                 //     selectColumn: "column1",
                 //     calcColumn: "column2",
@@ -210,6 +211,7 @@ class Statistics {
                 let groupFields = {
                     tableName: $('.statistics-title-input').attr('data-layerid'),
                     selectColumn: $('.group-input .dropdown_input').attr('data-field'),
+                    selectColumnName: $('.group-input .dropdown_input').val(),
                     calcColumn: $('.statistic-input .dropdown_input').attr('data-field'),
                     calcType: $('.calc-input .dropdown_input').attr('data-field'),
                     groupColumn: $('.group-input .dropdown_input').attr('data-field'),
@@ -218,12 +220,12 @@ class Statistics {
                 };
 
                 $('.statistics-item-target .target-input').each((index, item) => {
-                    let arry = []
-                    if ($(item).val() && $(item).val() != "全部") {
-                        arry.push($(item).val());
+                    const value = $(item).val();
+                    if (value && value !== "全部") {
+                        if (!groupFields.where.hasOwnProperty($(item).data('field')))
+                            groupFields.where[$(item).data('field')] = [];
+                        groupFields.where[$(item).data('field')] = ($(item).val().split(','));
                     }
-                    if (arry.length > 0)
-                        groupFields.where[$(item).attr('data-field')] = arry;
                 });
                 new CustomTable(null, groupFields)
             }

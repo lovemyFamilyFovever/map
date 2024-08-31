@@ -28,26 +28,25 @@ class CustomTable {
             queryType = 'group';
         }
 
-        // 使用 fetch 发送 POST 请求
         fetch('http://150.158.76.25:5000/' + queryType, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json' // 设置请求头，指定发送 JSON 数据
             },
-            body: JSON.stringify(requestData) // 将请求数据转换为 JSON 字符串并发送
+            body: JSON.stringify(requestData)
         }).then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json(); // 解析返回的 JSON 数据
+            return response.json();
         }).then(data => {
-            // console.log('查询结果:', data); // 在控制台输出查询结果
-            this.renderTable(data)
+            // console.log('查询结果:', data);
+            if (data.type == 'error') {
+                this.renderTable([])
+                alert(data.msg)
+            } else {
+                this.renderTable(data)
+            }
         }).catch(error => {
-            console.error('请求出错:', error); // 在控制台输出错误信息
+            console.error('请求出错:', error);
         });
-
-
     }
 
     // 销毁方法
@@ -62,16 +61,15 @@ class CustomTable {
 
     //给表格添加数据
     renderTable(data) {
-        this.table = new Tabulator(`#main-table`, {
+
+        let tableObj = {
             data,
             height: "100%",
             layout: "fitColumns", // 自动调整列宽 
-            resizableColumns: true,
-
-            locale: true,
-            pagination: "local",
-            paginationSize: 10,
+            resizableColumns: true,// 允许调整列宽
+            paginationSize: 10, // 每页显示的记录数
             paginationSizeSelector: [10, 20, 30, 40],
+            pagination: "local", // 使用本地分页名称
             langs: {
                 'zh-cn': {
                     "pagination": {
@@ -83,7 +81,7 @@ class CustomTable {
                     },
                 }
             },
-            placeholder: this.getEmptyStatus(),
+            placeholder: this.getEmptyStatusHtml(),
             columnDefaults: {
                 hozAlign: 'center',
                 vertAlign: "center",
@@ -91,8 +89,16 @@ class CustomTable {
                 headerHozAlign: 'center',
             },
             // initialSort: this.setDefaultSort(),
-            columns: this.handleColumns(),
-        });
+            // columns: this.handleColumns(),
+            // autoColumns: true,
+        }
+
+        if (this.layer)
+            tableObj.columns = this.handleColumns();
+        else
+            tableObj.autoColumns = true;
+
+        this.table = new Tabulator(`#main-table`, tableObj);
 
         //当调用tabulator构造函数并且表已完成渲染时，触发tableBuilt事件,渲染滚动条
         this.table.on("tableBuilt", () => {
@@ -104,8 +110,9 @@ class CustomTable {
             this.getStatisticsTable();
             this.bindEvents();
 
-            new CustomChart('main-echart', [], "123")
-
+            if (this.groupFields) {
+                new CustomChart(data)
+            }
         });
         // 当提示用户下载文件时，将触发downloadFull回调。
         this.table.on("downloadComplete", () => {
@@ -114,9 +121,15 @@ class CustomTable {
     }
 
     bindEvents() {
+        var that = this;
         // 点击筛选列名-展开/收起筛选条件
         $('.table_title_filter,.table_column_filter_colse').on('click', () => {
-            $('.table_column_filter_content').toggleClass('show');
+            if ($('.table_column_filter_content').hasClass('show')) {
+                $('.table_column_filter_content').removeClass('show');
+            } else {
+                $('.table_column_filter_content').addClass('show');
+                that.renderSortableHtml();
+            }
         });
 
         // 点击筛选列名-全选按钮
@@ -178,37 +191,34 @@ class CustomTable {
     // editor: 列的编辑类型，使单元格可编辑。常用值有 "input"、"number"、"select" 等。
     // editorParams: 为编辑器提供附加配置，如下拉框的选项值。
     handleColumns() {
-        if (this.layer) {
-            let columnArray = []
-            let columnHtml = "";
-
-            this.layer.columns.forEach((item, index) => {
-                columnArray.push({
-                    title: item["title"],
-                    field: item["field"],
-                    minWidth: 100,
-                })
-
-                columnHtml += template('multiCheckbox-html', {
-                    checked: "checked",
-                    id: "tableColumn" + index,
-                    name: item["title"],
-                });
-                index++;
+        let columnArray = []
+        this.layer.columns.forEach(item => {
+            columnArray.push({
+                title: item["title"],
+                field: item["field"],
+                minWidth: 100,
             })
-            //初始化排序功能
-            $('.table_column_filter_columns').html(columnHtml)
-            this.sortable = new Sortable($('.table_column_filter_columns')[0], {
-                animation: 150,
-                forceFallback: true,
+        })
+        return columnArray
+    }
+
+    //渲染左侧可排序列
+    renderSortableHtml() {
+        let columnHtml = "";
+        this.table.getColumnLayout().map((column, index) => {
+            columnHtml += template('multiCheckbox-html', {
+                checked: "checked",
+                id: "tableColumn" + index,
+                name: column["title"],
             });
-            new PerfectScrollbar('.table_column_filter_columns')
-
-            return columnArray
-        } else {
-            return []
-        }
-
+        });
+        //初始化排序功能
+        $('.table_column_filter_columns').html(columnHtml)
+        this.sortable = new Sortable($('.table_column_filter_columns')[0], {
+            animation: 150,
+            forceFallback: true,
+        });
+        new PerfectScrollbar('.table_column_filter_columns')
     }
 
     //统计结果，底部数据
@@ -233,7 +243,7 @@ class CustomTable {
     }
 
     //获取空状态html
-    getEmptyStatus() {
+    getEmptyStatusHtml() {
         return `
         <div class="table_panel" >
             <div class="empty_table">

@@ -1,14 +1,12 @@
 //渲染指定图层的表格
 class CustomChart {
-    constructor(container, data, title) {
-        this.container = container;
-        this.title = title + '图表';
+    constructor(data) {
         this.data = data;
-
+        this.container = 'main-echart';
+        this.title = "低效用地";
         this.initChart();
-        this.bindEvents();
-
     }
+
     initChart() {
         this.data = true
         if (this.data) {
@@ -22,6 +20,7 @@ class CustomChart {
         } else {
             this.getEmptyStatus()
         }
+        this.bindEvents();
     }
 
     bindEvents() {

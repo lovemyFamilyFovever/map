@@ -102,7 +102,6 @@ function initEvent() {
 
                     sfs.addGeoJSONToMap(data, objectData);
                     new Statistics(); // 实例化统计面板
-                    new CustomChart('main-echart', [], "模拟图表")
                     $(this).closest('.layer_switch').prev().addClass('active')
 
                     $(this).parent().show();
