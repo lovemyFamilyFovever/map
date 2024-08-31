@@ -1422,7 +1422,7 @@ p.layer_name {
     font-size: 0.7rem;
     position: relative;
     line-height: 1.5rem;
-    padding-left: 10px;
+    padding: 0 10px;
 }
 
 .statistics-card:before {

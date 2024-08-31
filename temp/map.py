@@ -107,7 +107,7 @@ def query_aggregated_data(table_name, select_column, select_column_name,calc_col
     }.get(calc_type.upper(), "")  # 默认别名为空字符串
 
     # 构建 SQL 查询语句
-    query = f"SELECT {select_column} AS {select_column_name} , {calc_type.upper()}({calc_column})"
+    query = f"SELECT {select_column} AS {select_column_name} ,ROUND({calc_type.upper()}({calc_column}),4)"
   
     if alias:  # 如果有别名，添加 AS 子句
         query += f" AS {alias}"

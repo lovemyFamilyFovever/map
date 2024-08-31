@@ -63,18 +63,6 @@ function initEvent() {
         $('.statistics-container').toggleClass('active')
     })
 
-    //显示隐藏 统计表
-    $('.table-container').on('click', function () {
-        $('.table-content').toggle()
-        $('.table-container').toggleClass('active')
-    })
-
-    //显示隐藏 统计图 
-    $('.chart-container').on('click', function () {
-        $('.chart-content').toggle()
-        $('.chart-container').toggleClass('active')
-    })
-
     //关闭图层列表
     $('.layer_content_close').on('click', function () {
         $('.layer-content').hide()
@@ -139,13 +127,11 @@ function initEvent() {
     //隐藏 统计表
     $('.table-content-close').on('click', function () {
         $('.table-content').hide()
-        $('.table-container').toggleClass('active')
     })
 
     //隐藏 统计图
     $('.chart-content-close').on('click', function () {
         $('.chart-content').hide()
-        $('.chart-container').toggleClass('active')
     })
 
     //点击空白区域隐藏下拉框

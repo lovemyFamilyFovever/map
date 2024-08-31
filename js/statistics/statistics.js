@@ -74,6 +74,7 @@ class Statistics {
             const index = $(this).index();
             $('.statistics-title-input').val(layerName);
             $('.statistics-title-input').attr('data-layerid', that.data[index].layerId);
+            $('.statistics-title-input').attr('data-index', index);
             $('.statistics-layer-container .dropdown_list').hide();
             that.renderContent(that.data[index]);
 
@@ -145,9 +146,17 @@ class Statistics {
             $('.dropdown_list').hide();
             const $dropdown_list = $(this).parent().find('.dropdown_list');
             let html = "";
-            $('.statistics-item-column').each((index, item) => {
-                html += `<li data-field="${$(item).attr('data-field')}">${item.innerText.trim()}</li>`
+
+            const layerId = $('.statistics-title-input').attr('data-layerid');
+
+            that.data.forEach((item, index) => {
+                if (item.layerId == layerId) {
+                    item.columns.forEach((column, index) => {
+                        html += `<li data-field="${column.field}"><span>${column.title}</span></li>`;
+                    });
+                }
             });
+
             $dropdown_list.find('ul').html(html)
             $dropdown_list.toggle();
             new PerfectScrollbar($dropdown_list[0]);
@@ -168,6 +177,9 @@ class Statistics {
         //重置 按钮
         $('.statistics-content-footer .reset').on('click', () => {
             $('.statistics-item .dropdown_input').val("");
+
+            const index = $('.statistics-title-input').attr('data-index');
+            that.customTable = new CustomTable(that.data[index]);//实例化自定义图表
         });
 
         //查询 按钮
@@ -182,6 +194,7 @@ class Statistics {
             });
 
             if (!groupColumn) {
+
                 let uniqueCategories = [];
                 $('.statistics-item').each((index, item) => {
                     const $target = $(item).find('.target-input');
@@ -237,7 +250,6 @@ class Statistics {
             }
 
             $('.table-content').show();
-            $('.table-container').addClass('active');
         }, 300));
     }
 
