@@ -31,9 +31,10 @@ a:hover {
 }
 
 .project_name {
-    font-size: 20px;
+    font-size: 1rem;
     font-weight: bolder;
-    line-height: 50px;
+    line-height: 60px;
+    box-sizing: border-box;
     position: fixed;
     width: 100%;
     top: 0;
@@ -41,10 +42,41 @@ a:hover {
     left: 0;
     color: #fff;
     z-index: 1005;
-    padding: 5px 18px;
+    padding: 0px 18px;
     background-image: -webkit-gradient(linear, left bottom, left top, from(#aac6ee), to(#6f86d6));
     background-image: -o-linear-gradient(bottom, #aac6ee 0%, #6f86d6 100%);
     background-image: linear-gradient(0deg, #aac6ee 0%, #6f86d6 100%);
+}
+
+.login_user {
+    float: right;
+    padding-right: 150px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.login_user img {
+    width: 20px;
+}
+
+.exit {
+    position: absolute;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    right: 20px;
+    color: #fff;
+    z-index: 1006;
+    font-size: 0.65rem;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.exit :hover {
+    color: #000;
 }
 
 #map {
@@ -1605,12 +1637,9 @@ p.layer_name {
 }
 
 .login-logo {
-    position: absolute;
-    left: .5rem;
-    top: .5rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+    margin-bottom: 6.5rem;
+    font-weight: bold;
+    font-size: 1.5rem;
 }
 
 .login-form {
@@ -1618,9 +1647,9 @@ p.layer_name {
     display: flex;
     justify-content: center;
     align-items: center;
-    /* background: #d9dde9; */
     position: relative;
-    background-image: linear-gradient(0deg, #dfe9f3 0%, #ffffff 100%);
+    flex-direction: row;
+    background-image: linear-gradient(120deg, #cfefff 0%, #e9f5ff 50%, #e3f5ff 100%);
 }
 
 .login-logo-text {
@@ -1661,23 +1690,56 @@ p.layer_name {
     top: 10px;
 }
 
+.login-form form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 .login-form input:focus-visible {
     border-color: #4e99f6;
     outline: #4e99f6;
 }
 
 .login-remember {
-    color: #bfbbd2;
+    color: #777489;
     font-size: 0.65rem;
 }
 
 .login-btn-wrap {
+    width: 255px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.login-remember:hover {
+.login-reset, .login-origin {
+    color: #828282;
+    font-size: 0.6rem;
+}
+
+.login-reset:hover, .login-origin:hover {
     text-decoration: underline;
     cursor: pointer;
+}
+
+.login-input img.password-status {
+    right: 10px;
+    left: unset;
+    width: 20px;
+    display: none;
+    cursor: pointer;
+}
+
+.login-input img.password-status.active {
+    display: block;
+}
+
+.login-form form {
+    display: none;
+}
+
+.login-form form.active {
+    display: flex;
 }

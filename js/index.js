@@ -1,6 +1,9 @@
 $(document).ready(function () {
     document.title = config.projectName;
-    $('.project_name span').text(config.projectName);
+    $('.project_name .project_name_text').text(config.projectName);
+
+    const loginUser = localStorage.getItem('loginUser');
+    $('#login_user_name').text(loginUser);
 
     sfs = new MapObj(config.mapOptions)  // 实例化地图对象
     loadMapLayers()//加载图层
@@ -164,6 +167,10 @@ function initEvent() {
         //待补充
     });
 
+    //点击退出登录
+    $('.exit').on('click', function () {
+        logout();
+    });
 }
 
 //筛选出show为true的图层
@@ -177,4 +184,10 @@ function findShowTrueElements(layerList = config.layerList) {
         }
         return acc;
     }, []);
+}
+// 退出登录
+function logout() {
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('loginTime');
+    window.location.href = 'login.html';
 }

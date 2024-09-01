@@ -21,12 +21,21 @@
     <link rel="stylesheet" href="libs/leaflet@1.9.3/leaflet.css" />
     <link rel="stylesheet" href="libs/LeafletMeasure/leaflet-geoman.css" />
     <link rel="stylesheet" href="css/index.css" />
+    <script src="js/check_login.js"></script>
 </head>
 
 <body>
     <div class="project_name">
         <img src="imgs/shortcut/shortcut.png" alt="logo" style="vertical-align: sub;">
-        <span></span>
+        <span class="project_name_text"></span>
+        <div class="login_user">
+            <img src="imgs/账户.svg" alt="账户">
+            <span><span id="login_user_name"></span>
+        </div>
+    </div>
+    <div class="exit">
+        <img src="imgs/exit.svg" alt="退出">
+        <span>退出登录</span>
     </div>
     <div id="map"></div>
     <div class="left-tool">

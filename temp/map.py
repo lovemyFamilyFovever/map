@@ -28,7 +28,6 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 logger.addHandler(handler)
 
-
 # 建立连接
 # MDB文件路径
 mdb_file_path='C:\\map\\map.mdb'
@@ -38,6 +37,77 @@ def get_connection():
         r'DBQ='+mdb_file_path+';'
     )
     return pyodbc.connect(conn_str)
+
+
+@app.route('/login', methods=['POST'])
+def login():
+    account = request.form.get('account')
+    password = request.form.get('password')
+
+    # 补全代码
+    conn = get_connection()
+    cursor = conn.cursor()
+    
+    # 使用参数化查询，防止 SQL 注入
+    query = "SELECT * FROM userinfo WHERE account=? AND password=?"
+
+    try:
+        cursor.execute(query, (account, password))
+        row = cursor.fetchone()
+        if row:
+            return jsonify(success=True, message="登录成功")
+        else:
+            return jsonify(success=False, message="用户名或密码错误")
+    except Exception as e:
+        logger.error(f"登录查询失败: {str(e)}")
+        return jsonify(success=False, message="服务器内部错误"), 500
+    finally:
+        cursor.close()
+        conn.close()
+        logger.info("数据库连接已关闭")
+
+# 修改密码
+@app.route('/reset', methods=['POST'])
+def reset():
+    account = request.form.get('account')
+    password = request.form.get('password')
+    new_password = request.form.get('newPassword')
+    confirm_password = request.form.get('confirmPassword')
+
+    # 参数有效性检查
+    if not all([account, password, new_password, confirm_password]):
+        return jsonify(success=False, message="所有字段都是必填项"), 400
+
+    if new_password != confirm_password:
+        return jsonify(success=False, message="新密码和确认密码不匹配")
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    try:
+        # 验证账户和当前密码
+        query = "SELECT * FROM userinfo WHERE account=? AND password=?"
+
+        logger.info(query)
+        cursor.execute(query, (account, password))
+        row = cursor.fetchone()
+
+        if not row:
+            return jsonify(success=False, message="用户名或当前密码错误")
+
+        # 更新密码
+        update_query = "UPDATE userinfo SET password=? WHERE account=?"
+        cursor.execute(update_query, (new_password, account))
+        conn.commit()
+
+        return jsonify(success=True, message="密码修改成功")
+    except Exception as e:
+        logger.error(f"密码重置失败: {str(e)}")
+        return jsonify(success=False, message="服务器内部错误"), 500
+    finally:
+        cursor.close()
+        conn.close()
+        logger.info("数据库连接已关闭")
 
 # 查询数据库表并返回结果。
 # :param table_name: 要查询的表名

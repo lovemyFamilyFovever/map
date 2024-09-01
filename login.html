@@ -26,25 +26,63 @@
                 <img src="imgs/login/map.png" alt="徐州">
             </div>
             <div class="login-form">
-                <form action="http://150.158.76.25:5000/login" method="post">
+                <form action="http://150.158.76.25:5000/login" method="post" class="login-form-origin active">
                     <div class="login-logo">
-                        <img src="imgs/shortcut/shortcut.svg" alt="">
                         <span class="login-logo-text">徐州市政府规划局在线平台</span>
                     </div>
                     <div class="login-input">
                         <span>用户名：</span>
                         <img src="imgs/login/account.svg" alt="登录用户名">
-                        <input type="text" name="username" placeholder="请输入用户名" required>
+                        <input type="text" name="account" placeholder="请输入用户名" required>
                     </div>
                     <div class="login-input">
                         <span>密码：</span>
                         <img src="imgs/login/password.svg" alt="登录密码">
                         <input type="password" name="password" placeholder="请输入密码" required>
+                        <img src="imgs/login/show.svg" alt="显示密码" class="password-status show-password">
+                        <img src="imgs/login/hide.svg" alt="隐藏密码" class="password-status hide-password active">
                     </div>
                     <div class="login-btn-wrap">
-                        <div class="login-remember">忘记密码</div>
+                        <div class="login-reset">更改密码</div>
                         <div class="login-btn">
                             <button type="submit" class="login-btn-submit search_btn">登录</button>
+                        </div>
+                    </div>
+                </form>
+
+                <form action="http://150.158.76.25:5000/reset" method="post" class="reset-password-form">
+                    <div class="login-logo">
+                        <span class="login-logo-text">徐州市政府规划局在线平台</span>
+                    </div>
+                    <div class="login-input">
+                        <span>用户名：</span>
+                        <img src="imgs/login/account.svg" alt="登录用户名">
+                        <input type="text" name="account" placeholder="请输入用户名" required>
+                    </div>
+                    <div class="login-input">
+                        <span>密码：</span>
+                        <img src="imgs/login/password.svg" alt="登录密码">
+                        <input type="password" name="password" placeholder="请输入密码" required>
+                        <img src="imgs/login/show.svg" alt="显示密码" class="password-status show-password">
+                        <img src="imgs/login/hide.svg" alt="隐藏密码" class="password-status hide-password active">
+                    </div>
+
+                    <!-- 修改密码 -->
+                    <div class="login-input change-password">
+                        <span>新密码：</span>
+                        <img src="imgs/login/password.svg" alt="登录密码">
+                        <input type="password" name="newPassword" placeholder="请输入新密码" required>
+                    </div>
+                    <div class="login-input change-password">
+                        <span>再次输入新密码：</span>
+                        <img src=" imgs/login/password.svg" alt="登录密码">
+                        <input type="password" name="confirmPassword" placeholder="再次输入新密码" required>
+                    </div>
+
+                    <div class="login-btn-wrap">
+                        <div class="login-origin">账号密码登录</div>
+                        <div class="login-btn">
+                            <button type="submit" class="login-btn-reset search_btn">确定</button>
                         </div>
                     </div>
                 </form>
@@ -52,5 +90,8 @@
         </div>
     </div>
 </body>
+
+<script src="libs/jquery/jquery_3.0.0.js"></script>
+<script src="js/login.js"></script>
 
 </html>
