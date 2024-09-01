@@ -232,6 +232,7 @@ class Statistics {
                     selectColumn: $('.group-input .dropdown_input').attr('data-field'),
                     selectColumnName: $('.group-input .dropdown_input').val(),
                     calcColumn: $('.statistic-input .dropdown_input').attr('data-field'),
+                    calcColumnName: $('.statistic-input .dropdown_input').val(),
                     calcType: $('.calc-input .dropdown_input').attr('data-field'),
                     calcTypeName: $('.calc-input .dropdown_input').val(),
                     chartType: $('.chart-input .dropdown_input').attr('data-field'),

@@ -12,6 +12,7 @@ class CustomTable {
     //初始化表格
     initTable() {
 
+        $('#main-table').hide()
         $('.table-content .loading-container').show();
         this.destroy(); // 先销毁可能存在的旧实例
 
@@ -106,6 +107,7 @@ class CustomTable {
 
             this.table.setLocale("zh-cn");
 
+            $('#main-table').show()
             $('.table-content .loading-container').hide();
             new PerfectScrollbar('.table_panel .tabulator-tableholder');
             this.getStatisticsTable();

@@ -153,7 +153,7 @@ def get_data():
     return jsonify(query_result)
 
 # 新增的查询数据的函数
-def query_aggregated_data(table_name, select_column, select_column_name,calc_column, calc_type, where_conditions):
+def query_aggregated_data(table_name, select_column, select_column_name,calc_column,calc_column_name, calc_type, where_conditions):
     conn = get_connection()
     cursor = conn.cursor()
 
@@ -180,7 +180,7 @@ def query_aggregated_data(table_name, select_column, select_column_name,calc_col
     query = f"SELECT {select_column} AS {select_column_name} ,ROUND({calc_type.upper()}({calc_column}),4)"
   
     if alias:  # 如果有别名，添加 AS 子句
-        query += f" AS {alias}"
+        query += f" AS {alias}-{calc_column_name}"
 
     query += f" FROM {table_name}"
     
@@ -215,10 +215,11 @@ def get_aggregated_data():
     select_column = data.get('selectColumn')
     select_column_name = data.get('selectColumnName')
     calc_column = data.get('calcColumn')
+    calc_column_name = data.get('calcColumnName')
     calc_type = data.get('calcType')
     where_conditions = data.get('where', {})
 
-    query_result = query_aggregated_data(table_name, select_column,select_column_name, calc_column, calc_type, where_conditions)
+    query_result = query_aggregated_data(table_name, select_column,select_column_name, calc_column,calc_column_name, calc_type, where_conditions)
     return jsonify(query_result)
 
 # 将Shapefile文件转换为GeoJSON格式的函数
