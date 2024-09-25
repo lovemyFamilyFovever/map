@@ -53,7 +53,15 @@ class CustomChart {
     // 获取图表配置项-柱状图
     getOption(chartType) {
         const selectColumnName = this.groupFields.selectColumnName;
-        const calcTypeName = this.groupFields.calcTypeName;
+        let satisticsFieldName = ""
+        if (this.groupFields.statisticsType == 'AVG') {
+            satisticsFieldName = this.groupFields.satisticsFieldName + '_平均值'
+        } else if (this.groupFields.statisticsType == 'SUM') {
+            satisticsFieldName = this.groupFields.satisticsFieldName + '_总和'
+        } else {
+            satisticsFieldName = this.groupFields.satisticsFieldName + '_数量和'
+        }
+
 
         if (chartType == 'bar') {
             return getBarOption(this.data)
@@ -68,7 +76,7 @@ class CustomChart {
             return {
                 tooltip: {},
                 legend: {
-                    data: [calcTypeName]
+                    data: [satisticsFieldName]
                 },
                 xAxis: {
                     type: 'category',
@@ -96,9 +104,9 @@ class CustomChart {
                     containLabel: true
                 },
                 series: [{
-                    name: calcTypeName,
+                    name: satisticsFieldName,
                     type: 'bar',
-                    data: data.map(item => item[calcTypeName]),
+                    data: data.map(item => item[satisticsFieldName]),
                 }]
             }
         }
@@ -109,7 +117,7 @@ class CustomChart {
                     trigger: 'axis'
                 },
                 legend: {
-                    data: [calcTypeName]
+                    data: [satisticsFieldName]
                 },
                 xAxis: {
                     type: 'category',
@@ -137,9 +145,9 @@ class CustomChart {
                     containLabel: true
                 },
                 series: [{
-                    name: calcTypeName,
+                    name: satisticsFieldName,
                     type: 'line',
-                    data: data.map(item => item[calcTypeName]),
+                    data: data.map(item => item[satisticsFieldName]),
                     smooth: true // 平滑曲线
                 }]
             }
@@ -167,7 +175,7 @@ class CustomChart {
                     radius: '50%',
                     data: data.map(item => ({
                         name: item[selectColumnName],
-                        value: item[calcTypeName]
+                        value: item[satisticsFieldName]
                     })),
                     emphasis: {
                         itemStyle: {

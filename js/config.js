@@ -6,7 +6,7 @@ var config = {
     mapOptions: {
         minZoom: 1, //最小缩放值
         maxZoom: 18, //最大缩放值
-        zoom: 7, //初始缩放值
+        zoom: 11, //初始缩放值
         attributionControl: false, //是否启用地图属性控件
         zoomControl: true, //是否启用地图缩放控件
         scaleControl: true,//是否启用比例尺控件 
@@ -28,7 +28,7 @@ var config = {
             cutPolygon: false,          // 不显示剪切多边形的工具
             removalMode: false,          // 显示删除工具
             drawText: false,            // 隐藏插入文本的控件
-        }
+        },
     },
     center: [33.523079, 116.477051],
 
@@ -45,12 +45,14 @@ var config = {
         layerId: "XZQ",
         layerName: "行政区",
         subtitle: "XZQMC",
-        url: "http://150.158.76.25:5000/load_shp?file_path=XZQ",
+        url: "http://localhost:6080/arcgis/rest/services/低效用地/XZQ/MapServer/0",
         show: true,
         style: {
-            color: "green",
+            fillColor: "#3388ff",
+            color: "#3388ff",
             weight: 2,
-            opacity: 1
+            opacity: 1,
+            fillOpacity: 0.2
         },
         columns: [
             //title: 表格列名，field: 数据库字段名，statistics: 是否统计
@@ -62,7 +64,7 @@ var config = {
             layerId: "ZJXZQ",
             layerName: "镇级行政区",
             subtitle: "XZQMC",
-            url: "http://150.158.76.25:5000/load_shp?file_path=ZJXZQ",
+            url: "http://localhost:6080/arcgis/rest/services/低效用地/GYYD/MapServer/0",
             show: false,
             style: {
                 color: "#D81159",
@@ -99,13 +101,13 @@ var config = {
         layerId: "XZJT",
         layerName: "交通",
         subtitle: "用地类型",
-        url: "http://150.158.76.25:5000/load_shp?file_path=XZJT",
-        show: true,
+        url: "http://localhost:6080/arcgis/rest/services/低效用地/XZJT/MapServer/0",
+        show: false,
         style: {
-            color: "#804d36",
-            weight: 2,
-            opacity: 1
-        }, columns: [
+            color: "#795548",
+            weight: 4
+        },
+        columns: [
             //title: 表格列名，field: 数据库字段名，statistics: 是否统计
             { title: "用地类型", field: "用地类型", statistics: true },
             { title: "名称", field: "MC", statistics: true },
@@ -116,33 +118,34 @@ var config = {
         layerId: "GYYD",
         layerName: "工业用地",
         subtitle: "TDSYQR",
-        url: "http://150.158.76.25:5000/load_shp?file_path=GYYD",
-        show: false,
+        url: "http://localhost:6080/arcgis/rest/services/低效用地/GYYD/MapServer/0",
+        show: true,
         style: {
-            color: "blue",
+            fillColor: "#3388ff",
+            color: "#3388ff",
             weight: 2,
-            opacity: 1
+            opacity: 1,
+            fillOpacity: 0.2
         },
         columns: [
             //title: 表格列名，field: 数据库字段名，statistics: 是否统计
-            { title: "所在乡镇", field: "所在乡镇", statistics: true },
-            { title: "土地使用权人", field: "土地使用权人", statistics: true },
-            { title: "土地面积", field: "土地面积(亩)", statistics: false },
-            { title: "建设状况", field: "建设状况", statistics: true },
-            { title: "是否一地多企", field: "是否一地多企", statistics: true },
-            { title: "是否规上企业用地", field: "是否规上企业用地", statistics: true },
-            { title: "是否低效用地", field: "是否低效用地", statistics: true },
-            { title: "盘活方式", field: "盘活方式", statistics: true },
-            { title: "实施时间", field: "实施时间", statistics: true },
-            { title: "规划用途", field: "规划用途", statistics: true },
-            { title: "使用期限", field: "使用权限", statistics: true },
+            { title: "所在乡镇", field: "SZX", statistics: true },
+            { title: "土地使用权人", field: "TDSYQR", statistics: true },
+            { title: "土地面积（亩）", field: "TDMJ", statistics: false },
+            { title: "建设状况", field: "JSZK", statistics: true },
+            { title: "是否一地多企", field: "SFYDDQ", statistics: true },
+            { title: "是否规上企业用地", field: "SFGSQYYD", statistics: true },
+            { title: "是否低效用地", field: "SFDXYD", statistics: true },
+            { title: "盘活方式", field: "PHFS", statistics: true },
+            { title: "实施时间", field: "SSSJ", statistics: true },
+            { title: "规划用途", field: "GHYT", statistics: true },
         ],
         children: [{
             layerId: "低效工业用地",
             layerName: "低效工业用地",
             subtitle: "PHPQMC",
             url: "http://150.158.76.25:5000/load_shp?file_path=低效工业用地",
-            show: true,
+            show: false,
             style: {
                 color: "#4FB0C6",
                 weight: 2,
@@ -161,7 +164,7 @@ var config = {
             layerName: "片区盘活地块",
             subtitle: "PHPQMC",
             url: "http://150.158.76.25:5000/load_shp?file_path=片区盘活地块",
-            show: true,
+            show: false,
             style: {
                 color: "#0000FF",
                 weight: 2,
@@ -208,11 +211,13 @@ var config = {
         layerId: "QYWZ",
         layerName: "企业位置",
         subtitle: "YDDWMC",
-        url: "http://150.158.76.25:5000/load_shp?file_path=QYWZ",
+        url: "http://localhost:6080/arcgis/rest/services/低效用地/QYWZ/MapServer/0",
         show: false,
         style: {
-            color: "#4169E1",
-            weight: 2,
+            radius: 5,
+            fillColor: "#000000",
+            color: "transparent",
+            weight: 0,
             opacity: 1
         },
         columns: [

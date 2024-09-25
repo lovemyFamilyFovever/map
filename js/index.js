@@ -2,8 +2,8 @@ $(document).ready(function () {
     document.title = config.projectName;
     $('.project_name .project_name_text').text(config.projectName);
 
-    const loginUser = localStorage.getItem('loginUser');
-    $('#login_user_name').text(loginUser);
+    // const loginUser = localStorage.getItem('loginUser');
+    // $('#login_user_name').text(loginUser);
 
     sfs = new MapObj(config.mapOptions)  // 实例化地图对象
     loadMapLayers()//加载图层
@@ -16,18 +16,9 @@ async function loadMapLayers() {
     $(".layer_wrap").append(template('layers-html', config))
 
     const showLayerList = findShowTrueElements(config.layerList)
-    // 使用Promise.all来处理多个并发请求
-    Promise.all(showLayerList.map(layer => fetch(layer.url).then(response => response.json())))
-        .then(dataArray => {
-            dataArray.forEach((data, index) => {
-                console.log(`Data from URL ${showLayerList[index].url}`);
-                sfs.addGeoJSONToMap(data, showLayerList[index]);
-            });
-            new Statistics(); // 实例化统计面板
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+
+    sfs.addGeoJSONToMap(showLayerList);
+    new Statistics(); // 实例化统计面板
 }
 
 // 首屏页面的事件注册
@@ -101,20 +92,14 @@ function initEvent() {
             $(this).parent().hide();
             $(this).parent().prev().show()
 
-            fetch(objectData.url)
-                .then(response => response.json())
-                .then(data => {
+            sfs.addGeoJSONToMap([objectData]);
+            new Statistics(); // 实例化统计面板
 
-                    sfs.addGeoJSONToMap(data, objectData);
-                    new Statistics(); // 实例化统计面板
-                    $(this).closest('.layer_switch').prev().addClass('active')
+            $(this).closest('.layer_switch').prev().addClass('active')
 
-                    $(this).parent().show();
-                    $(this).parent().prev().hide()
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
+            $(this).parent().show();
+            $(this).parent().prev().hide()
+
         } else {
             // 从layerGroup中查找并删除图层
             sfs.removeLayerById(objectData.layerId)

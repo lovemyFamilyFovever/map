@@ -1,4 +1,3 @@
-// map.js
 class MapObj {
     constructor(options) {
         this.mapObj = null;
@@ -6,9 +5,9 @@ class MapObj {
         this.satellite = null;
         this.image = null;
         this.terrain = null;
-        this.layerStore = new Map(); // 新增 layerGroup 属性
-        this.initMap(options);
+        this.layerStore = new Map();
         this.attribute = null;
+        this.initMap(options);
     }
 
     initMap(options) {
@@ -17,7 +16,8 @@ class MapObj {
             zoomControl: true,
             scaleControl: false
         };
-        this.options = $.extend({}, defaultOptions, options);
+
+        this.options = Object.assign({}, defaultOptions, options);
         // 创建地图
         this.mapObj = L.map("map", config.mapOptions).setView(config.center);
 
@@ -70,72 +70,50 @@ class MapObj {
             // 设置语言
             this.mapObj.pm.setLang('zh');
         }
-
-        // if (this.options.mousemoveLatlng) {
-        //     // 定义一个变量存储坐标信息
-        //     var coords = L.control();
-        //     // 添加一个div来显示坐标  
-        //     coords.onAdd = function () {
-        //         let _this = this;
-        //         _this._div = L.DomUtil.create('div', 'coords');
-        //         return _this._div;
-        //     };
-        //     coords.update = function (evt) {
-        //         coords._div.innerHTML =
-        //             '经度:' + evt.latlng.lng + '<br>' +
-        //             '纬度:' + evt.latlng.lat;
-        //     };
-        //     this.mapObj.on('mousemove', coords.update);
-
-        //     // 添加控件到地图
-        //     coords.addTo(this.mapObj);
-        //     coords.setPosition('bottomright');
-        // }
     }
 
     // 添加解析后的 GeoJSON 到地图上
-    addGeoJSONToMap(geoJson, objectData) {
+    addGeoJSONToMap(layerDataArray) {
 
-        proj4.defs("EPSG:4539", "+proj=tmerc +lat_0=0 +lon_0=117 +k=1 +x_0=39500000 +y_0=0 +datum=CGCS2000 +units=m +no_defs"); // CGCS2000_3_Degree_GK_Zone_39
-        proj4.defs("EPSG:3857", "+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs"); // Web Mercator
-        proj4.defs("EPSG:4326", "+proj=longlat +datum=WGS84 +no_defs"); // WGS84 经纬度
+        // 遍历每个图层数据对象
+        layerDataArray.forEach((layerData, index) => {
+            const featureLayerUrl = layerData.url;  // 当前图层的 ArcGIS 服务地址
 
-        // 转换 GeoJSON 坐标
-        var transformedGeoJson = JSON.parse(JSON.stringify(geoJson));
-        const geoJsonLayer = L.geoJSON(transformedGeoJson, {
-            coordsToLatLng: function (coords) {
+            // 使用 Esri Leaflet 插件加载 ArcGIS Feature Layer
+            const featureLayer = L.esri.featureLayer({
+                url: featureLayerUrl,
+                style: layerData.style,
+            });
 
-                // Convert CGCS2000 coordinates to EPSG:3857
-                const fromProj = proj4("EPSG:4539");
-                const toProj = proj4("EPSG:3857");
+            // 设置唯一的 layerId 和其他属性
+            featureLayer.layerId = layerData.layerId;
+            featureLayer.layerName = layerData.layerName;
+            featureLayer.subtitle = layerData.subtitle;
 
-                // Convert coordinates
-                const point = proj4(fromProj, toProj, [coords[0], coords[1]]);
-                return L.CRS.EPSG3857.unproject(L.point(point[0], point[1]));
-            },
-            pointToLayer: function (feature, latlng) {
-                // 自定义点的样式，设置成一个黑点
-                return L.circleMarker(latlng, {
-                    radius: 5,    // 点的大小
-                    fillColor: "#000000", // 填充颜色：黑色
-                    color: "transparent", // 边框颜色：黑色
-                    weight: 0,   // 边框宽度
-                    opacity: 1,  // 边框透明度
+            // 将图层添加到地图
+            featureLayer.addTo(this.mapObj);
+            this.layerStore.set(layerData.layerId, featureLayer);
+
+
+            //缩放到所有图层的范围
+            if (index == layerDataArray.length - 1) {
+                // 查询所有要素并获取边界
+                featureLayer.query().run((error, featureCollection) => {
+                    if (!error) {
+                        const bounds = L.geoJSON(featureCollection).getBounds();
+                        this.mapObj.fitBounds(bounds);
+                    } else {
+                        console.error(error);
+                    }
                 });
-            },
-            style: function () {
-                return objectData.style;
             }
-        })
-        geoJsonLayer.layerId = objectData.layerId; // 给图层添加唯一的 layerId
-        geoJsonLayer.layerName = objectData.layerName; // 给图层添layerName
-        geoJsonLayer.subtitle = objectData.subtitle; // 给图层添subtitle
+        });
+    }
 
-        geoJsonLayer.addTo(this.mapObj);
-        this.layerStore.set(objectData.layerId, geoJsonLayer); // 将图层存储到 layerStore 中
 
-        var center = geoJsonLayer.getBounds().getCenter();
-        this.mapObj.setView(center, 13);   // 设置地图视图到图层中心点，并设置一个合适的缩放级别 13
+    // 获取指定 id 的图层
+    getLayerById(layerId) {
+        return this.layerStore.get(layerId);
     }
 
     // 获取当前添加的图层
@@ -182,42 +160,131 @@ class MapObj {
     bindClickEvent() {
         var that = this;
 
-        // 监听地图的点击事件
+        // 绑定点击事件，收集所有点击到的图层的 feature 数据
         this.mapObj.on('click', function (e) {
 
-            if ($('.attribute-container.active').length == 0) return;
-            let data = []
-            const layers = Array.from(that.layerStore.values());// 获取当前打开的图层数组
-            layers.forEach(function (layer, index) {
-                data.push({
-                    index: index,
-                    name: layer.layerName,
-                    layerId: layer.layerId,
-                    subtitle: layer.subtitle,
-                    children: []
-                })
-                layer.eachLayer(function (layerItem) {
-                    if (layerItem instanceof L.Polygon || layerItem instanceof L.Polyline) {
-                        // 检查点击的点是否在这个图层内
-                        if (layerItem.getBounds().contains(e.latlng)) {
-                            data[index].children.push(layerItem);
-                        }
-                    } else if (layerItem instanceof L.Marker || layerItem instanceof L.CircleMarker) {
-                        // 检查点击的位置是否足够接近这个标记点
-                        const distanceThreshold = 100; // 以米为单位的距离阈值
-                        const distance = e.latlng.distanceTo(layerItem.getLatLng());
-                        if (distance <= distanceThreshold) {
-                            data[index].children.push(layerItem);
-                        }
-                    }
+            let attributeData = []
+            let queryPromises = [];
+
+            // 遍历每个图层
+            that.layerStore.forEach((layer, index) => {
+                let collectedData = [];
+                // 创建查询对象
+                const query = L.esri.query({
+                    url: layer.options.url  // 每个图层的服务 URL
                 });
+
+                // 设置查询参数，返回属性字段，不返回几何信息
+                let queryPromise;
+                if (layer._layers[0].feature.geometry.type === 'Point') {
+                    // 对于点状要素，使用 nearby 方法
+                    queryPromise = new Promise((resolve, reject) => {
+                        query.nearby(e.latlng)
+                            .run((error, featureCollection) => {
+                                if (error) {
+                                    console.error("查询图层失败: ", error);
+                                    reject(error);
+                                    return;
+                                }
+
+                                // 如果有要素返回，收集它们的数据
+                                if (featureCollection.features.length > 0) {
+                                    featureCollection.features.forEach((feature) => {
+                                        collectedData.push({
+                                            feature: feature, // 要素的属性数据
+                                            options: layer._originalStyle // 图层的其他配置信息
+                                        });
+                                    });
+                                }
+                                attributeData.push({
+                                    index: index,
+                                    layerId: layer.layerId,
+                                    name: layer.layerName,
+                                    subtitle: layer.subtitle,
+                                    children: collectedData
+                                });
+                                resolve();
+                            });
+                    });
+                } else if (layer._layers[0].feature.geometry.type === 'LineString') {
+                    console.log(layer._layers[0].feature.geometry.type)
+                    // 对于线状或面状要素，使用 query 方法
+                    queryPromise = new Promise((resolve, reject) => {
+                        query.within(e.latlng)
+                            .run((error, featureCollection) => {
+                                if (error) {
+                                    console.error("查询图层失败: ", error);
+                                    reject(error);
+                                    return;
+                                }
+
+                                // 如果有要素返回，收集它们的数据
+                                if (featureCollection.features.length > 0) {
+                                    featureCollection.features.forEach((feature) => {
+                                        collectedData.push({
+                                            feature: feature, // 要素的属性数据
+                                            options: layer._originalStyle // 图层的其他配置信息
+                                        });
+                                    });
+                                }
+                                attributeData.push({
+                                    index: index,
+                                    layerId: layer.layerId,
+                                    name: layer.layerName,
+                                    subtitle: layer.subtitle,
+                                    children: collectedData
+                                });
+                                resolve();
+                            });
+                    });
+                } else {
+                    // 对于线状或面状要素，使用 query 方法
+                    queryPromise = new Promise((resolve, reject) => {
+                        query.intersects(e.latlng)
+                            .run((error, featureCollection) => {
+                                if (error) {
+                                    console.error("查询图层失败: ", error);
+                                    reject(error);
+                                    return;
+                                }
+
+                                // 如果有要素返回，收集它们的数据
+                                if (featureCollection.features.length > 0) {
+                                    featureCollection.features.forEach((feature) => {
+                                        collectedData.push({
+                                            feature: feature, // 要素的属性数据
+                                            options: layer._originalStyle // 图层的其他配置信息
+                                        });
+                                    });
+                                }
+                                attributeData.push({
+                                    index: index,
+                                    layerId: layer.layerId,
+                                    name: layer.layerName,
+                                    subtitle: layer.subtitle,
+                                    children: collectedData
+                                });
+                                resolve();
+                            });
+                    });
+                }
+
+                // 将每个查询的 Promise 加入数组
+                queryPromises.push(queryPromise);
             });
-            if (that.attribute) {
-                that.attribute.restoreOriginalStyles()
-            }
-            that.attribute = new Attribute(data);// 实例化属性面板
+
+            // 等待所有查询完成
+            Promise.all(queryPromises).then(() => {
+                if (that.attribute) {
+                    that.attribute.restoreOriginalStyles();
+                }
+                that.attribute = new Attribute(attributeData); // 实例化属性面板
+            }).catch((err) => {
+                console.error("查询过程中发生错误: ", err);
+            });
 
         });
+
 
         // 阻止图层面板点击事件冒泡
         $('.layer-pop').on('click', function () {
@@ -248,7 +315,4 @@ class MapObj {
             }
         });
     }
-
-
-
 }

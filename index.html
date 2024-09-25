@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -21,22 +21,22 @@
     <link rel="stylesheet" href="libs/leaflet@1.9.3/leaflet.css" />
     <link rel="stylesheet" href="libs/LeafletMeasure/leaflet-geoman.css" />
     <link rel="stylesheet" href="css/index.css" />
-    <script src="js/check_login.js"></script>
+    <!--<script src="js/check_login.js"></script>-->
 </head>
 
 <body>
     <div class="project_name">
         <img src="imgs/shortcut/shortcut.png" alt="logo" style="vertical-align: sub;">
         <span class="project_name_text"></span>
-        <div class="login_user">
+        <!-- <div class="login_user">
             <img src="imgs/账户.svg" alt="账户">
             <span><span id="login_user_name"></span>
-        </div>
+        </div> -->
     </div>
-    <div class="exit">
+    <!-- <div class="exit">
         <img src="imgs/exit.svg" alt="退出">
         <span>退出登录</span>
-    </div>
+    </div> -->
     <div id="map"></div>
     <div class="left-tool">
         <div class="left-tool-title">
@@ -45,15 +45,15 @@
                 <img src="imgs/layers.svg" alt="加载图层" />
                 <span>数据中心</span>
             </div>
-            <!-- 属性查询 -->
-            <div class="left-tool-item attribute-container" title="属性查询">
-                <img src="imgs/attribute.svg" alt="属性查询" style="width: 25px;" />
-                <span>属性查询</span>
-            </div>
             <!-- 统计查询 -->
             <div class="left-tool-item statistics-container" title="切换统计查询">
                 <img src="imgs/statistics.svg" alt="统计查询" />
                 <span>查询统计</span>
+            </div>
+            <!-- 属性查询 -->
+            <div class="left-tool-item attribute-container" title="属性查询">
+                <img src="imgs/attribute.svg" alt="属性查询" style="width: 25px;" />
+                <span>属性查询</span>
             </div>
         </div>
 
@@ -350,6 +350,7 @@
         </div>
     </script>
 </body>
+
 <!-- 基础插件 -->
 <script src="libs/jquery/jquery_3.0.0.js"></script>
 <script src="libs/template@4.8/template.js"></script>
@@ -362,6 +363,7 @@
 <script src="libs/leaflet@1.9.3/leaflet.js"></script>
 <script src="libs/esri-leaflet/esri-leaflet-2.5.0.js"></script>
 <script src="libs/LeafletMeasure/leaflet-geoman.min.js"></script>
+
 <!-- 定制化表格展示 -->
 <script src="libs/tabulator-tables@5.6.0/tabulator.min.js"></script>
 <script src="libs/tabulator-tables@5.6.0/xlsx.full.min.js"></script>

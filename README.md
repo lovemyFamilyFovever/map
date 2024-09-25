@@ -6,10 +6,6 @@ https://mapservice.tdtah.cn/server1/rest/services
 ```
 
 
-- 在线地址
-https://lovemyfamilyfovever.github.io/map/
-
-
 2024年3月8日 17:36:13
 1. [x] 新增表格保存文件时的名称弹窗
 2. [ ] 新增表格自定义查询逻辑fields  待完善
@@ -36,9 +32,3 @@ https://lovemyfamilyfovever.github.io/map/
 
 2024年3月14日 23:29:11
 1. [x] 新增数据获取失败时的弹窗组件
-
-
-2024年9月2日 1：:3
-1. [x] 新增登录验证
-2. [x] 新增登录修改密码
-3. [ ] 新增登录状态保存

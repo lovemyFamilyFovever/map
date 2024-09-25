@@ -3,7 +3,7 @@ class Statistics {
     constructor() {
         this.data = [];
         this.customTable = null;
-        this.columns = Array.from(sfs.layerStore.keys())
+        this.layersID = Array.from(sfs.layerStore.keys())
         this.init();
     }
     init() {
@@ -19,7 +19,7 @@ class Statistics {
         } else {
             $(".statistics-items .empty_table").hide();
 
-            this.data = this.findLayersByIds(this.columns)
+            this.data = this.findLayersByIds(this.layersID)
             this.customTable = new CustomTable(this.data[0]);//实例化自定义图表
             this.renderTitle();
             this.renderContent(this.data[0]);
@@ -41,11 +41,11 @@ class Statistics {
         //渲染图层下拉选项的列表
         let liHtml = "";
         this.data.forEach((item, index) => {
-            liHtml += `<li data-layerid="${item.layerId}"><span>${item.layerName}</span></li>`;
+            liHtml += `<li data-layerid="${item.layerId}" data-index="${index}"><span>${item.layerName}</span></li>`;
         });
         $('.statistics-layer-container ul').html(liHtml);
-        $('.statistics-title-input').val(this.data[0].layerName)
-        $('.statistics-title-input').attr('data-layerid', this.data[0].layerId);
+        $('.statistics-title-input').val(this.data[0].layerName);
+        $('.statistics-title-input').attr('data-layerid', this.data[0].layerId).attr('data-index', 0);;
     }
 
     renderContent(obj) {
@@ -177,26 +177,16 @@ class Statistics {
         //重置 按钮
         $('.statistics-content-footer .reset').on('click', () => {
             $('.statistics-item .dropdown_input').val("");
-
-            const index = $('.statistics-title-input').attr('data-index');
-            that.customTable = new CustomTable(that.data[index]);//实例化自定义图表
         });
 
         //查询 按钮
         $('.statistics-content-footer .confirm').on('click', that.debounce(() => {
 
-            let groupColumn = true;
-            $('.statistics-group-wrap-content .dropdown_input').each((index, item) => {
-                if (item.value.trim() == "") {
-                    groupColumn = false;
-                    return false;
-                }
-            });
+            const index = $('.statistics-title-input').attr('data-index');
 
-            if (!groupColumn) {
-
-                let uniqueCategories = [];
-                $('.statistics-item').each((index, item) => {
+            let uniqueCategories = "";
+            if ($('.statistics-item').length > 0) {
+                $('.statistics-item').each((i, item) => {
                     const $target = $(item).find('.target-input');
 
                     if ($target.val()) {
@@ -206,49 +196,34 @@ class Statistics {
                                 values.push($(this).attr('data-field'))
                             }
                         });
-                        uniqueCategories.push({
-                            field: $target.attr('data-field'),
-                            type: 'in',
-                            value: values
-                        })
+                        uniqueCategories += `${$target.attr('data-field')} IN (${values.map(value => `'${value}'`).join(",")}) AND `;
                     }
                 });
-                that.customTable.filterTable(uniqueCategories);
-            } else {
-                // select column1,count(column2) from table  where column2="a" and column='b' group by column1;
-                // requestData = {
-                //     selectColumn: "column1",
-                //     calcColumn: "column2",
-                //     calcType: "count",
-                //     groupColumn: "column1",
-                //     where: {
-                //         column2: ["a","b"],
-                //         column: ["c"],
-                //         // 可能还有别的更多的列
-                //     }
-                // }
-                let groupFields = {
-                    tableName: $('.statistics-title-input').attr('data-layerid'),
+                uniqueCategories = uniqueCategories.substring(0, uniqueCategories.length - 5);
+            }
+
+
+            let groupColumn = true;
+            let statisticsParams = null;
+            $('.statistics-group-wrap-content .dropdown_input').each((index, item) => {
+                if (item.value.trim() == "") {
+                    groupColumn = false;
+                    return false;
+                }
+            });
+            if (groupColumn) {
+                statisticsParams = {
                     selectColumn: $('.group-input .dropdown_input').attr('data-field'),
                     selectColumnName: $('.group-input .dropdown_input').val(),
-                    calcColumn: $('.statistic-input .dropdown_input').attr('data-field'),
-                    calcColumnName: $('.statistic-input .dropdown_input').val(),
-                    calcType: $('.calc-input .dropdown_input').attr('data-field'),
-                    calcTypeName: $('.calc-input .dropdown_input').val(),
+                    satisticsField: $('.statistic-input .dropdown_input').attr('data-field'),
+                    satisticsFieldName: $('.statistic-input .dropdown_input').val(),
+                    statisticsType: $('.calc-input .dropdown_input').attr('data-field'),
                     chartType: $('.chart-input .dropdown_input').attr('data-field'),
-                    where: {}
                 };
 
-                $('.statistics-item-target .target-input').each((index, item) => {
-                    const value = $(item).val();
-                    if (value && value !== "全部") {
-                        if (!groupFields.where.hasOwnProperty($(item).data('field')))
-                            groupFields.where[$(item).data('field')] = [];
-                        groupFields.where[$(item).data('field')] = ($(item).val().split(','));
-                    }
-                });
-                new CustomTable(null, groupFields)
             }
+
+            new CustomTable(that.data[index], uniqueCategories, statisticsParams);//实例化自定义图表
 
             $('.table-content').show();
         }, 300));

@@ -2,7 +2,7 @@ class Attribute {
     constructor(data) {
         this.data = data;
         this.init();
-        this.originalStyles = new Map(); // 用于保存每个图层的初始样式
+        this.polygonLayer = null; // 用于保存当前选中的面图层
     }
     // 初始化属性统计
     init() {
@@ -119,19 +119,17 @@ class Attribute {
             return;
         }
 
-        this.saveOriginalStyle(layer); // 保存当前图层的初始样式
-
         const geometry = layer.feature.geometry;
         const type = geometry.type;
 
-        const fromProj = proj4("EPSG:4539");  // CGCS2000
-        const toProj = proj4("EPSG:3857");    // WGS84 Web Mercator
+        // const fromProj = proj4("EPSG:4539");  // CGCS2000
+        // const toProj = proj4("EPSG:3857");    // WGS84 Web Mercator
 
         if (type === "Point") {
             const coordinates = geometry.coordinates;
             // 将CGCS2000的坐标转换为Web Mercator坐标
-            const [x, y] = proj4(fromProj, toProj, [coordinates[0], coordinates[1]]);
-            const latLng = L.CRS.EPSG3857.unproject(L.point(x, y));
+            // const [x, y] = proj4(fromProj, toProj, [coordinates[0], coordinates[1]]);
+            // const latLng = L.CRS.EPSG3857.unproject(L.point(x, y));
             map.setView(latLng, 18); // 设置地图中心并放大到适当的级别
         } else if (type === "LineString") {
             const coordinates = geometry.coordinates;
@@ -148,11 +146,21 @@ class Attribute {
             // 如果是面图层
             const coordinates = geometry.coordinates[0];
 
-            const latLngs = coordinates.map(coord => {
-                const [x, y] = proj4(fromProj, toProj, coord);
-                return L.CRS.EPSG3857.unproject(L.point(x, y));
+            // const latLngs = coordinates.map(coord => {
+            //     const [x, y] = proj4(fromProj, toProj, coord);
+            //     return L.CRS.EPSG3857.unproject(L.point(x, y));
+            // });
+            // const bounds = L.latLngBounds(latLngs);
+
+            // 创建一个空的 LatLngBounds 对象
+            let bounds = L.latLngBounds();
+
+            // 遍历多边形的每个点，并添加到 bounds 中
+            coordinates.forEach(coord => {
+                const latLng = L.latLng(coord[1], coord[0]); // Leaflet 使用 [纬度, 经度] 的顺序
+                bounds.extend(latLng);
             });
-            const bounds = L.latLngBounds(latLngs);
+
             // 将地图视角调整为包含整个边界框
             map.fitBounds(bounds, {
                 padding: [50, 50], // 设置边距，上下左右各50像素
@@ -161,42 +169,38 @@ class Attribute {
             console.warn("Unsupported geometry type: " + type);
         }
 
-        // 监听地图缩放结束的事件
-        function blinkLayer(times, interval) {
-            let count = 0;
-            layer.setStyle({ color: 'red', opacity: 1 }); // 改变样式
-            const blink = setInterval(() => {
-                if (count >= times) {
-                    clearInterval(blink);
-                    layer.setStyle({ opacity: 1 }); // 最后恢复原始样式
-                } else {
-                    layer.setStyle({ opacity: count % 2 === 0 ? 0 : 1 });
-                    count++;
-                }
-            }, interval);
-        }
-        // 调用闪烁函数，闪烁4次（实际显示两次，隐藏两次），间隔250ms
-        blinkLayer(4, 250);
-    }
+        // 创建一个用来闪烁的多边形图层
+        this.polygonLayer = L.geoJSON(geometry, {
+            style: function (feature) {
+                return {
+                    fillColor: 'blue',       // 填充颜色
+                    fillOpacity: 0.3,        // 填充透明度
+                    color: 'red',            // 边界颜色
+                    weight: 2,               // 边界宽度
+                    opacity: 0.8             // 边界透明度
+                };
+            },
+            originalStyle: layer.options
+        }).addTo(map);
 
-    // 保存图层的初始样式
-    saveOriginalStyle(layer) {
-        if (!this.originalStyles.has(layer._leaflet_id)) {
-            this.originalStyles.set(layer._leaflet_id, {
-                color: layer.options.color,
-                opacity: layer.options.opacity,
-            });
-        }
+        // 将地图视角调整为包含整个多边形的范围
+        map.fitBounds(this.polygonLayer.getBounds());
     }
 
     // 恢复图层的初始样式
     restoreOriginalStyles() {
-        this.originalStyles.forEach((style, id) => {
-            const layer = sfs.mapObj._layers[id];
-            if (layer) {
-                layer.setStyle(style);
-            }
-        });
+        if (this.polygonLayer)
+            this.removePolygonLayer();
+        // this.polygonLayer.setStyle(this.polygonLayer.options.originalStyle);
+    }
+
+
+    // 示例函数，删除多边形图层
+    removePolygonLayer() {
+        if (this.polygonLayer) {
+            sfs.mapObj.removeLayer(this.polygonLayer);
+            this.polygonLayer = null; // 清空全局变量
+        }
     }
 
     getListHtml() {

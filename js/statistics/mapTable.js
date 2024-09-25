@@ -1,7 +1,8 @@
 //渲染指定图层的表格
 class CustomTable {
-    constructor(layer, groupFields) {
-        this.groupFields = groupFields;
+    constructor(layer, searchConditions, statisticsByConditions) {
+        this.searchConditions = searchConditions;
+        this.statisticsByConditions = statisticsByConditions;
         this.layer = layer;
         this.table = null;
         this.sortable = null;
@@ -16,40 +17,90 @@ class CustomTable {
         $('.table-content .loading-container').show();
         this.destroy(); // 先销毁可能存在的旧实例
 
-        let requestData = null;
-        let queryType = '';
-        if (this.layer) {
-            requestData = {
-                table_name: this.layer.layerId,
-                columns: this.layer.columns.map(item => item.field)
-            };
-            queryType = 'query';
+        if (!this.layer) {
+            return
+        }
+        const featureLayer = sfs.getLayerById(this.layer.layerId)
+        const query = featureLayer.query();
+        if (!this.searchConditions) {
+            this.searchConditions = '1=1';
+        }
+        query.where(this.searchConditions)
+            .fields(this.layer.columns.map(item => item.field))
+            .returnGeometry(false)
+            .run((error, featureCollection) => {
+                if (error) {
+                    console.error("查询失败:", error);
+                    this.renderTable([])
+                    alert(data.msg)
+                    return;
+                }
+                let attributesArray = [];
+                // 提取所有要素的属性
+                attributesArray = featureCollection.features.map(feature => feature.properties);
+                if (this.statisticsByConditions) {
+                    attributesArray = this.groupAndAggregate(attributesArray)
+                }
+                // 翻转数组，解决前端分页问题
+                this.renderTable(attributesArray.reverse())
+            });
+    }
+
+    // 聚合统计
+    groupAndAggregate(data) {
+        const { selectColumn, selectColumnName, satisticsField, satisticsFieldName, statisticsType } = this.statisticsByConditions;
+
+        const result = data.reduce((acc, item) => {
+
+            const groupValue = item[selectColumn];  // 动态获取分组字段的值
+            const sumValue = Number(item[satisticsField]);        // 动态获取需要统计的字段的值
+
+            // 检查 sumValue 是否为数字类型，确保只统计数字
+            if (typeof sumValue !== 'number') {
+                console.warn(`Warning: ${satisticsField} value is not a number for item`, item);
+                return acc;  // 跳过非数字的值
+            }
+
+            // 查找是否已经存在该分组
+            const existingGroup = acc.find(group => group[selectColumnName] === groupValue);
+
+            if (existingGroup) {
+                // 如果存在，累加统计字段的值并更新数量和平均值
+                existingGroup[satisticsFieldName + '_总和'] += sumValue;
+                existingGroup[satisticsFieldName + '_数量和'] += 1;
+                existingGroup[satisticsFieldName + '_平均值'] = existingGroup[satisticsFieldName + '_总和'] / existingGroup[satisticsFieldName + '_数量和'];
+            } else {
+                // 如果不存在，创建新分组
+                acc.push({
+                    [selectColumnName]: groupValue,        // 动态设置分组字段的名称和值
+                    [satisticsFieldName + '_总和']: sumValue,                // 初始化统计字段的总和
+                    [satisticsFieldName + '_数量和']: 1,                          // 初始化数量
+                    [satisticsFieldName + '_平均值']: sumValue                  // 初始化平均值
+                });
+            }
+            return acc;
+        }, []);
+
+        if (statisticsType.toLowerCase() == "sum") {
+            result.map(group => {
+                group[satisticsFieldName + '_总和'] = group[satisticsFieldName + '_总和'].toFixed(2);
+                delete group[satisticsFieldName + '_平均值'];
+                delete group[satisticsFieldName + '_数量和'];
+            });
+        } else if (statisticsType.toLowerCase() == "avg") {
+            result.map(group => {
+                delete group[satisticsFieldName + '_总和'];
+                // group[satisticsFieldName + '_平均值'] = group[satisticsFieldName + '_平均值'].toFixed(2);
+                delete group[satisticsFieldName + '_数量和'];
+            });
         } else {
-            requestData = this.groupFields
-            queryType = 'group';
+            delete group[satisticsFieldName + '_总和'];
+            delete group[satisticsFieldName + '_平均值'];
         }
 
-        fetch('http://150.158.76.25:5000/' + queryType, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json' // 设置请求头，指定发送 JSON 数据
-            },
-            body: JSON.stringify(requestData)
-        }).then(response => {
-            return response.json();
-        }).then(data => {
-            // console.log('查询结果:', data);
-            if (data.type == 'error') {
-                this.renderTable([])
-                alert(data.msg)
-            } else {
-                // 翻转数组，解决前端分页问题
-                this.renderTable(data.reverse())
-            }
-        }).catch(error => {
-            console.error('请求出错:', error);
-        });
+        return result
     }
+
 
     // 销毁方法
     destroy() {
@@ -95,10 +146,10 @@ class CustomTable {
             // autoColumns: true,
         }
 
-        if (this.layer)
-            tableObj.columns = this.handleColumns();
-        else
+        if (this.statisticsByConditions)
             tableObj.autoColumns = true;
+        else
+            tableObj.columns = this.handleColumns();
 
         this.table = new Tabulator(`#main-table`, tableObj);
 
@@ -113,8 +164,8 @@ class CustomTable {
             this.getStatisticsTable();
             this.bindEvents();
 
-            if (this.groupFields) {
-                new CustomChart(data, this.groupFields)
+            if (this.statisticsByConditions) {
+                new CustomChart(data, this.statisticsByConditions)
             }
         });
         // 当提示用户下载文件时，将触发downloadFull回调。
