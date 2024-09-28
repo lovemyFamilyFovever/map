@@ -1,9 +1,9 @@
 //渲染指定图层的表格
 class CustomTable {
     constructor(layer, searchConditions, statisticsByConditions) {
+        this.layer = layer;
         this.searchConditions = searchConditions;
         this.statisticsByConditions = statisticsByConditions;
-        this.layer = layer;
         this.table = null;
         this.sortable = null;
         this.downloadOptions = ['CSV', 'JSON', 'XLSX', 'PDF', 'HTML'];
@@ -20,7 +20,7 @@ class CustomTable {
         if (!this.layer) {
             return
         }
-        const featureLayer = sfs.getLayerById(this.layer.layerId)
+        const featureLayer = sfs.getLayerById(this.layer._leaflet_id)
         const query = featureLayer.query();
         if (!this.searchConditions) {
             this.searchConditions = '1=1';

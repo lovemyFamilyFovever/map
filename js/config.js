@@ -4,15 +4,16 @@ var config = {
     projectName: "徐州经济技术开发区工业企业低效用地分析系统",
 
     mapOptions: {
+        center: [34.283876502969214, 117.37861633300783],
         minZoom: 1, //最小缩放值
         maxZoom: 18, //最大缩放值
-        zoom: 11, //初始缩放值
-        attributionControl: false, //是否启用地图属性控件
+        zoom: 13, //初始缩放值
         zoomControl: true, //是否启用地图缩放控件
-        scaleControl: true,//是否启用比例尺控件 
+        // scaleControl: true,//是否启用比例尺控件 
         toolListControl: true, //是否启用地图测量工具
         initTooltips: true,//是否初始化右上角的工具栏
         mousemoveLatlng: true,//是否显示鼠标滑动的坐标
+        attributionControl: false, //是否启用地图属性控件
         // crs: L.CRS.EPSG3857, //坐标参考系统
         toolList: {
             rotateMode: false,          // 不显示旋转模式工具
@@ -30,7 +31,6 @@ var config = {
             drawText: false,            // 隐藏插入文本的控件
         },
     },
-    center: [33.523079, 116.477051],
 
     "矢量底图": 'http://t0.tianditu.gov.cn/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=94062428027398766a1d0f3000b5dc6c',
     "矢量底图注记": 'http://t0.tianditu.gov.cn/DataServer?T=cva_w&x={x}&y={y}&l={z}&tk=94062428027398766a1d0f3000b5dc6c',
@@ -102,7 +102,7 @@ var config = {
         layerName: "交通",
         subtitle: "用地类型",
         url: "http://localhost:6080/arcgis/rest/services/低效用地/XZJT/MapServer/0",
-        show: false,
+        show: true,
         style: {
             color: "#795548",
             weight: 4
@@ -119,7 +119,7 @@ var config = {
         layerName: "工业用地",
         subtitle: "TDSYQR",
         url: "http://localhost:6080/arcgis/rest/services/低效用地/GYYD/MapServer/0",
-        show: true,
+        show: false,
         style: {
             fillColor: "#3388ff",
             color: "#3388ff",
@@ -212,12 +212,11 @@ var config = {
         layerName: "企业位置",
         subtitle: "YDDWMC",
         url: "http://localhost:6080/arcgis/rest/services/低效用地/QYWZ/MapServer/0",
-        show: false,
+        show: true,
         style: {
             radius: 5,
-            fillColor: "#000000",
-            color: "transparent",
-            weight: 0,
+            fillColor: "blue",
+            weight: 1,
             opacity: 1
         },
         columns: [

@@ -1,24 +1,62 @@
 $(document).ready(function () {
+
     document.title = config.projectName;
     $('.project_name .project_name_text').text(config.projectName);
 
-    // const loginUser = localStorage.getItem('loginUser');
-    // $('#login_user_name').text(loginUser);
-
     sfs = new MapObj(config.mapOptions)  // 实例化地图对象
-    loadMapLayers()//加载图层
+
+    renderLayerList(); // 渲染图层列表页面
     initEvent()// 首屏页面的事件注册
+
+    new Statistics(); // 实例化统计面板
 });
 
-//加载图层列表html模板
-async function loadMapLayers() {
-
-    $(".layer_wrap").append(template('layers-html', config))
-
-    const showLayerList = findShowTrueElements(config.layerList)
-
-    sfs.addGeoJSONToMap(showLayerList);
-    new Statistics(); // 实例化统计面板
+// 渲染图层列表页面
+function renderLayerList(list) {
+    var sb = "";
+    sb += '<div class="layer_items">';
+    config.layerList.forEach((item, i) => {
+        sb += `<div class="layer_item">`;
+        sb += `    <div class="layer_info">`;
+        sb += `        <p class="layer_name" title="地块名称">${item.layerName}</p>`;
+        sb += `        <div class="layer_switch">`;
+        sb += `            <div class="layer_loading loader"></div>`;
+        sb += `            <label class="switch">`;
+        if (item.show) {
+            const leafletID = sfs.addGeoJSONToMap(item);
+            sb += `        <input type="checkbox" data-index="${i}" data-leafletid="${leafletID}" checked />`;
+        } else {
+            sb += `        <input type="checkbox" data-index="${i}" />`;
+        }
+        sb += `                <span class="slider"></span>`;
+        sb += `            </label>`;
+        sb += `        </div>`;
+        sb += `    </div>`;
+        sb += `</div>`;
+        if (item.children) {
+            item.children.forEach((child, j) => {
+                sb += `<div class="layer_item layer_item_child">`;
+                sb += `    <div class="layer_info">`;
+                sb += `        <p class="layer_name" title="地块名称">${child.layerName}</p>`;
+                sb += `        <div class="layer_switch">`;
+                sb += `            <div class="layer_loading loader"></div>`;
+                sb += `            <label class="switch">`;
+                if (child.show) {
+                    const leafletID = sfs.addGeoJSONToMap(child);
+                    sb += `        <input type="checkbox" data-parent="${i}" data-index="${j}" data-leafletid="${leafletID}" checked />`;
+                } else {
+                    sb += `        <input type="checkbox" data-parent="${i}" data-index="${j}" />`;
+                }
+                sb += `                <span class="slider"></span>`;
+                sb += `            </label>`;
+                sb += `        </div>`;
+                sb += `    </div>`;
+                sb += `</div>`;
+            })
+        }
+    });
+    sb += '</div>';
+    $(".layer_wrap").append(sb)
 }
 
 // 首屏页面的事件注册
@@ -36,8 +74,7 @@ function initEvent() {
 
     //显示隐藏 属性查询
     $('.attribute-container').on('click', function () {
-        if (sfs.layerStore.size == 0) return;
-        var mapContainer = document.getElementById('map');
+        if (sfs.layerGroup.length == 0) return;
         if ($(this).hasClass('active')) {
             $('.attribute-container').removeClass('active')
 
@@ -63,7 +100,6 @@ function initEvent() {
 
     //隐藏 查询统计弹窗
     $('.statistics-container').on('click', function () {
-
         $('.layer-content').removeClass('active')
         $('.layer-container').removeClass('active')
 
@@ -78,8 +114,8 @@ function initEvent() {
     })
     // 绑定change事件  切换图层的显示和隐藏
     $('.layer_switch input[type="checkbox"]').on('click', function () {
-        const index = $(this).closest('.layer_switch').attr('data-index');
-        const parentIndex = $(this).closest('.layer_switch').attr('data-parent');
+        const index = $(this).attr('data-index');
+        const parentIndex = $(this).attr('data-parent');
 
         let objectData = null;
         if (parentIndex) {
@@ -92,33 +128,26 @@ function initEvent() {
             $(this).parent().hide();
             $(this).parent().prev().show()
 
-            sfs.addGeoJSONToMap([objectData]);
+            const leafletID = sfs.addGeoJSONToMap(objectData);
+            $(this).attr('data-leafletid', leafletID)
             new Statistics(); // 实例化统计面板
 
             $(this).closest('.layer_switch').prev().addClass('active')
-
             $(this).parent().show();
             $(this).parent().prev().hide()
 
         } else {
+            const leafletID = $(this).attr('data-leafletid');
             // 从layerGroup中查找并删除图层
-            sfs.removeLayerById(objectData.layerId)
-            $(this).closest('.layer_switch').prev().removeClass('active')
+            sfs.removeLayerById(leafletID)
 
+            $(this).closest('.layer_switch').prev().removeClass('active')
             $(this).parent().show();
             $(this).parent().prev().hide()
 
             new Statistics(); // 实例化统计面板
         }
     });
-
-    // //隐藏 属性查询弹窗
-    // $('.attribute_content_close').on('click', function () {
-    //     $('.attribute_content').hide();
-    //     $('.attribute-container').removeClass('active')
-    //     var mapContainer = document.getElementById('map');
-    //     mapContainer.style.cursor = 'revert-layer';
-    // })
 
     //隐藏 统计查询
     $('.statistics-content-close').on('click', function () {
@@ -146,33 +175,4 @@ function initEvent() {
             $('.dropdown_list').hide();
         }
     });
-
-    //点击图层显示 样式编辑弹窗
-    $('.editLayerStyle').on('click', function () {
-        //待补充
-    });
-
-    //点击退出登录
-    $('.exit').on('click', function () {
-        logout();
-    });
-}
-
-//筛选出show为true的图层
-function findShowTrueElements(layerList = config.layerList) {
-    return layerList.reduce((acc, layer) => {
-        if (layer.show) {
-            acc.push(layer);
-        }
-        if (layer.children) {
-            acc.push(...findShowTrueElements(layer.children));
-        }
-        return acc;
-    }, []);
-}
-// 退出登录
-function logout() {
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('loginTime');
-    window.location.href = 'login.html';
 }

@@ -1,25 +1,20 @@
 class MapObj {
     constructor(options) {
         this.mapObj = null;
-        this.options = null;
+        this.options = options;
+
         this.satellite = null;
         this.image = null;
         this.terrain = null;
-        this.layerStore = new Map();
+
         this.attribute = null;
-        this.initMap(options);
+        this.initMap();
     }
 
-    initMap(options) {
-        const defaultOptions = {
-            toolListControl: false,
-            zoomControl: true,
-            scaleControl: false
-        };
+    initMap() {
 
-        this.options = Object.assign({}, defaultOptions, options);
         // 创建地图
-        this.mapObj = L.map("map", config.mapOptions).setView(config.center);
+        this.mapObj = L.map("map", this.options).setView(this.options.center);
 
         //卫星
         const mapA = L.tileLayer(config["矢量底图"], { subdomains: ["0", "1", "2", "3", "4", "5", "6", "7"] })
@@ -46,11 +41,18 @@ class MapObj {
         this.bindClickEvent();
 
     }
+
     // 切换右下角工具栏的地图类型
     switchLayers(layer) {
-        this.mapObj.removeLayer(this.satellite);
-        this.mapObj.removeLayer(this.terrain);
-        this.mapObj.removeLayer(this.image);
+        // 定义所有图层
+        const layers = [this.satellite, this.image, this.terrain];
+
+        // 遍历图层，移除所有图层，最后添加所选图层
+        layers.forEach((currentLayer) => {
+            if (this.mapObj.hasLayer(currentLayer)) {
+                this.mapObj.removeLayer(currentLayer);
+            }
+        });
         this.mapObj.addLayer(layer);
     }
 
@@ -59,103 +61,57 @@ class MapObj {
         if (this.options.zoomControl) {
             L.control.zoom({ position: 'bottomright' }).addTo(this.mapObj);
         }
-        // 添加比例尺控件 
-        if (this.options.scaleControl) {
-            L.control.scale({ position: 'bottomright' }).addTo(this.mapObj);
-        }
-        // 添加绘制控件 初始化右上角绘制测量工具栏
-        if (this.options.toolListControl) {
-            const toolList = $.extend(true, { position: 'bottomright' }, config.mapOptions.toolList);
-            this.mapObj.pm.addControls(toolList);
-            // 设置语言
-            this.mapObj.pm.setLang('zh');
-        }
+
+        // // 添加绘制控件 初始化右上角绘制测量工具栏
+        // if (this.options.toolListControl) {
+        //     const toolList = $.extend(true, { position: 'bottomright' }, config.mapOptions.toolList);
+        //     this.mapObj.pm.addControls(toolList);
+        //     // 设置语言
+        //     this.mapObj.pm.setLang('zh');
+        // }
     }
 
     // 添加解析后的 GeoJSON 到地图上
-    addGeoJSONToMap(layerDataArray) {
-
+    addGeoJSONToMap(layerData) {
         // 遍历每个图层数据对象
-        layerDataArray.forEach((layerData, index) => {
-            const featureLayerUrl = layerData.url;  // 当前图层的 ArcGIS 服务地址
+        const featureLayerUrl = layerData.url;  // 当前图层的 ArcGIS 服务地址
 
-            // 使用 Esri Leaflet 插件加载 ArcGIS Feature Layer
-            const featureLayer = L.esri.featureLayer({
-                url: featureLayerUrl,
-                style: layerData.style,
-            });
-
-            // 设置唯一的 layerId 和其他属性
-            featureLayer.layerId = layerData.layerId;
-            featureLayer.layerName = layerData.layerName;
-            featureLayer.subtitle = layerData.subtitle;
-
-            // 将图层添加到地图
-            featureLayer.addTo(this.mapObj);
-            this.layerStore.set(layerData.layerId, featureLayer);
-
-
-            //缩放到所有图层的范围
-            if (index == layerDataArray.length - 1) {
-                // 查询所有要素并获取边界
-                featureLayer.query().run((error, featureCollection) => {
-                    if (!error) {
-                        const bounds = L.geoJSON(featureCollection).getBounds();
-                        this.mapObj.fitBounds(bounds);
-                    } else {
-                        console.error(error);
-                    }
-                });
-            }
+        // 使用 Esri Leaflet 插件加载 ArcGIS Feature Layer
+        const featureLayer = L.esri.featureLayer({
+            url: featureLayerUrl,
+            style: layerData.style,
+            pointToLayer: function (feature, latlng) {
+                return L.circleMarker(latlng, layerData.style);
+            },
         });
+        Object.assign(featureLayer, layerData);
+
+        // 将图层添加到地图
+        featureLayer.addTo(this.mapObj);
+        this.layerGroup.addLayer(featureLayer);
+        return featureLayer._leaflet_id;
     }
 
 
     // 获取指定 id 的图层
     getLayerById(layerId) {
-        return this.layerStore.get(layerId);
+        layerId = parseInt(layerId);
+        return this.layerGroup.getLayer(layerId);
     }
 
     // 获取当前添加的图层
     getLayers() {
-        return Array.from(this.layerStore.values());
-    }
-
-    // 新增图层的方法
-    addLayer(layer) {
-        this.mapObj.addLayer(layer);
+        return this.layerGroup.getLayers()
     }
 
     // 删除指定 id 的图层
     removeLayerById(layerId) {
-        const layer = this.layerStore.get(layerId);
-        if (layer) {
-            this.mapObj.removeLayer(layer);
-            this.layerStore.delete(layerId); // 从存储中删除
+        layerId = parseInt(layerId);
+        if (this.layerGroup.hasLayer(layerId)) {
+            this.layerGroup.removeLayer(layerId);
         }
     }
 
-    //将某个图层放在最上层
-    bringLayerToFront(layerId) {
-        const layer = this.layerGroup.getLayer(layerId);
-        if (layer) {
-            layer.bringToFront();
-        }
-    }
-    //将某个图层放到最底层
-    bringLayerToBack(layerId) {
-        const layer = this.layerGroup.getLayer(layerId);
-        if (layer) {
-            layer.bringToBack();
-        }
-    }
-    //设置某个图层的样式
-    setLayerStyle(layerId, style) {
-        const layer = this.layerGroup.getLayer(layerId);
-        if (layer) {
-            layer.setStyle(style);
-        }
-    }
     // 绑定点击事件
     bindClickEvent() {
         var that = this;
@@ -163,54 +119,56 @@ class MapObj {
         // 绑定点击事件，收集所有点击到的图层的 feature 数据
         this.mapObj.on('click', function (e) {
 
+            if (!$('.attribute-container').hasClass('active')) {
+                return false;
+            }
             let attributeData = []
             let queryPromises = [];
 
             // 遍历每个图层
-            that.layerStore.forEach((layer, index) => {
+            that.layerGroup.eachLayer((layer) => {
                 let collectedData = [];
                 // 创建查询对象
                 const query = L.esri.query({
                     url: layer.options.url  // 每个图层的服务 URL
                 });
 
-                // 设置查询参数，返回属性字段，不返回几何信息
                 let queryPromise;
-                if (layer._layers[0].feature.geometry.type === 'Point') {
+                let type = layer._layers[0].feature.geometry.type;
+                // 设置查询参数，返回属性字段，不返回几何信息
+                if (type === 'Point') {
                     // 对于点状要素，使用 nearby 方法
                     queryPromise = new Promise((resolve, reject) => {
-                        query.nearby(e.latlng)
-                            .run((error, featureCollection) => {
-                                if (error) {
-                                    console.error("查询图层失败: ", error);
-                                    reject(error);
-                                    return;
-                                }
+                        query.bboxIntersects(e.latlng)
+                        query.run((error, featureCollection) => {
+                            if (error) {
+                                console.error("查询图层失败: ", error);
+                                reject(error);
+                                return;
+                            }
 
-                                // 如果有要素返回，收集它们的数据
-                                if (featureCollection.features.length > 0) {
-                                    featureCollection.features.forEach((feature) => {
-                                        collectedData.push({
-                                            feature: feature, // 要素的属性数据
-                                            options: layer._originalStyle // 图层的其他配置信息
-                                        });
+                            // 如果有要素返回，收集它们的数据
+                            if (featureCollection.features.length > 0) {
+                                featureCollection.features.forEach((feature) => {
+                                    collectedData.push({
+                                        feature: feature, // 要素的属性数据
+                                        options: layer._originalStyle // 图层的其他配置信息
                                     });
-                                }
-                                attributeData.push({
-                                    index: index,
-                                    layerId: layer.layerId,
-                                    name: layer.layerName,
-                                    subtitle: layer.subtitle,
-                                    children: collectedData
                                 });
-                                resolve();
+                            }
+                            attributeData.push({
+                                layerId: layer.layerId,
+                                name: layer.layerName,
+                                subtitle: layer.subtitle,
+                                children: collectedData
                             });
+                            resolve();
+                        });
                     });
-                } else if (layer._layers[0].feature.geometry.type === 'LineString') {
-                    console.log(layer._layers[0].feature.geometry.type)
+                } else if (type === 'LineString') {
                     // 对于线状或面状要素，使用 query 方法
                     queryPromise = new Promise((resolve, reject) => {
-                        query.within(e.latlng)
+                        query.bboxIntersects(e.latlng)
                             .run((error, featureCollection) => {
                                 if (error) {
                                     console.error("查询图层失败: ", error);
@@ -228,7 +186,6 @@ class MapObj {
                                     });
                                 }
                                 attributeData.push({
-                                    index: index,
                                     layerId: layer.layerId,
                                     name: layer.layerName,
                                     subtitle: layer.subtitle,
@@ -258,7 +215,6 @@ class MapObj {
                                     });
                                 }
                                 attributeData.push({
-                                    index: index,
                                     layerId: layer.layerId,
                                     name: layer.layerName,
                                     subtitle: layer.subtitle,
@@ -302,6 +258,8 @@ class MapObj {
         })
         // 图层底图选择
         $('.layer-items a').on('click', function (e) {
+            if ($(this).hasClass('active'))
+                return false;
             $(this).siblings().removeClass('active')
             $(this).addClass('active')
             const id = $(this).attr('id')

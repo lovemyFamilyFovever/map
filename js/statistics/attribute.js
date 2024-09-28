@@ -126,18 +126,11 @@ class Attribute {
         // const toProj = proj4("EPSG:3857");    // WGS84 Web Mercator
 
         if (type === "Point") {
-            const coordinates = geometry.coordinates;
-            // 将CGCS2000的坐标转换为Web Mercator坐标
-            // const [x, y] = proj4(fromProj, toProj, [coordinates[0], coordinates[1]]);
-            // const latLng = L.CRS.EPSG3857.unproject(L.point(x, y));
-            map.setView(latLng, 18); // 设置地图中心并放大到适当的级别
+            const [lng, lat] = geometry.coordinates;
+            map.setView([lat, lng], map.getZoom());
         } else if (type === "LineString") {
             const coordinates = geometry.coordinates;
-            const latLngs = coordinates.map(coord => {
-                const [x, y] = proj4(fromProj, toProj, coord);
-                return L.CRS.EPSG3857.unproject(L.point(x, y));
-            });
-            const bounds = L.latLngBounds(latLngs);
+            const bounds = L.latLngBounds(coordinates);
             // 将地图视角调整为包含整个边界框
             map.fitBounds(bounds, {
                 padding: [50, 50], // 设置边距，上下左右各50像素
@@ -145,14 +138,6 @@ class Attribute {
         } else if (type === "Polygon") {
             // 如果是面图层
             const coordinates = geometry.coordinates[0];
-
-            // const latLngs = coordinates.map(coord => {
-            //     const [x, y] = proj4(fromProj, toProj, coord);
-            //     return L.CRS.EPSG3857.unproject(L.point(x, y));
-            // });
-            // const bounds = L.latLngBounds(latLngs);
-
-            // 创建一个空的 LatLngBounds 对象
             let bounds = L.latLngBounds();
 
             // 遍历多边形的每个点，并添加到 bounds 中
