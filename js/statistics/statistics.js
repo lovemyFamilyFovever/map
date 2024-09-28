@@ -1,16 +1,15 @@
 //渲染指定图层的表格
 class Statistics {
     constructor() {
-        this.data = [];
-        this.firstLayer = null;
+        this.layer = null;
         this.customTable = null;
         this.init();
     }
     init() {
 
         sfs.layerGroup.eachLayer(layer => {
-            if (layer.layerId !== "XZQ" && this.firstLayer == null) {
-                this.firstLayer = layer
+            if (layer.layerId !== "XZQ" && this.layer == null) {
+                this.layer = layer
             }
         });
 
@@ -27,11 +26,11 @@ class Statistics {
             $(".statistics-items .empty_table").hide();
 
             this.renderTitle();
-            this.renderContent(this.firstLayer._leaflet_id);
+            this.renderContent(this.layer._leaflet_id);
             this.bindEvent();
             $('.statistics-content-body .loading-container').hide();
 
-            this.customTable = new CustomTable(this.firstLayer);//实例化自定义图表
+            this.customTable = new CustomTable(this.layer);//实例化自定义图表
         }
     }
 
@@ -52,7 +51,7 @@ class Statistics {
             liHtml += `<li data-leafletID="${layer._leaflet_id}"><span>${layer.layerName}</span></li>`;
         });
         $('.statistics-title-container ul').html(liHtml);
-        $('.statistics-title-input').val(this.firstLayer.layerName).attr('data-leafletID', this.firstLayer._leaflet_id);
+        $('.statistics-title-input').val(this.layer.layerName).attr('data-leafletID', this.layer._leaflet_id);
     }
 
     renderContent(id) {
@@ -152,15 +151,9 @@ class Statistics {
             $('.dropdown_list').hide();
             const $dropdown_list = $(this).parent().find('.dropdown_list');
             let html = "";
-
-            const layerId = $('.statistics-title-input').attr('data-layerid');
-
-            that.data.forEach((item, index) => {
-                if (item.layerId == layerId) {
-                    item.columns.forEach((column, index) => {
-                        html += `<li data-field="${column.field}"><span>${column.title}</span></li>`;
-                    });
-                }
+            that.layer.columns.forEach((item, index) => {
+                if (item.statistics)
+                    html += `<li data-field="${item.field}"><span>${item.title}</span></li>`;
             });
 
             $dropdown_list.find('ul').html(html)
@@ -179,7 +172,6 @@ class Statistics {
             $(this).parent().parent().toggle();
         });
 
-
         //重置 按钮
         $('.statistics-content-footer .reset').on('click', () => {
             $('.statistics-item .dropdown_input').val("");
@@ -188,7 +180,7 @@ class Statistics {
         //查询 按钮
         $('.statistics-content-footer .confirm').on('click', that.debounce(() => {
 
-            const index = $('.statistics-title-input').attr('data-index');
+            const leafletID = $('.statistics-title-input').attr('data-leafletID');
 
             let uniqueCategories = "";
             if ($('.statistics-item').length > 0) {
@@ -208,7 +200,6 @@ class Statistics {
                 uniqueCategories = uniqueCategories.substring(0, uniqueCategories.length - 5);
             }
 
-
             let groupColumn = true;
             let statisticsParams = null;
             $('.statistics-group-wrap-content .dropdown_input').each((index, item) => {
@@ -226,10 +217,9 @@ class Statistics {
                     statisticsType: $('.calc-input .dropdown_input').attr('data-field'),
                     chartType: $('.chart-input .dropdown_input').attr('data-field'),
                 };
-
             }
 
-            new CustomTable(that.data[index], uniqueCategories, statisticsParams);//实例化自定义图表
+            new CustomTable(sfs.layerGroup.getLayer(leafletID), uniqueCategories, statisticsParams);//实例化自定义图表
 
             $('.table-content').show();
         }, 300));

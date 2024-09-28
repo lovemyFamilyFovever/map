@@ -94,8 +94,11 @@ class CustomTable {
                 delete group[satisticsFieldName + '_数量和'];
             });
         } else {
-            delete group[satisticsFieldName + '_总和'];
-            delete group[satisticsFieldName + '_平均值'];
+            result.map(group => {
+                delete group[satisticsFieldName + '_总和'];
+                delete group[satisticsFieldName + '_平均值'];
+            });
+
         }
 
         return result
