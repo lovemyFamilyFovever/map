@@ -8,7 +8,7 @@ $(document).ready(function () {
     renderLayerList(); // 渲染图层列表页面
     initEvent()// 首屏页面的事件注册
 
-    new Statistics(); // 实例化统计面板
+    statisticsObj = new Statistics(); // 实例化统计面板
 });
 
 // 渲染图层列表页面
@@ -61,7 +61,7 @@ function renderLayerList(list) {
 
 // 首屏页面的事件注册
 function initEvent() {
-
+    var that = this;
     //显示隐藏 图层列表
     $('.layer-container').on('click', function () {
 
@@ -130,7 +130,6 @@ function initEvent() {
 
             const leafletID = sfs.addGeoJSONToMap(objectData);
             $(this).attr('data-leafletid', leafletID)
-            new Statistics(); // 实例化统计面板
 
             $(this).closest('.layer_switch').prev().addClass('active')
             $(this).parent().show();
@@ -144,9 +143,8 @@ function initEvent() {
             $(this).closest('.layer_switch').prev().removeClass('active')
             $(this).parent().show();
             $(this).parent().prev().hide()
-
-            new Statistics(); // 实例化统计面板
         }
+        that.statisticsObj.renderTitle(); // 重新渲染统计面板标题
     });
 
     //隐藏 统计查询

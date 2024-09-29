@@ -109,6 +109,7 @@ p.layer_name{color:#333}
 .empty_table .empty_table_image,.empty_chart .empty_chart_image{margin-bottom:20px}
 .table_action_btn{cursor:pointer;display:-webkit-box;display:-ms-flexbox;display:flex;border-radius:5px;background:#f1f3f6;padding:0 10px;font-weight:bolder;line-height:26px;height:26px;font-size:12px;gap:7px;width:-webkit-max-content;width:-moz-max-content;width:max-content;-webkit-box-align:center;-ms-flex-align:center;align-items:center;margin-left:10px;position:relative}
 .table_action_text{width:-webkit-max-content;width:-moz-max-content;width:max-content;color:#333}
+.table_title_filter{display: none;}
 .table_action_btn img{width:14px;height:14px}
 .table_action_btn:hover{background:aliceblue}
 .tabulator-row{border-bottom:1px solid #edf6fd;min-height:27px;line-height:27px;font-size:12px}
@@ -117,7 +118,7 @@ p.layer_name{color:#333}
 .tabulator .tabulator-footer{background:#fff;border-top:none}
 .tabulator .tabulator-footer .tabulator-footer-contents{padding:0}
 .tabulator .tabulator-footer .tabulator-page{margin:0;padding:5px 10px}
-.tabulator .tabulator-tableholder{border-radius:10px;overflow:hidden}
+.tabulator .tabulator-tableholder{border-radius:10px;overflow:scroll;}
 .tabulator{font-size:12px}
 .tabulator .tabulator-header{border-bottom:none;border-top:none}
 .tabulator .tabulator-footer .tabulator-page[data-page="first"],.tabulator .tabulator-footer .tabulator-page[data-page="last"]{display:none}
@@ -198,10 +199,11 @@ to{-webkit-transform:scale(1);transform:scale(1)}
 .table_column_filter_action input{vertical-align:middle;cursor:pointer}
 .search_btn{border:none;outline:none;background:#327CFF;color:#fff;width:80px;line-height:30px;height:30px;text-align:center;border-radius:5px;cursor:pointer;-webkit-transition:color .2s linear,background-color .2s linear,border .2s linear,-webkit-box-shadow .2s linear;transition:color .2s linear,background-color .2s linear,border .2s linear,-webkit-box-shadow .2s linear}
 .search_btn:hover{color:#fff;background-color:#57a3f3;border-color:#57a3f3}
+.statistics-content .empty_table{display: none;}
 .statistics-content-body{padding:10px 0;min-height:calc(100% - 85px);height:calc(100% - 85px)}
 .statistics-content-footer{position:absolute;bottom:10px;left:10px;right:10px;display:flex;justify-content:space-between}
 .statistics-items{position:relative}
-.statistics-card{color:#000;font-size:0.7rem;position:relative;line-height:1.5rem;padding:0 10px}
+.statistics-card{color:#000;font-size:0.7rem;position:relative;line-height:1.5rem;padding:0 10px;font-weight: bolder;}
 .statistics-card:before{content:"";position:absolute;width:5px;height:1rem;border-radius:5px;left:-4px;top:5px;background:#327cff}
 .statistics-item{display:flex;gap:10px;margin:10px;align-items:center}
 .statistics-item .dropdown_list{max-height:270px}

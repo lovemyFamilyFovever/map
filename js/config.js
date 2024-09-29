@@ -120,7 +120,7 @@ var config = {
         layerName: "工业用地",
         subtitle: "TDSYQR",
         url: preUrl + "GYYD/MapServer/0",
-        show: false,
+        show: true,
         style: {
             fillColor: "#3388ff",
             color: "#3388ff",
@@ -132,7 +132,7 @@ var config = {
             //title: 表格列名，field: 数据库字段名，statistics: 是否统计
             { title: "所在乡镇", field: "SZX", statistics: true },
             { title: "土地使用权人", field: "TDSYQR", statistics: true },
-            { title: "土地面积（亩）", field: "TDMJ", statistics: false },
+            { title: "土地面积（亩）", field: "TDMJ", statistics: true },
             { title: "建设状况", field: "JSZK", statistics: true },
             { title: "是否一地多企", field: "SFYDDQ", statistics: true },
             { title: "是否规上企业用地", field: "SFGSQYYD", statistics: true },
@@ -213,7 +213,7 @@ var config = {
         layerName: "企业位置",
         subtitle: "YDDWMC",
         url: preUrl + "QYWZ/MapServer/0",
-        show: true,
+        show: false,
         style: {
             radius: 5,
             fillColor: "blue",
