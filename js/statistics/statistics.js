@@ -3,15 +3,16 @@ class Statistics {
     constructor() {
         this.layer = null;
         this.customTable = null;
+        this.metadataFields = null;
         this.init();
     }
     init() {
-
         sfs.layerGroup.eachLayer(layer => {
             if (layer.layerId !== "XZQ" && this.layer == null) {
                 this.layer = layer
             }
         });
+        this.metadataFields = this.getMetadataFields();
 
         this.destroy(); // 先销毁可能存在的旧实例
         if (sfs.layerGroup.size == 0) {
@@ -64,6 +65,16 @@ class Statistics {
         $(".statistics-items").html(html);
     }
 
+    getMetadataFields() {
+        this.layer.metadata((error, metadata) => {
+            if (error) {
+                console.error('Error fetching metadata:', error);
+                return;
+            }
+            this.metadataFields = metadata.fields;
+        });
+    }
+
     //绑定事件
     bindEvent() {
         let that = this;
@@ -84,6 +95,7 @@ class Statistics {
             that.renderContent($(this).attr('data-leafletID'));
 
             that.customTable = new CustomTable($(this).attr('data-leafletID'));//实例化自定义图表
+            that.metadataFields = that.getMetadataFields();
         });
 
         //展示下拉列表-具体值
@@ -146,20 +158,27 @@ class Statistics {
             }
         });
 
-        //分组字段 按钮 + 统计字段 按钮
-        $('.group-input input,.statistic-input input').on('click', function () {
+        // 分组字段 按钮 + 统计字段 按钮
+        $('.group-input input, .statistic-input input').on('click', function () {
+            // 隐藏所有下拉列表
             $('.dropdown_list').hide();
+
             const $dropdown_list = $(this).parent().find('.dropdown_list');
             let html = "";
-            that.layer.columns.forEach((item, index) => {
-                if (item.statistics)
-                    html += `<li data-field="${item.field}"><span>${item.title}</span></li>`;
+            that.layer.columns.forEach(item => {
+                that.metadataFields.forEach(field => {
+                    if (field.alias == item.field) {
+                        html += `<li data-field="${field.name}" data-type="${field.type}"><span>${item.title}</span></li>`;
+                    }
+                });
             });
+            // 更新下拉列表的内容并显示
+            $dropdown_list.find('ul').html(html);
+            $dropdown_list.toggle(); // 切换显示状态
+            new PerfectScrollbar($dropdown_list[0]); // 更新滚动条
 
-            $dropdown_list.find('ul').html(html)
-            $dropdown_list.toggle();
-            new PerfectScrollbar($dropdown_list[0]);
-        })
+        });
+
 
         //统计类型 按钮 + 图表类型 按钮
         $('.calc-input input,.chart-input input').on('click', function () {
@@ -168,8 +187,20 @@ class Statistics {
         })
         //分组字段 选择 + 统计字段 选择 + 统计类型 选择 + 图表类型 选择
         $('.group-input,.statistic-input,.calc-input,.chart-input ').on('click', 'li', function () {
-            $(this).parent().parent().siblings('.dropdown_input').val($(this).text()).attr('data-field', $(this).attr('data-field'));
-            $(this).parent().parent().toggle();
+            const $parent = $(this).parent().parent();
+            $parent.siblings('.dropdown_input').val($(this).text()).attr('data-field', $(this).attr('data-field'));
+            if ($(this).attr('data-type')) {
+                $parent.siblings('.dropdown_input').attr('data-type', $(this).attr('data-type'));
+            }
+            if ($parent.parent().hasClass('calc-input')) {
+                const type = $('.calc-input').prev().find('.dropdown_input').attr('data-type');
+                if (type == "esriFieldTypeDouble") {
+                    $('.calc-input ul').empty().append(`<li data-field="AVG">平均值</li><li data-field="SUM">求和</li>`)
+                } else {
+                    $('.calc-input ul').empty().append(`<li data-field="COUNT">计数</li>`)
+                }
+            }
+            $parent.toggle();
         });
 
         //重置 按钮

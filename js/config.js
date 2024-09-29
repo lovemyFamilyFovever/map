@@ -1,8 +1,9 @@
+const preUrl = "http://192.168.1.2:6080/arcgis/rest/services/低效用地/"
 var config = {
     defaultCatalog: 'PC',
     version: "0.35",
     projectName: "徐州经济技术开发区工业企业低效用地分析系统",
-
+    // preUrl: "http://localhost:6080/arcgis/rest/services/低效用地/",
     mapOptions: {
         center: [34.283876502969214, 117.37861633300783],
         minZoom: 1, //最小缩放值
@@ -45,7 +46,7 @@ var config = {
         layerId: "XZQ",
         layerName: "行政区",
         subtitle: "XZQMC",
-        url: "http://localhost:6080/arcgis/rest/services/低效用地/XZQ/MapServer/0",
+        url: preUrl + "XZQ/MapServer/0",
         show: true,
         style: {
             fillColor: "#3388ff",
@@ -64,7 +65,7 @@ var config = {
             layerId: "ZJXZQ",
             layerName: "镇级行政区",
             subtitle: "XZQMC",
-            url: "http://localhost:6080/arcgis/rest/services/低效用地/GYYD/MapServer/0",
+            url: preUrl + "GYYD/MapServer/0",
             show: false,
             style: {
                 color: "#D81159",
@@ -101,7 +102,7 @@ var config = {
         layerId: "XZJT",
         layerName: "交通",
         subtitle: "用地类型",
-        url: "http://localhost:6080/arcgis/rest/services/低效用地/XZJT/MapServer/0",
+        url: preUrl + "XZJT/MapServer/0",
         show: true,
         style: {
             color: "#795548",
@@ -118,7 +119,7 @@ var config = {
         layerId: "GYYD",
         layerName: "工业用地",
         subtitle: "TDSYQR",
-        url: "http://localhost:6080/arcgis/rest/services/低效用地/GYYD/MapServer/0",
+        url: preUrl + "GYYD/MapServer/0",
         show: false,
         style: {
             fillColor: "#3388ff",
@@ -211,7 +212,7 @@ var config = {
         layerId: "QYWZ",
         layerName: "企业位置",
         subtitle: "YDDWMC",
-        url: "http://localhost:6080/arcgis/rest/services/低效用地/QYWZ/MapServer/0",
+        url: preUrl + "QYWZ/MapServer/0",
         show: true,
         style: {
             radius: 5,
