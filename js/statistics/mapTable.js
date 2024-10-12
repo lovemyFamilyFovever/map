@@ -98,12 +98,9 @@ class CustomTable {
                 delete group[satisticsFieldName + '_总和'];
                 delete group[satisticsFieldName + '_平均值'];
             });
-
         }
-
         return result
     }
-
 
     // 销毁方法
     destroy() {
@@ -121,7 +118,8 @@ class CustomTable {
         let tableObj = {
             data,
             height: "100%",
-            layout: "fitColumns", // 自动调整列宽 
+            layout: "fitDataFill", // 自动调整列宽 
+            columnFit: true,
             resizableColumns: true,// 允许调整列宽
             paginationSize: 10, // 每页显示的记录数
             paginationSizeSelector: [10, 20, 30, 40],
@@ -156,14 +154,24 @@ class CustomTable {
 
         this.table = new Tabulator(`#main-table`, tableObj);
 
+
         //当调用tabulator构造函数并且表已完成渲染时，触发tableBuilt事件,渲染滚动条
         this.table.on("tableBuilt", () => {
-
+            this.table.hideColumn("id");
             this.table.setLocale("zh-cn");
 
             $('#main-table').show()
             $('.table-content .loading-container').hide();
-            new PerfectScrollbar('.table_panel .tabulator-tableholder');
+
+            // 重新绑定行点击事件
+            this.table.on("rowClick", (e, row) => {
+                console.log("Clicked row:", this);
+                var rowData = row.getData();
+                var nameValue = rowData.name;
+                console.log("Clicked row's name:", nameValue);
+            });
+
+            // new PerfectScrollbar('.table_panel .tabulator-tableholder');
             this.getStatisticsTable();
             this.bindEvents();
 
@@ -253,7 +261,7 @@ class CustomTable {
             columnArray.push({
                 title: item["title"],
                 field: item["field"],
-                minWidth: 100,
+                visible: item["field"] !== "FID",
             })
         })
         return columnArray

@@ -1,4 +1,5 @@
 const preUrl = "http://192.168.1.2:6080/arcgis/rest/services/低效用地/"
+//const preUrl = "http://10.20.28.10:6080/arcgis/rest/services/低效用地/"
 var config = {
     defaultCatalog: 'PC',
     version: "0.35",
@@ -57,6 +58,7 @@ var config = {
         },
         columns: [
             //title: 表格列名，field: 数据库字段名，statistics: 是否统计
+            { title: "id", field: "FID", statistics: false },
             { title: "行政区名称", field: "XZQMC", statistics: true },
             { title: "长度", field: "Shape_Length", statistics: true },
             { title: "面积", field: "Shape_Area", statistics: false },
@@ -65,7 +67,7 @@ var config = {
             layerId: "ZJXZQ",
             layerName: "镇级行政区",
             subtitle: "XZQMC",
-            url: preUrl + "GYYD/MapServer/0",
+            url: preUrl + "ZJXZQ/MapServer/0",
             show: false,
             style: {
                 color: "#D81159",
@@ -74,6 +76,7 @@ var config = {
             },
             columns: [
                 //title: 表格列名，field: 数据库字段名，statistics: 是否统计
+                { title: "id", field: "FID", statistics: false },
                 { title: "行政区名称", field: "XZQMC", statistics: true },
                 { title: "导出面积", field: "DCMJ", statistics: false },
                 { title: "建设面积", field: "JSMJ", statistics: false },
@@ -83,7 +86,7 @@ var config = {
             layerId: "CJXZQ",
             layerName: "村级行政区",
             subtitle: "ZLDWMC",
-            url: "http://150.158.76.25:5000/load_shp?file_path=CJXZQ",
+            url: preUrl + "CJXZQ/MapServer/0",
             show: false,
             style: {
                 color: "#BBFFFF",
@@ -92,35 +95,38 @@ var config = {
             },
             columns: [
                 //title: 表格列名，field: 数据库字段名，statistics: 是否统计
+                { title: "id", field: "FID", statistics: false },
                 { title: "地均单位名称", field: "DJDWMC", statistics: true },
                 { title: "导出面积", field: "DCMJ", statistics: false },
                 { title: "建设面积", field: "JSMJ", statistics: false },
                 { title: "县区代码", field: "县区代码", statistics: true },
             ],
         }]
-    }, {
-        layerId: "XZJT",
-        layerName: "交通",
-        subtitle: "用地类型",
-        url: preUrl + "XZJT/MapServer/0",
-        show: true,
-        style: {
-            color: "#795548",
-            weight: 4
-        },
-        columns: [
-            //title: 表格列名，field: 数据库字段名，statistics: 是否统计
-            { title: "用地类型", field: "用地类型", statistics: true },
-            { title: "名称", field: "MC", statistics: true },
-            { title: "备注", field: "备注", statistics: false },
-            { title: "原名称备份", field: "原名称备份", statistics: false },
-        ],
-    }, {
+    },
+    // {
+    //     layerId: "XZJT",
+    //     layerName: "交通",
+    //     subtitle: "用地类型",
+    //     url: preUrl + "XZJT/MapServer/0",
+    //     show: false,
+    //     style: {
+    //         color: "#795548",
+    //         weight: 4
+    //     },
+    //     columns: [
+    //         //title: 表格列名，field: 数据库字段名，statistics: 是否统计
+    //         { title: "用地类型", field: "用地类型", statistics: true },
+    //         { title: "名称", field: "MC", statistics: true },
+    //         { title: "备注", field: "备注", statistics: false },
+    //         { title: "原名称备份", field: "原名称备份", statistics: false },
+    //     ],
+    // }, 
+    {
         layerId: "GYYD",
         layerName: "工业用地",
         subtitle: "TDSYQR",
         url: preUrl + "GYYD/MapServer/0",
-        show: false,
+        show: true,
         style: {
             fillColor: "#3388ff",
             color: "#3388ff",
@@ -130,9 +136,10 @@ var config = {
         },
         columns: [
             //title: 表格列名，field: 数据库字段名，statistics: 是否统计
+            { title: "id", field: "FID", statistics: false },
             { title: "所在乡镇", field: "SZX", statistics: true },
             { title: "土地使用权人", field: "TDSYQR", statistics: true },
-            { title: "土地面积（亩）", field: "TDMJ", statistics: false },
+            { title: "土地面积（亩）", field: "TDMJ", statistics: true },
             { title: "建设状况", field: "JSZK", statistics: true },
             { title: "是否一地多企", field: "SFYDDQ", statistics: true },
             { title: "是否规上企业用地", field: "SFGSQYYD", statistics: true },
@@ -145,7 +152,7 @@ var config = {
             layerId: "低效工业用地",
             layerName: "低效工业用地",
             subtitle: "PHPQMC",
-            url: "http://150.158.76.25:5000/load_shp?file_path=低效工业用地",
+            url: preUrl + "低效工业用地/MapServer/0",
             show: false,
             style: {
                 color: "#4FB0C6",
@@ -154,6 +161,7 @@ var config = {
             },
             columns: [
                 //title: 表格列名，field: 数据库字段名，statistics: 是否统计
+                { title: "id", field: "FID", statistics: false },
                 { title: "行政村", field: "SZC", statistics: true },
                 { title: "土地使用权人", field: "TDSYQR", statistics: true },
                 { title: "用地单位", field: "YDDW", statistics: false },
@@ -164,7 +172,7 @@ var config = {
             layerId: "片区盘活地块",
             layerName: "片区盘活地块",
             subtitle: "PHPQMC",
-            url: "http://150.158.76.25:5000/load_shp?file_path=片区盘活地块",
+            url: preUrl + "片区盘活地块/MapServer/0",
             show: false,
             style: {
                 color: "#0000FF",
@@ -173,6 +181,7 @@ var config = {
             },
             columns: [
                 //title: 表格列名，field: 数据库字段名，statistics: 是否统计
+                { title: "id", field: "FID", statistics: false },
                 { title: "土地整理", field: "TDZL", statistics: false },
                 { title: "所在乡镇", field: "SZXZ", statistics: true },
                 { title: "行政村", field: "SZC", statistics: true },
@@ -196,7 +205,7 @@ var config = {
         layerId: "片区范围",
         layerName: "片区范围",
         subtitle: "盘活片区名",
-        url: "http://150.158.76.25:5000/load_shp?file_path=片区范围",
+        url: preUrl + "片区范围/MapServer/0",
         show: false,
         style: {
             color: "#00FA9A",
@@ -205,6 +214,7 @@ var config = {
         },
         columns: [
             //title: 表格列名，field: 数据库字段名，statistics: 是否统计
+            { title: "id", field: "FID", statistics: false },
             { title: "盘活片区名", field: "盘活片区名", statistics: true },
             { title: "行政区名称", field: "行政区名称", statistics: false },
         ]
@@ -213,7 +223,7 @@ var config = {
         layerName: "企业位置",
         subtitle: "YDDWMC",
         url: preUrl + "QYWZ/MapServer/0",
-        show: true,
+        show: false,
         style: {
             radius: 5,
             fillColor: "blue",
@@ -222,6 +232,7 @@ var config = {
         },
         columns: [
             //title: 表格列名，field: 数据库字段名，statistics: 是否统计
+            { title: "id", field: "FID", statistics: false },
             { title: "所在县", field: "SZX", statistics: true },
             { title: "所在村", field: "SZC", statistics: true },
             { title: "所在乡镇", field: "SZXZ", statistics: true },

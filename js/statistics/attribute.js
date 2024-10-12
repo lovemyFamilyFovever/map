@@ -62,7 +62,7 @@ class Attribute {
             $('.attribute-title-count b').text(number)
         });
 
-        // 点击图层属性列表，展开隐藏图层片段
+        // >展开隐藏图层片段
         $('.attribute-wrap').on('click', '.select-attribute-toggle', function (e) {
             e.stopPropagation();
             e.preventDefault();
@@ -86,6 +86,11 @@ class Attribute {
             that.locateLayerOnMap(that.data[i].children[j]);
         })
 
+        $('.attribute-wrap').on('mouseenter', '.select-attribute-detail li', function (e) {
+        })
+        $('.attribute-wrap').on('mouseleave', '.select-attribute-detail li', function (e) {
+        })
+
         //返回上一级
         $('.attribute-wrap').on('click', '.attribute-info-back', function (e) {
             $('.attribute-info-container').hide();
@@ -103,13 +108,10 @@ class Attribute {
             // 移除悬浮的文本
             $('#hover-text').remove();
             $(document).off('mousemove.hoverText'); // 取消鼠标移动事件
-
         })
-
     }
 
     locateLayerOnMap(layer) {
-
         // 首先恢复所有图层的初始样式
         this.restoreOriginalStyles();
 
@@ -121,9 +123,6 @@ class Attribute {
 
         const geometry = layer.feature.geometry;
         const type = geometry.type;
-
-        // const fromProj = proj4("EPSG:4539");  // CGCS2000
-        // const toProj = proj4("EPSG:3857");    // WGS84 Web Mercator
 
         if (type === "Point") {
             const [lng, lat] = geometry.coordinates;

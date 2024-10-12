@@ -7,52 +7,42 @@ class Statistics {
         this.init();
     }
     init() {
-        sfs.layerGroup.eachLayer(layer => {
-            if (layer.layerId !== "XZQ" && this.layer == null) {
-                this.layer = layer
-            }
-        });
-        this.metadataFields = this.getMetadataFields();
+        $(".statistics-items .empty_table").hide();
 
-        this.destroy(); // 先销毁可能存在的旧实例
-        if (sfs.layerGroup.size == 0) {
-            $(".statistics-items").append(`
-                <div class="empty_table">
-                    <div class="empty_table_image">
-                        <img src="imgs/empty_table.svg" />
-                    </div>
-                <div class="empty_table_text">请先加载图层!</div>
-            </div>`);
-        } else {
-            $(".statistics-items .empty_table").hide();
-
-            this.renderTitle();
-            this.renderContent(this.layer._leaflet_id);
-            this.bindEvent();
-            $('.statistics-content-body .loading-container').hide();
-
-            this.customTable = new CustomTable(this.layer);//实例化自定义图表
-        }
-    }
-
-    // 销毁方法
-    destroy() {
-        // 移除已绑定的事件，避免多次绑定
-        $('.statistics-title-input').off('click',)
-        $('.statistics-title-container .dropdown_list').off('click', 'li')
-        $('.statistics-items').off('click', '.statistics-item-target .target-input')
-        $('.statistics-items').off('click', '.statistics-item-target li')
+        this.renderTitle();
+        this.renderContent(this.layer._leaflet_id);
+        this.bindEvent();
+        $('.statistics-content-body .loading-container').hide();
     }
 
     renderTitle() {
+        this.layer = null
         //渲染图层下拉选项的列表
         let liHtml = "";
-        sfs.layerGroup.eachLayer((layer, index) => {
-            if (layer.layerId == "XZQ") return;
+
+        sfs.layerGroup.eachLayer((layer) => {
+            if (layer.layerId == "XZQ") {
+                return;
+            }
+            if (this.layer == null) {
+                this.layer = layer
+            }
             liHtml += `<li data-leafletID="${layer._leaflet_id}"><span>${layer.layerName}</span></li>`;
         });
-        $('.statistics-title-container ul').html(liHtml);
-        $('.statistics-title-input').val(this.layer.layerName).attr('data-leafletID', this.layer._leaflet_id);
+        if (this.layer == null) {
+            $('.statistics-content .data-body').hide();
+            $('.statistics-content .empty_table').css('display', 'flex');
+        } else {
+
+            $('.statistics-content .data-body').show();
+            $('.statistics-content .empty_table').css('display', 'none');
+
+            $('.statistics-title-container ul').html(liHtml);
+            $('.statistics-title-input').val(this.layer.layerName).attr('data-leafletID', this.layer._leaflet_id);
+            this.metadataFields = this.getMetadataFields();
+            this.renderContent(this.layer._leaflet_id);
+            this.customTable = new CustomTable(this.layer);//实例化自定义图表
+        }
     }
 
     renderContent(id) {
@@ -92,10 +82,15 @@ class Statistics {
             $('.statistics-title-input').val(layerName).attr('data-leafletID', $(this).attr('data-leafletID'));
 
             $('.statistics-title-container .dropdown_list').hide();
+
+            that.layer = sfs.layerGroup.getLayer($(this).attr('data-leafletID'));
+
             that.renderContent($(this).attr('data-leafletID'));
 
-            that.customTable = new CustomTable($(this).attr('data-leafletID'));//实例化自定义图表
-            that.metadataFields = that.getMetadataFields();
+            that.customTable = new CustomTable(that.layer);//实例化自定义图表
+            that.getMetadataFields();
+
+            $('.statistics-group-wrap-content .dropdown_input').val("");
         });
 
         //展示下拉列表-具体值
@@ -167,7 +162,7 @@ class Statistics {
             let html = "";
             that.layer.columns.forEach(item => {
                 that.metadataFields.forEach(field => {
-                    if (field.alias == item.field) {
+                    if (field.alias == item.field && item.statistics) {
                         html += `<li data-field="${field.name}" data-type="${field.type}"><span>${item.title}</span></li>`;
                     }
                 });
@@ -176,13 +171,21 @@ class Statistics {
             $dropdown_list.find('ul').html(html);
             $dropdown_list.toggle(); // 切换显示状态
             new PerfectScrollbar($dropdown_list[0]); // 更新滚动条
-
         });
-
 
         //统计类型 按钮 + 图表类型 按钮
         $('.calc-input input,.chart-input input').on('click', function () {
             $('.dropdown_list').hide();
+
+            if ($(this).parent().parent().hasClass('calc-input')) {
+                const type = $('.statistic-input').find('.dropdown_input').attr('data-type');
+                if (type == "esriFieldTypeDouble") {
+                    $('.calc-input ul').empty().append(`<li data-field="AVG">平均值</li><li data-field="SUM">求和</li>`)
+                } else {
+                    $('.calc-input ul').empty().append(`<li data-field="COUNT">计数</li>`)
+                }
+            }
+
             $(this).siblings('.dropdown_list').toggle();
         })
         //分组字段 选择 + 统计字段 选择 + 统计类型 选择 + 图表类型 选择
@@ -191,14 +194,6 @@ class Statistics {
             $parent.siblings('.dropdown_input').val($(this).text()).attr('data-field', $(this).attr('data-field'));
             if ($(this).attr('data-type')) {
                 $parent.siblings('.dropdown_input').attr('data-type', $(this).attr('data-type'));
-            }
-            if ($parent.parent().hasClass('calc-input')) {
-                const type = $('.calc-input').prev().find('.dropdown_input').attr('data-type');
-                if (type == "esriFieldTypeDouble") {
-                    $('.calc-input ul').empty().append(`<li data-field="AVG">平均值</li><li data-field="SUM">求和</li>`)
-                } else {
-                    $('.calc-input ul').empty().append(`<li data-field="COUNT">计数</li>`)
-                }
             }
             $parent.toggle();
         });
@@ -250,7 +245,7 @@ class Statistics {
                 };
             }
 
-            new CustomTable(sfs.layerGroup.getLayer(leafletID), uniqueCategories, statisticsParams);//实例化自定义图表
+            that.customTable = new CustomTable(sfs.layerGroup.getLayer(leafletID), uniqueCategories, statisticsParams);//实例化自定义图表
 
             $('.table-content').show();
         }, 300));
