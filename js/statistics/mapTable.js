@@ -7,6 +7,7 @@ class CustomTable {
         this.table = null;
         this.sortable = null;
         this.downloadOptions = ['CSV', 'JSON', 'XLSX', 'PDF', 'HTML'];
+        this.tableData = [];
         this.initTable();
     }
 
@@ -114,11 +115,11 @@ class CustomTable {
 
     //给表格添加数据
     renderTable(data) {
-
+        this.tableData = data;
         let tableObj = {
             data,
             height: "100%",
-            layout: "fitDataFill", // 自动调整列宽 
+            layout: this.statisticsByConditions ? "fitColumns" : "fitDataFill", // 自动调整列宽 
             columnFit: true,
             resizableColumns: true,// 允许调整列宽
             paginationSize: 10, // 每页显示的记录数
@@ -154,7 +155,6 @@ class CustomTable {
 
         this.table = new Tabulator(`#main-table`, tableObj);
 
-
         //当调用tabulator构造函数并且表已完成渲染时，触发tableBuilt事件,渲染滚动条
         this.table.on("tableBuilt", () => {
             this.table.hideColumn("id");
@@ -166,9 +166,13 @@ class CustomTable {
             // 重新绑定行点击事件
             this.table.on("rowClick", (e, row) => {
                 var rowData = row.getData();
+
+                const featureLayer = sfs.getLayerById(this.layer._leaflet_id)
+                const query = featureLayer.query();
+
+                // 点击行时，如果有FID字段，则高亮面积图层
                 if (rowData.FID !== undefined) {
-                    const featureLayer = sfs.getLayerById(this.layer._leaflet_id)
-                    const query = featureLayer.query();
+
                     query.where(`FID = ${row.getData().FID}`)
                         .returnGeometry(true)
                         .run((error, featureCollection) => {
@@ -177,14 +181,38 @@ class CustomTable {
                                 alert(data.msg)
                                 return;
                             }
-                            const geometry = featureCollection.features[0].geometry;
-                            console.log("featureCollection:", geometry)
+                            sfs.addPolygonLayer({
+                                feature: featureCollection.features[0],
+                                options: featureLayer.style,
+                            })
+                        });
+                } else {
+
+
+
+                    query.where(`${this.statisticsByConditions.selectColumn}='${rowData[this.statisticsByConditions.selectColumnName]}'`)
+                        .fields(this.layer.columns.map(item => item.field))
+                        .returnGeometry(false)
+                        .run((error, featureCollection) => {
+                            if (error) {
+                                console.error("查询失败:", error);
+                                alert(data.msg)
+                                return;
+                            }
+                            let attributesArray = [];
+                            // 提取所有要素的属性
+                            attributesArray = featureCollection.features.map(feature => feature.properties);
+
+                            // 先设置列配置
+                            this.table.setData(attributesArray.reverse())
+                            this.table.setColumns(this.handleColumns())
+                            this.getStatisticsTable();
                         });
                 }
             });
 
-            // new PerfectScrollbar('.table_panel .tabulator-tableholder');
-            this.getStatisticsTable();
+            new PerfectScrollbar('.table_panel .tabulator-tableholder');
+
             this.bindEvents();
 
             if (this.statisticsByConditions) {
@@ -300,23 +328,10 @@ class CustomTable {
 
     //统计结果，底部数据
     getStatisticsTable() {
-        const count = this.table.getDataCount("active");
-        var mj_gq = 0;
-        var zd = 0;
-        var yj_m = 0;
-        this.table.getData("active").forEach((row) => {
-            mj_gq += row.土地面积;
-            zd += row.宗地数_宗;
-            yj_m += row.亩;
-        });
-
+        const count = this.tableData.length;
         $('.table-wrapper-count').html(
             `共 <b> ${count > 999 ? '999+' : count}</b> 条丨`
         )
-
-        // 面积(公顷): <b>${mj_gq.toFixed(4)}</b>丨
-        // 宗地数(宗): <b>${zd}</b>丨
-        // 面积(亩): <b>${yj_m.toFixed(2)}</b>
     }
 
     //获取空状态html
@@ -340,14 +355,6 @@ class CustomTable {
             }
         });
         return Array.from(new Set(columns));
-    }
-
-    //过滤表格
-    filterTable(filters) {
-        if (filters.length > 0) {
-            this.table.setFilter(filters);
-            this.getStatisticsTable();
-        }
     }
 
 }

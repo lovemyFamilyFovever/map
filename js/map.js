@@ -145,6 +145,13 @@ class MapObj {
             },
             originalStyle: layer.options
         }).addTo(this.mapObj);
+
+        const layerBounds = this.polygonLayer.getBounds();
+        this.mapObj.fitBounds(layerBounds, {
+            padding: [20, 20], // 地图边缘的内边距，可以根据需要调整
+            maxZoom: 14        // 限制缩放级别，防止过度放大
+        });
+
     }
 
     // 绑定点击事件
@@ -192,13 +199,13 @@ class MapObj {
                                         options: layer._originalStyle // 图层的其他配置信息
                                     });
                                 });
+                                attributeData.push({
+                                    layerId: layer.layerId,
+                                    name: layer.layerName,
+                                    subtitle: layer.subtitle,
+                                    children: collectedData
+                                });
                             }
-                            attributeData.push({
-                                layerId: layer.layerId,
-                                name: layer.layerName,
-                                subtitle: layer.subtitle,
-                                children: collectedData
-                            });
                             resolve();
                         });
                     });
@@ -221,13 +228,13 @@ class MapObj {
                                             options: layer._originalStyle // 图层的其他配置信息
                                         });
                                     });
+                                    attributeData.push({
+                                        layerId: layer.layerId,
+                                        name: layer.layerName,
+                                        subtitle: layer.subtitle,
+                                        children: collectedData
+                                    });
                                 }
-                                attributeData.push({
-                                    layerId: layer.layerId,
-                                    name: layer.layerName,
-                                    subtitle: layer.subtitle,
-                                    children: collectedData
-                                });
                                 resolve();
                             });
                     });
@@ -240,14 +247,15 @@ class MapObj {
             // 等待所有查询完成
             Promise.all(queryPromises).then(() => {
                 that.restoreOriginalStyles();
-                that.addPolygonLayer(attributeData[0].children[0])
                 that.attribute = new Attribute(attributeData); // 实例化属性面板
+                if (attributeData.length == 0) {
+                    return false;
+                }
+                that.addPolygonLayer(attributeData[0].children[0])
             }).catch((err) => {
                 console.error("查询过程中发生错误: ", err);
             });
-
         });
-
 
         // 阻止图层面板点击事件冒泡
         $('.layer-pop').on('click', function () {

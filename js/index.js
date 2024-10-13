@@ -85,14 +85,14 @@ function initEvent() {
             $('.attribute-container').addClass('active')
 
             // 创建悬浮文本的 div
-            var hoverText = $('<div id="hover-text">点击获取图斑属性</div>');
+            var hoverText = $('<img src="imgs/getAttribute.svg" alt="悬浮提示" id="hover-text"/>');
             $('body').append(hoverText);
 
             // 监听鼠标移动事件，让文本跟随鼠标
             $(document).on('mousemove.hoverText', function (e) {
                 hoverText.css({
-                    top: e.clientY + 10 + 'px',  // 距离鼠标光标下方 10 像素
-                    left: e.clientX + 10 + 'px'  // 距离鼠标光标右侧 10 像素
+                    top: e.clientY - 8 + 'px',  // 距离鼠标光标下方 10 像素
+                    left: e.clientX + 8 + 'px'  // 距离鼠标光标右侧 10 像素
                 });
             });
         }

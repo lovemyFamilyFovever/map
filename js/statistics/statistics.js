@@ -159,11 +159,18 @@ class Statistics {
             $('.dropdown_list').hide();
 
             const $dropdown_list = $(this).parent().find('.dropdown_list');
+
+            const name = $(this).parent().parent().hasClass('group-input') ? "分组字段" : "统计字段";
+
             let html = "";
             that.layer.columns.forEach(item => {
                 that.metadataFields.forEach(field => {
                     if (field.alias == item.field && item.statistics) {
-                        html += `<li data-field="${field.name}" data-type="${field.type}"><span>${item.title}</span></li>`;
+                        if (name == "分组字段" && field.type == "esriFieldTypeDouble") {
+                            return false;
+                        } else {
+                            html += `<li data-field="${field.name}" data-type="${field.type}"><span>${item.title}</span></li>`;
+                        }
                     }
                 });
             });
@@ -178,6 +185,9 @@ class Statistics {
             $('.dropdown_list').hide();
 
             if ($(this).parent().parent().hasClass('calc-input')) {
+                if ($('.statistic-input .dropdown_input').val() == "") {
+                    return false;
+                }
                 const type = $('.statistic-input').find('.dropdown_input').attr('data-type');
                 if (type == "esriFieldTypeDouble") {
                     $('.calc-input ul').empty().append(`<li data-field="AVG">平均值</li><li data-field="SUM">求和</li>`)

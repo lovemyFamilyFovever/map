@@ -124,7 +124,10 @@ class Attribute {
                         <ul>`
                 item.children.forEach((child, j) => {
                     number++;
-                    attributeSelectInfoHtml += `<li data-index="${j}"><img src="imgs/图斑.svg" alt="图斑" /> ${child.feature.properties[item.subtitle]}</li>`
+                    attributeSelectInfoHtml += `
+                    <li data-index="${j}" title="${child.feature.properties[item.subtitle]}" class="select-attribute-item">
+                        <img src="imgs/图斑.svg" alt="图斑" /> ${child.feature.properties[item.subtitle]}
+                    </li>`
                 })
                 attributeSelectInfoHtml += `
                         </ul>
@@ -166,7 +169,9 @@ class Attribute {
         }
         return `
             <div class="attribute-info-title">
-                <span class="attribute-info-back"><img src="imgs/tree.svg" alt="图斑" />图形列表</span><img src="imgs/right.svg" alt="间隔" /> ${subtitle}
+                <span class="attribute-info-back"><img src="imgs/tree.svg" alt="图斑" />图形列表</span>
+                <img src="imgs/right.svg" alt="间隔" />
+                <span class="attribute-info-title-name" title="${subtitle}"> ${subtitle}</span>
             </div>
             <div class="attribute-info-content">${attributeInfoContentHtml}</div>`
     }
