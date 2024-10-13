@@ -7,6 +7,7 @@ class MapObj {
         this.image = null;
         this.terrain = null;
 
+        this.polygonLayer = null;// 用于保存当前选中的面图层
         this.attribute = null;
         this.initMap();
     }
@@ -112,6 +113,40 @@ class MapObj {
         }
     }
 
+    // 恢复图层的初始样式
+    restoreOriginalStyles() {
+        if (this.polygonLayer) {
+            if (this.polygonLayer) {
+                this.mapObj.removeLayer(this.polygonLayer);
+                this.polygonLayer = null; // 清空全局变量
+            }
+        }
+    }
+
+    addPolygonLayer(layer) {
+
+        this.restoreOriginalStyles();
+
+        if (!layer.feature || !layer.feature.geometry) {
+            console.error("Invalid layer or geometry");
+            return;
+        }
+
+        // 创建一个用来闪烁的多边形图层
+        this.polygonLayer = L.geoJSON(layer.feature.geometry, {
+            style: function () {
+                return {
+                    fillColor: 'blue',       // 填充颜色
+                    fillOpacity: 0.3,        // 填充透明度
+                    color: 'red',            // 边界颜色
+                    weight: 2,               // 边界宽度
+                    opacity: 0.8             // 边界透明度
+                };
+            },
+            originalStyle: layer.options
+        }).addTo(this.mapObj);
+    }
+
     // 绑定点击事件
     bindClickEvent() {
         var that = this;
@@ -127,6 +162,8 @@ class MapObj {
 
             // 遍历每个图层
             that.layerGroup.eachLayer((layer) => {
+                if (layer.layerName == "行政区") return false;
+
                 let collectedData = [];
                 // 创建查询对象
                 const query = L.esri.query({
@@ -165,35 +202,6 @@ class MapObj {
                             resolve();
                         });
                     });
-                } else if (type === 'LineString') {
-                    // 对于线状或面状要素，使用 query 方法
-                    queryPromise = new Promise((resolve, reject) => {
-                        query.bboxIntersects(e.latlng)
-                            .run((error, featureCollection) => {
-                                if (error) {
-                                    console.error("查询图层失败: ", error);
-                                    reject(error);
-                                    return;
-                                }
-
-                                // 如果有要素返回，收集它们的数据
-                                if (featureCollection.features.length > 0) {
-                                    featureCollection.features.forEach((feature) => {
-                                        collectedData.push({
-                                            feature: feature, // 要素的属性数据
-                                            options: layer._originalStyle // 图层的其他配置信息
-                                        });
-                                    });
-                                }
-                                attributeData.push({
-                                    layerId: layer.layerId,
-                                    name: layer.layerName,
-                                    subtitle: layer.subtitle,
-                                    children: collectedData
-                                });
-                                resolve();
-                            });
-                    });
                 } else {
                     // 对于线状或面状要素，使用 query 方法
                     queryPromise = new Promise((resolve, reject) => {
@@ -231,9 +239,8 @@ class MapObj {
 
             // 等待所有查询完成
             Promise.all(queryPromises).then(() => {
-                if (that.attribute) {
-                    that.attribute.restoreOriginalStyles();
-                }
+                that.restoreOriginalStyles();
+                that.addPolygonLayer(attributeData[0].children[0])
                 that.attribute = new Attribute(attributeData); // 实例化属性面板
             }).catch((err) => {
                 console.error("查询过程中发生错误: ", err);

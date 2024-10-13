@@ -2,7 +2,6 @@ class Attribute {
     constructor(data) {
         this.data = data;
         this.init();
-        this.polygonLayer = null; // 用于保存当前选中的面图层
     }
     // 初始化属性统计
     init() {
@@ -62,7 +61,7 @@ class Attribute {
             $('.attribute-title-count b').text(number)
         });
 
-        // >展开隐藏图层片段
+        // > 展开隐藏图层片段
         $('.attribute-wrap').on('click', '.select-attribute-toggle', function (e) {
             e.stopPropagation();
             e.preventDefault();
@@ -83,12 +82,7 @@ class Attribute {
 
             new PerfectScrollbar('.attribute-info-content');
 
-            that.locateLayerOnMap(that.data[i].children[j]);
-        })
-
-        $('.attribute-wrap').on('mouseenter', '.select-attribute-detail li', function (e) {
-        })
-        $('.attribute-wrap').on('mouseleave', '.select-attribute-detail li', function (e) {
+            sfs.addPolygonLayer(that.data[i].children[j]);//高亮图层
         })
 
         //返回上一级
@@ -103,7 +97,7 @@ class Attribute {
             $('.attribute-container').removeClass('active')
             var mapContainer = document.getElementById('map');
             mapContainer.style.cursor = 'revert-layer';
-            that.restoreOriginalStyles(); // 恢复所有图层的初始样式
+            sfs.restoreOriginalStyles(); // 恢复所有图层的初始样式
 
             // 移除悬浮的文本
             $('#hover-text').remove();
@@ -111,87 +105,12 @@ class Attribute {
         })
     }
 
-    locateLayerOnMap(layer) {
-        // 首先恢复所有图层的初始样式
-        this.restoreOriginalStyles();
-
-        let map = sfs.mapObj
-        if (!layer.feature || !layer.feature.geometry) {
-            console.error("Invalid layer or geometry");
-            return;
-        }
-
-        const geometry = layer.feature.geometry;
-        const type = geometry.type;
-
-        if (type === "Point") {
-            const [lng, lat] = geometry.coordinates;
-            map.setView([lat, lng], map.getZoom());
-        } else if (type === "LineString") {
-            const coordinates = geometry.coordinates;
-            const bounds = L.latLngBounds(coordinates);
-            // 将地图视角调整为包含整个边界框
-            map.fitBounds(bounds, {
-                padding: [50, 50], // 设置边距，上下左右各50像素
-            });
-        } else if (type === "Polygon") {
-            // 如果是面图层
-            const coordinates = geometry.coordinates[0];
-            let bounds = L.latLngBounds();
-
-            // 遍历多边形的每个点，并添加到 bounds 中
-            coordinates.forEach(coord => {
-                const latLng = L.latLng(coord[1], coord[0]); // Leaflet 使用 [纬度, 经度] 的顺序
-                bounds.extend(latLng);
-            });
-
-            // 将地图视角调整为包含整个边界框
-            map.fitBounds(bounds, {
-                padding: [50, 50], // 设置边距，上下左右各50像素
-            });
-        } else {
-            console.warn("Unsupported geometry type: " + type);
-        }
-
-        // 创建一个用来闪烁的多边形图层
-        this.polygonLayer = L.geoJSON(geometry, {
-            style: function (feature) {
-                return {
-                    fillColor: 'blue',       // 填充颜色
-                    fillOpacity: 0.3,        // 填充透明度
-                    color: 'red',            // 边界颜色
-                    weight: 2,               // 边界宽度
-                    opacity: 0.8             // 边界透明度
-                };
-            },
-            originalStyle: layer.options
-        }).addTo(map);
-
-        // 将地图视角调整为包含整个多边形的范围
-        map.fitBounds(this.polygonLayer.getBounds());
-    }
-
-    // 恢复图层的初始样式
-    restoreOriginalStyles() {
-        if (this.polygonLayer)
-            this.removePolygonLayer();
-        // this.polygonLayer.setStyle(this.polygonLayer.options.originalStyle);
-    }
-
-
-    // 示例函数，删除多边形图层
-    removePolygonLayer() {
-        if (this.polygonLayer) {
-            sfs.mapObj.removeLayer(this.polygonLayer);
-            this.polygonLayer = null; // 清空全局变量
-        }
-    }
-
     getListHtml() {
         let number = 0;
         let attributeSelectTitleHtml = "";
         let attributeSelectInfoHtml = "";
         this.data.forEach((item, i) => {
+
             attributeSelectTitleHtml += `<li data-index="${item.name}">${item.name}</li>`
             if (item.children.length > 0) {
                 attributeSelectInfoHtml += `

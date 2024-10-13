@@ -165,10 +165,22 @@ class CustomTable {
 
             // 重新绑定行点击事件
             this.table.on("rowClick", (e, row) => {
-                console.log("Clicked row:", this);
                 var rowData = row.getData();
-                var nameValue = rowData.name;
-                console.log("Clicked row's name:", nameValue);
+                if (rowData.FID !== undefined) {
+                    const featureLayer = sfs.getLayerById(this.layer._leaflet_id)
+                    const query = featureLayer.query();
+                    query.where(`FID = ${row.getData().FID}`)
+                        .returnGeometry(true)
+                        .run((error, featureCollection) => {
+                            if (error) {
+                                console.error("查询失败:", error);
+                                alert(data.msg)
+                                return;
+                            }
+                            const geometry = featureCollection.features[0].geometry;
+                            console.log("featureCollection:", geometry)
+                        });
+                }
             });
 
             // new PerfectScrollbar('.table_panel .tabulator-tableholder');
