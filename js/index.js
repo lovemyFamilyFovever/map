@@ -107,8 +107,13 @@ function initEvent() {
         $('.statistics-container').toggleClass('active')
         if ($('.statistics-content').hasClass('active')) {
             $('.table-content').show();
+            if ($('#main-echart .loading-container').length == 0) {
+                $('.chart-content').show();
+            }
         } else {
             $('.table-content').hide();
+            $('.chart-content').hide();
+            sfs.restoreOriginalStyles(); // 还原地图样式
         }
     })
 

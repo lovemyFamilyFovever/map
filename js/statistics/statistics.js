@@ -87,7 +87,7 @@ class Statistics {
 
             that.renderContent($(this).attr('data-leafletID'));
 
-            that.customTable = new CustomTable(that.layer);//实例化自定义图表
+            that.customTable.initTable(that.layer);//实例化自定义图表
             that.getMetadataFields();
 
             $('.statistics-group-wrap-content .dropdown_input').val("");
@@ -202,8 +202,13 @@ class Statistics {
         $('.group-input,.statistic-input,.calc-input,.chart-input ').on('click', 'li', function () {
             const $parent = $(this).parent().parent();
             $parent.siblings('.dropdown_input').val($(this).text()).attr('data-field', $(this).attr('data-field'));
+
             if ($(this).attr('data-type')) {
-                $parent.siblings('.dropdown_input').attr('data-type', $(this).attr('data-type'));
+                const data_type = $parent.siblings('.dropdown_input').attr('data-type');
+                if (data_type != $(this).attr('data-type')) {
+                    $parent.siblings('.dropdown_input').attr('data-type', $(this).attr('data-type'));
+                    $('.calc-input .dropdown_input').val("");
+                }
             }
             $parent.toggle();
         });
@@ -255,8 +260,7 @@ class Statistics {
                 };
             }
 
-            that.customTable = new CustomTable(sfs.layerGroup.getLayer(leafletID), uniqueCategories, statisticsParams);//实例化自定义图表
-
+            that.customTable.initTable(sfs.layerGroup.getLayer(leafletID), uniqueCategories, statisticsParams);//实例化自定义图表
             $('.table-content').show();
         }, 300));
     }

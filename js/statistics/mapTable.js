@@ -7,16 +7,20 @@ class CustomTable {
         this.table = null;
         this.sortable = null;
         this.downloadOptions = ['CSV', 'JSON', 'XLSX', 'PDF', 'HTML'];
-        this.tableData = [];
         this.initTable();
     }
 
     //初始化表格
-    initTable() {
+    initTable(layer, searchConditions, statisticsByConditions) {
+        if (layer) {
+            this.layer = layer;
+            this.searchConditions = searchConditions;
+            this.statisticsByConditions = statisticsByConditions;
+        }
 
         $('#main-table').hide()
         $('.table-content .loading-container').show();
-        this.destroy(); // 先销毁可能存在的旧实例
+        // this.destroy(); // 先销毁可能存在的旧实例
 
         if (!this.layer) {
             return
@@ -36,9 +40,8 @@ class CustomTable {
                     alert(data.msg)
                     return;
                 }
-                let attributesArray = [];
                 // 提取所有要素的属性
-                attributesArray = featureCollection.features.map(feature => feature.properties);
+                let attributesArray = featureCollection.features.map(feature => feature.properties);
                 if (this.statisticsByConditions) {
                     attributesArray = this.groupAndAggregate(attributesArray)
                 }
@@ -115,7 +118,6 @@ class CustomTable {
 
     //给表格添加数据
     renderTable(data) {
-        this.tableData = data;
         let tableObj = {
             data,
             height: "100%",
@@ -159,9 +161,11 @@ class CustomTable {
         this.table.on("tableBuilt", () => {
             this.table.hideColumn("id");
             this.table.setLocale("zh-cn");
+            this.getStatisticsTable();
 
             $('#main-table').show()
             $('.table-content .loading-container').hide();
+
 
             // 重新绑定行点击事件
             this.table.on("rowClick", (e, row) => {
@@ -185,11 +189,17 @@ class CustomTable {
                                 feature: featureCollection.features[0],
                                 options: featureLayer.style,
                             })
+
+                            // 清除其他行的高亮
+                            $('.highlight').removeClass('highlight');
+                            // 为点击的行添加高亮样式
+                            row.getElement().classList.add("highlight");
+
+
+                            if (this.statisticsByConditions)
+                                $('.table-wrap-back').css('display', 'flex')
                         });
                 } else {
-
-
-
                     query.where(`${this.statisticsByConditions.selectColumn}='${rowData[this.statisticsByConditions.selectColumnName]}'`)
                         .fields(this.layer.columns.map(item => item.field))
                         .returnGeometry(false)
@@ -199,26 +209,26 @@ class CustomTable {
                                 alert(data.msg)
                                 return;
                             }
-                            let attributesArray = [];
                             // 提取所有要素的属性
-                            attributesArray = featureCollection.features.map(feature => feature.properties);
+                            let attributesArray = featureCollection.features.map(feature => feature.properties);
 
                             // 先设置列配置
                             this.table.setData(attributesArray.reverse())
                             this.table.setColumns(this.handleColumns())
+
                             this.getStatisticsTable();
+                            $('.table-wrap-back').css('display', 'flex')
                         });
                 }
             });
 
             new PerfectScrollbar('.table_panel .tabulator-tableholder');
-
             this.bindEvents();
-
             if (this.statisticsByConditions) {
                 new CustomChart(data, this.statisticsByConditions)
             }
         });
+
         // 当提示用户下载文件时，将触发downloadFull回调。
         this.table.on("downloadComplete", () => {
             $('.table_panel').find('.dropdown_list').hide();
@@ -284,6 +294,12 @@ class CustomTable {
                 });
             });
         });
+
+        $('.table-wrap-back').on('click', () => {
+            $('.search_btn.confirm').click();
+            $('.table-wrap-back').hide();
+            sfs.restoreOriginalStyles();
+        })
     }
 
     //处理列名
@@ -328,7 +344,7 @@ class CustomTable {
 
     //统计结果，底部数据
     getStatisticsTable() {
-        const count = this.tableData.length;
+        const count = this.table.getData().length;
         $('.table-wrapper-count').html(
             `共 <b> ${count > 999 ? '999+' : count}</b> 条丨`
         )

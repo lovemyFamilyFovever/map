@@ -25,7 +25,8 @@ a {
     text-decoration: none
 }
 
-a:active, a:hover {
+a:active,
+a:hover {
     outline: 0
 }
 
@@ -350,7 +351,11 @@ a:active, a:hover {
     width: 17vw
 }
 
-.layer-content, .attribute_content, .statistics-content, .table-content, .chart-content {
+.layer-content,
+.attribute_content,
+.statistics-content,
+.table-content,
+.chart-content {
     padding: 10px;
     position: relative;
     background: rgb(255 255 255 / 90%);
@@ -365,7 +370,8 @@ a:active, a:hover {
     width: 45vw
 }
 
-.left-tool .layer-content, .left-tool .statistics-content {
+.left-tool .layer-content,
+.left-tool .statistics-content {
     border-radius: 0 6px 6px 0;
     height: calc(100vh - 80px);
     left: -16.35vw;
@@ -376,11 +382,14 @@ a:active, a:hover {
     position: absolute
 }
 
-.left-tool .layer-content.active, .left-tool .statistics-content.active {
+.left-tool .layer-content.active,
+.left-tool .statistics-content.active {
     left: 70px
 }
 
-.layer_title, .attribute-title, .statistics-title {
+.layer_title,
+.attribute-title,
+.statistics-title {
     font-size: 0.8rem;
     font-weight: bolder;
     margin-bottom: 8px;
@@ -395,14 +404,17 @@ a:active, a:hover {
     padding: 0 10px 8px 10px
 }
 
-.layer_title img, .attribute-title img, .statistics-title img {
+.layer_title img,
+.attribute-title img,
+.statistics-title img {
     vertical-align: bottom;
     padding-right: 6px;
     width: 18px;
     height: 18px
 }
 
-.layer_wrap, .attribute-wrap {
+.layer_wrap,
+.attribute-wrap {
     max-height: 78vh;
     position: relative
 }
@@ -424,7 +436,7 @@ a:active, a:hover {
 
 .attribute-info-back {
     cursor: pointer;
-    width: 100px;
+    width: max-content;
     color: #4195f2
 }
 
@@ -726,7 +738,8 @@ p.layer_name {
     z-index: 999
 }
 
-.empty_table, .empty_chart {
+.empty_table,
+.empty_chart {
     color: rgba(0, 0, 0, 0.25);
     font-size: 14px;
     display: -webkit-box;
@@ -746,7 +759,8 @@ p.layer_name {
     width: 100%
 }
 
-.empty_table .empty_table_image, .empty_chart .empty_chart_image {
+.empty_table .empty_table_image,
+.empty_chart .empty_chart_image {
     margin-bottom: 20px
 }
 
@@ -770,7 +784,26 @@ p.layer_name {
     -ms-flex-align: center;
     align-items: center;
     margin-left: 10px;
-    position: relative
+    position: relative;
+    border: 1px solid #57a3f3;
+}
+
+.table_action_btn:hover {
+    background: aliceblue
+}
+
+.table_action_btn img {
+    width: 14px;
+    height: 14px
+}
+
+.table_action_btn.table-wrap-back img {
+    width: 12px;
+    height: 12px;
+}
+
+.table-wrap-back {
+    display: none;
 }
 
 .table_action_text {
@@ -782,15 +815,6 @@ p.layer_name {
 
 .table_title_filter {
     display: none;
-}
-
-.table_action_btn img {
-    width: 14px;
-    height: 14px
-}
-
-.table_action_btn:hover {
-    background: aliceblue
 }
 
 .tabulator-row {
@@ -836,7 +860,8 @@ p.layer_name {
     border-top: none
 }
 
-.tabulator .tabulator-footer .tabulator-page[data-page="first"], .tabulator .tabulator-footer .tabulator-page[data-page="last"] {
+.tabulator .tabulator-footer .tabulator-page[data-page="first"],
+.tabulator .tabulator-footer .tabulator-page[data-page="last"] {
     display: none
 }
 
@@ -917,7 +942,8 @@ p.layer_name {
     display: none
 }
 
-.table-content .title, .chart-content .title {
+.table-content .title,
+.chart-content .title {
     margin-left: 0
 }
 
@@ -982,11 +1008,17 @@ p.layer_name {
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
-    margin-left: 10px
+    margin-left: 10px;
+    border: 1px solid #57a3f3;
 }
 
 .echart_download:hover {
     background: aliceblue
+}
+
+.echart_download img {
+    width: 14px;
+    height: 14px
 }
 
 .echart_type .active {
@@ -1703,12 +1735,14 @@ p.layer_name {
     align-items: center
 }
 
-.login-reset, .login-origin {
+.login-reset,
+.login-origin {
     color: #828282;
     font-size: 0.6rem
 }
 
-.login-reset:hover, .login-origin:hover {
+.login-reset:hover,
+.login-origin:hover {
     text-decoration: underline;
     cursor: pointer
 }
@@ -1731,4 +1765,18 @@ p.layer_name {
 
 .login-form form.active {
     display: flex
+}
+
+.highlight {
+    background-color: #afcdf4 !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .tabulator.table .tabulator-row:hover {
+        background-color: #afcdf4
+    }
+
+    .tabulator.table .tabulator-row:hover .tabulator-cell {
+        background-color: #afcdf4
+    }
 }
