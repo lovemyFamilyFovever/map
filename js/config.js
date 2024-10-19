@@ -139,7 +139,7 @@ var config = {
             { title: "id", field: "FID", statistics: false },
             { title: "所在乡镇", field: "SZX", statistics: true },
             { title: "土地使用权人", field: "TDSYQR", statistics: true },
-            { title: "土地面积（亩）", field: "TDMJ", statistics: true },
+            { title: "土地面积（亩）", field: "TDMJ", statistics: false },
             { title: "建设状况", field: "JSZK", statistics: true },
             { title: "是否一地多企", field: "SFYDDQ", statistics: true },
             { title: "是否规上企业用地", field: "SFGSQYYD", statistics: true },

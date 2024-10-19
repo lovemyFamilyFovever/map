@@ -18,24 +18,24 @@ class MapObj {
         this.mapObj = L.map("map", this.options).setView(this.options.center);
 
         //卫星
-        const mapA = L.tileLayer(config["矢量底图"], { subdomains: ["0", "1", "2", "3", "4", "5", "6", "7"] })
-        const mapA_T = L.tileLayer(config["矢量底图注记"], { subdomains: ["0", "1", "2", "3", "4", "5", "6", "7"] })
-        this.satellite = L.layerGroup([mapA, mapA_T]);
+        // const mapA = L.tileLayer(config["矢量底图"], { subdomains: ["0", "1", "2", "3", "4", "5", "6", "7"] })
+        // const mapA_T = L.tileLayer(config["矢量底图注记"], { subdomains: ["0", "1", "2", "3", "4", "5", "6", "7"] })
+        // this.satellite = L.layerGroup([mapA, mapA_T]);
 
-        //影像
-        const mapB = L.tileLayer(config["影像地图"], { subdomains: ["0", "1", "2", "3", "4", "5", "6", "7"] })
-        const mapB_T = L.tileLayer(config["影像地图注记"], { subdomains: ["0", "1", "2", "3", "4", "5", "6", "7"] })
-        this.image = L.layerGroup([mapB, mapB_T]);
+        // //影像
+        // const mapB = L.tileLayer(config["影像地图"], { subdomains: ["0", "1", "2", "3", "4", "5", "6", "7"] })
+        // const mapB_T = L.tileLayer(config["影像地图注记"], { subdomains: ["0", "1", "2", "3", "4", "5", "6", "7"] })
+        // this.image = L.layerGroup([mapB, mapB_T]);
 
-        //地形
-        const mapC = L.tileLayer(config["地形地图"], { subdomains: ["0", "1", "2", "3", "4", "5", "6", "7"] })
-        const mapC_T = L.tileLayer(config["地形地图注记"], { subdomains: ["0", "1", "2", "3", "4", "5", "6", "7"] })
-        this.terrain = L.layerGroup([mapC, mapC_T]);
+        // //地形
+        // const mapC = L.tileLayer(config["地形地图"], { subdomains: ["0", "1", "2", "3", "4", "5", "6", "7"] })
+        // const mapC_T = L.tileLayer(config["地形地图注记"], { subdomains: ["0", "1", "2", "3", "4", "5", "6", "7"] })
+        // this.terrain = L.layerGroup([mapC, mapC_T]);
 
         this.layerGroup = L.layerGroup().addTo(this.mapObj); // 初始化 layerGroup
 
         // 加载底图
-        this.switchLayers(this.satellite);
+        // this.switchLayers(this.satellite);
         // 添加控件
         this.addControls();
         //绑定点击事件

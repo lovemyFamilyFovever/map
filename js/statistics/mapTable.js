@@ -94,13 +94,14 @@ class CustomTable {
         } else if (statisticsType.toLowerCase() == "avg") {
             result.map(group => {
                 delete group[satisticsFieldName + '_总和'];
-                // group[satisticsFieldName + '_平均值'] = group[satisticsFieldName + '_平均值'].toFixed(2);
+                group[satisticsFieldName + '_平均值'] = group[satisticsFieldName + '_平均值'].toFixed(2);
                 delete group[satisticsFieldName + '_数量和'];
             });
         } else {
             result.map(group => {
                 delete group[satisticsFieldName + '_总和'];
                 delete group[satisticsFieldName + '_平均值'];
+                group[satisticsFieldName + '_数量和'] = group[satisticsFieldName + '_数量和'].toFixed(2);
             });
         }
         return result
