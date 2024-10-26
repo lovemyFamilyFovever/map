@@ -34,6 +34,11 @@ class MapObj {
 
         this.layerGroup = L.layerGroup().addTo(this.mapObj); // 初始化 layerGroup
 
+
+        const featureLayer = L.esri.featureLayer({
+            url: "http://localhost:6080/arcgis/rest/services/低效用地/现状/MapServer/0"
+        }).addTo(this.mapObj);
+
         // 加载底图
         // this.switchLayers(this.satellite);
         // 添加控件

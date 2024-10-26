@@ -1517,6 +1517,48 @@ p.layer_name {
     position: relative
 }
 
+
+.statistics-item ul {
+    width: 354px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.statistics-item li {
+    min-width: 152px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.statistics-item li div {
+    display: inline-block;
+    word-break: break-all;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 124px;
+}
+
+.statistics-item-target .dropdown_list .fuzzy_search_container input {
+    width: 95%;
+    height: 30px;
+    margin-left: 10px;
+    text-indent: 10px;
+    outline: 1px solid #327CFF;
+}
+
+.statistics-item-target .dropdown_list .fuzzy_search_container img {
+    position: absolute;
+    top: 24px;
+    right: 20px;
+}
+
+.fuzzy_search_container {
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
 .statistics-select-layer {
     display: flex;
     align-items: center;

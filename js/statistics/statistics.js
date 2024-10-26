@@ -93,6 +93,30 @@ class Statistics {
             $('.statistics-group-wrap-content .dropdown_input').val("");
         });
 
+        //搜索
+        $('.statistics-items').on('click', '.fuzzy_search_container img', function () {
+            var text = $(this).parent().find('input').val();
+            if (text == "") {
+                $(this).parent().parent().find('li').show();
+                return;
+            }
+            $(this).parent().parent().find('li').each((index, item) => {
+                if (item.innerText.indexOf(text) > -1) {
+                    $(item).show();
+                } else {
+                    $(item).hide();
+                }
+            });
+        });
+
+        // 绑定输入框的键盘事件
+        $('.statistics-items').on('keypress', '.fuzzy_search_container input', function (e) {
+            if (e.which === 13) {
+                $('.statistics-items .fuzzy_search_container img').click();
+            }
+        });
+
+
         //展示下拉列表-具体值
         $('.statistics-items').on('click', '.statistics-item-target .target-input', function () {
             $('.dropdown_list').hide();
@@ -100,6 +124,10 @@ class Statistics {
             let index = $(this).attr('data-index');
 
             const columns = that.getColumnUnique(field)
+            if (columns.length < 10) {
+                $(this).siblings('.dropdown_list').find('.fuzzy_search_container').hide();
+            }
+
             let html = "";
             html += `
                 <li>
@@ -109,9 +137,9 @@ class Statistics {
             columns.forEach(item => {
                 if (item)
                     html += `
-                    <li>
+                    <li title="${item}">
                         <input type="checkbox" class="column-static" data-field="${item}" />
-                        <span>${item}</span>
+                        <div>${item}</div>
                     </li>`;
             });
 
@@ -216,6 +244,7 @@ class Statistics {
         //重置 按钮
         $('.statistics-content-footer .reset').on('click', () => {
             $('.statistics-item .dropdown_input').val("");
+            that.customTable = new CustomTable(that.layer);//实例化自定义图表
         });
 
         //查询 按钮
@@ -273,6 +302,10 @@ class Statistics {
                 <input type="text" placeholder="请选择" data-field="${item.field}" data-index="${index}" class="target-input dropdown_input" readonly>
                     <img src="imgs/dropdown.svg" class="dropdown_svg">
                     <div class="dropdown_list">
+                        <div class="fuzzy_search_container">
+                            <input type="text" class="fuzzy_search_input" placeholder="请输入关键字搜索">
+                            <img src="imgs/search.svg" class="fuzzy_search_icon">
+                        </div>
                         <ul></ul>
                     </div>
                 </div>

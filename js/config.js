@@ -1,4 +1,4 @@
-const preUrl = "http://192.168.1.2:6080/arcgis/rest/services/低效用地/"
+const preUrl = "http://127.0.0.1:6080/arcgis/rest/services/低效用地/"
 //const preUrl = "http://10.20.28.10:6080/arcgis/rest/services/低效用地/"
 var config = {
     defaultCatalog: 'PC',
@@ -48,7 +48,7 @@ var config = {
         layerName: "行政区",
         subtitle: "XZQMC",
         url: preUrl + "XZQ/MapServer/0",
-        show: true,
+        show: false,
         style: {
             fillColor: "#3388ff",
             color: "#3388ff",
@@ -126,7 +126,7 @@ var config = {
         layerName: "工业用地",
         subtitle: "TDSYQR",
         url: preUrl + "GYYD/MapServer/0",
-        show: true,
+        show: false,
         style: {
             fillColor: "#3388ff",
             color: "#3388ff",
