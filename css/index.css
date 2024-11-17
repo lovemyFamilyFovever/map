@@ -927,15 +927,15 @@ p.layer_name {
 }
 
 .table-wrapper {
-    height: calc(100% - 30px)
+    height: calc(100% - 40px)
 }
 
 .table-wrapper-count {
     position: absolute;
-    bottom: 5px;
+    bottom: 10px;
     left: 15px;
     font-size: 13px;
-    line-height: 1.5rem
+    line-height: 30px
 }
 
 .updown_svg {

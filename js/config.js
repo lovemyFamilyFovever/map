@@ -1,5 +1,6 @@
 const preUrl = "http://127.0.0.1:6080/arcgis/rest/services/低效用地/"
-//const preUrl = "http://10.20.28.10:6080/arcgis/rest/services/低效用地/"
+// const preUrl = "http://172.17.178.130:6080/arcgis/rest/services/低效用地/"
+
 var config = {
     defaultCatalog: 'PC',
     version: "0.35",
@@ -34,23 +35,18 @@ var config = {
         },
     },
 
-    "矢量底图": 'http://t0.tianditu.gov.cn/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=94062428027398766a1d0f3000b5dc6c',
-    "矢量底图注记": 'http://t0.tianditu.gov.cn/DataServer?T=cva_w&x={x}&y={y}&l={z}&tk=94062428027398766a1d0f3000b5dc6c',
-
-    "影像地图": 'http://t{s}.tianditu.gov.cn/DataServer?T=img_w&x={x}&y={y}&l={z}&tk=94062428027398766a1d0f3000b5dc6c',
-    "影像地图注记": 'http://t0.tianditu.gov.cn/DataServer?T=cia_w&x={x}&y={y}&l={z}&tk=94062428027398766a1d0f3000b5dc6c',
-
-    "地形地图": 'http://t0.tianditu.gov.cn/DataServer?T=ter_w&x={x}&y={y}&l={z}&tk=94062428027398766a1d0f3000b5dc6c',
-    "地形地图注记": 'http://t0.tianditu.gov.cn/DataServer?T=cta_w&x={x}&y={y}&l={z}&tk=94062428027398766a1d0f3000b5dc6c',
+    "规划地图": preUrl + 'XZQ/MapServer/0',
+    "现状地图": preUrl + '现状/MapServer/0',
+    "影像地图": preUrl + '影像/MapServer/0',
 
     layerList: [{
         layerId: "XZQ",
         layerName: "行政区",
         subtitle: "XZQMC",
         url: preUrl + "XZQ/MapServer/0",
-        show: false,
+        show: true,
         style: {
-            fillColor: "#3388ff",
+            fillColor: "red",
             color: "#3388ff",
             weight: 2,
             opacity: 1,
@@ -126,7 +122,7 @@ var config = {
         layerName: "工业用地",
         subtitle: "TDSYQR",
         url: preUrl + "GYYD/MapServer/0",
-        show: false,
+        show: true,
         style: {
             fillColor: "#3388ff",
             color: "#3388ff",

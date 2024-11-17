@@ -17,30 +17,25 @@ class MapObj {
         // 创建地图
         this.mapObj = L.map("map", this.options).setView(this.options.center);
 
-        //卫星
-        // const mapA = L.tileLayer(config["矢量底图"], { subdomains: ["0", "1", "2", "3", "4", "5", "6", "7"] })
-        // const mapA_T = L.tileLayer(config["矢量底图注记"], { subdomains: ["0", "1", "2", "3", "4", "5", "6", "7"] })
-        // this.satellite = L.layerGroup([mapA, mapA_T]);
-
-        // //影像
-        // const mapB = L.tileLayer(config["影像地图"], { subdomains: ["0", "1", "2", "3", "4", "5", "6", "7"] })
-        // const mapB_T = L.tileLayer(config["影像地图注记"], { subdomains: ["0", "1", "2", "3", "4", "5", "6", "7"] })
-        // this.image = L.layerGroup([mapB, mapB_T]);
-
-        // //地形
-        // const mapC = L.tileLayer(config["地形地图"], { subdomains: ["0", "1", "2", "3", "4", "5", "6", "7"] })
-        // const mapC_T = L.tileLayer(config["地形地图注记"], { subdomains: ["0", "1", "2", "3", "4", "5", "6", "7"] })
-        // this.terrain = L.layerGroup([mapC, mapC_T]);
-
         this.layerGroup = L.layerGroup().addTo(this.mapObj); // 初始化 layerGroup
 
 
-        const featureLayer = L.esri.featureLayer({
-            url: "http://localhost:6080/arcgis/rest/services/低效用地/现状/MapServer/0"
-        }).addTo(this.mapObj);
+        this.satellite = L.esri.dynamicMapLayer({
+            url: "http://localhost:6080/arcgis/rest/services/低效用地/现状数据/MapServer"
+        })
+
+        this.image = L.esri.dynamicMapLayer({
+            url: 'http://localhost:6080/arcgis/rest/services/低效用地/影像/MapServer',
+            layers: [0] // 指定图层 ID
+        })
+
+        // L.esri.featureLayer({
+        //     //"http://172.17.178.130:6080/arcgis/rest/services/低效用地/"
+        //     url: "http://localhost:6080/arcgis/rest/services/低效用地/现状数据/MapServer"
+        // }).addTo(this.mapObj);
 
         // 加载底图
-        // this.switchLayers(this.satellite);
+        this.switchLayers('vec_type');
         // 添加控件
         this.addControls();
         //绑定点击事件
@@ -49,17 +44,18 @@ class MapObj {
     }
 
     // 切换右下角工具栏的地图类型
-    switchLayers(layer) {
-        // 定义所有图层
-        const layers = [this.satellite, this.image, this.terrain];
+    switchLayers(type) {
 
-        // 遍历图层，移除所有图层，最后添加所选图层
-        layers.forEach((currentLayer) => {
-            if (this.mapObj.hasLayer(currentLayer)) {
-                this.mapObj.removeLayer(currentLayer);
-            }
-        });
-        this.mapObj.addLayer(layer);
+        this.mapObj.removeLayer(this.satellite);
+        this.mapObj.removeLayer(this.image);
+
+        if (type == 'vec_type') {//现状
+            this.mapObj.addLayer(this.satellite);
+        } else if (type == 'img_type') {//影像
+            this.mapObj.addLayer(this.image);
+        } else if (type === 'ter_type') {//地形
+            this.mapObj.addLayer(layer);
+        }
     }
 
     addControls() {
@@ -282,15 +278,12 @@ class MapObj {
                 return false;
             $(this).siblings().removeClass('active')
             $(this).addClass('active')
-            const id = $(this).attr('id')
+            const mapType = $(this).attr('id')
             // 切换地图类型
-            if (id == 'vec_type') {//矢量
-                that.switchLayers(that.satellite)
-            } else if (id == 'img_type') {//卫星
-                that.switchLayers(that.image)
-            } else if (id === 'ter_type') {//地形
-                that.switchLayers(that.terrain)
-            }
+
+            that.switchLayers(mapType)
+
+
         });
     }
 }

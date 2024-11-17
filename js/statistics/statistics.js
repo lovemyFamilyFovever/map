@@ -129,11 +129,14 @@ class Statistics {
             }
 
             let html = "";
-            html += `
+
+            if (columns.length > 1) {
+                html += `
                 <li>
                     <input type="checkbox" id="cbx-column-static-all-${index++}" class="column-static-all" data-field="全部" />
                     <span>全部</span>
                 </li>`;
+            }
             columns.forEach(item => {
                 if (item)
                     html += `
@@ -142,6 +145,12 @@ class Statistics {
                         <div>${item}</div>
                     </li>`;
             });
+            if (columns.length <= 5) {
+                $(this).siblings('.dropdown_list').find('ul').css({
+                    'flex-direction': 'column',
+                    'width': '177px'
+                });
+            }
 
             $(this).siblings('.dropdown_list').find('ul').html(html)
             $(this).siblings('.dropdown_list').toggle();
