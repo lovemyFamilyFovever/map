@@ -20,12 +20,23 @@ class MapObj {
         this.layerGroup = L.layerGroup().addTo(this.mapObj); // 初始化 layerGroup
 
 
-        this.satellite = L.esri.dynamicMapLayer({
-            url: "http://localhost:6080/arcgis/rest/services/低效用地/现状数据/MapServer"
+
+        this.satellite = L.esri.featureLayer({
+            url: config["现状地图"],
+            style: function (feature) {
+                return {
+                    color: "#edf7d2",
+                    weight: 0.5,
+                    opacity: 1,
+                    fillOpacity: 0.5
+                };
+            }
+            // url: "http://localhost:6080/arcgis/rest/services/低效用地/现状数据/MapServer/0"
         })
 
         this.image = L.esri.dynamicMapLayer({
-            url: 'http://localhost:6080/arcgis/rest/services/低效用地/影像/MapServer',
+            url: config["影像地图"],
+            // url: 'http://localhost:6080/arcgis/rest/services/低效用地/影像/MapServer',
             layers: [0] // 指定图层 ID
         })
 

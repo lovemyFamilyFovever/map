@@ -35,9 +35,8 @@ var config = {
         },
     },
 
-    "规划地图": preUrl + 'XZQ/MapServer/0',
     "现状地图": preUrl + '现状/MapServer/0',
-    "影像地图": preUrl + '影像/MapServer/0',
+    "影像地图": preUrl + '影像/MapServer',
 
     layerList: [{
         layerId: "XZQ",
