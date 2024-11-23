@@ -50,7 +50,7 @@ class Statistics {
         const layer = sfs.layerGroup.getLayer(id);
         let html = ""
         layer.columns.forEach((item, index) => {
-            if (item.statistics)
+            if (item.statistics && item.title.indexOf("面积") == -1)
                 html += this.renderHtml(item, index);
         });
         $(".statistics-items").html(html);
@@ -78,19 +78,21 @@ class Statistics {
         //选择图层 统计查询列表
         $('.statistics-title-container .dropdown_list').on('click', 'li', function () {
             const layerName = $(this).find('span').text();
-            if ($('.statistics-title-input').val() == layerName) return;
+            if ($('.statistics-title-input').val() == layerName) {
+                $('.statistics-title-container .dropdown_list').hide();
+            } else {
+                $('.statistics-title-input').val(layerName).attr('data-leafletID', $(this).attr('data-leafletID'));
 
-            $('.statistics-title-input').val(layerName).attr('data-leafletID', $(this).attr('data-leafletID'));
+                $('.statistics-title-container .dropdown_list').hide();
 
-            $('.statistics-title-container .dropdown_list').hide();
+                that.layer = sfs.layerGroup.getLayer($(this).attr('data-leafletID'));
 
-            that.layer = sfs.layerGroup.getLayer($(this).attr('data-leafletID'));
+                that.renderContent($(this).attr('data-leafletID'));
+                that.customTable = new CustomTable(that.layer);//实例化自定义图表
+                that.getMetadataFields();
 
-            that.renderContent($(this).attr('data-leafletID'));
-            that.customTable = new CustomTable(that.layer);//实例化自定义图表
-            that.getMetadataFields();
-
-            $('.statistics-group-wrap-content .dropdown_input').val("");
+                $('.statistics-group-wrap-content .dropdown_input').val("");
+            }
         });
 
         //搜索
@@ -126,6 +128,8 @@ class Statistics {
             const columns = that.getColumnUnique(field)
             if (columns.length < 10) {
                 $(this).siblings('.dropdown_list').find('.fuzzy_search_container').hide();
+            } else {
+                $(this).siblings('.dropdown_list').find('.fuzzy_search_container').show();
             }
 
             let html = "";
@@ -138,7 +142,7 @@ class Statistics {
                 </li>`;
             }
             columns.forEach(item => {
-                if (item)
+                if (item.trim() != "")
                     html += `
                     <li title="${item}">
                         <input type="checkbox" class="column-static" data-field="${item}" />
@@ -149,6 +153,11 @@ class Statistics {
                 $(this).siblings('.dropdown_list').find('ul').css({
                     'flex-direction': 'column',
                     'width': '177px'
+                });
+            } else {
+                $(this).siblings('.dropdown_list').find('ul').css({
+                    'flex-direction': 'unset',
+                    'width': '354px'
                 });
             }
 
