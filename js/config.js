@@ -1,6 +1,5 @@
-const preUrl = "http://127.0.0.1:6080/arcgis/rest/services/低效用地/"
-// const preUrl = "http://172.17.178.130:6080/arcgis/rest/services/低效用地/"
-
+//const preUrl = "http://172.17.178.130:6080/arcgis/rest/services/低效用地/"
+const preUrl = "http://localhost:6080/arcgis/rest/services/低效用地/"
 var config = {
     defaultCatalog: 'PC',
     version: "0.35",
@@ -8,7 +7,7 @@ var config = {
     // preUrl: "http://localhost:6080/arcgis/rest/services/低效用地/",
     mapOptions: {
         center: [34.283876502969214, 117.37861633300783],
-        minZoom: 1, //最小缩放值
+        minZoom: 12, //最小缩放值
         maxZoom: 18, //最大缩放值
         zoom: 13, //初始缩放值
         zoomControl: true, //是否启用地图缩放控件
@@ -35,8 +34,9 @@ var config = {
         },
     },
 
-    "现状地图": preUrl + '现状/MapServer/0',
-    "影像地图": preUrl + '影像/MapServer',
+    "现状": preUrl + '现状数据/MapServer/tile/{z}/{y}/{x}',
+    "规划": preUrl + '规划数据/MapServer/tile/{z}/{y}/{x}',
+    "影像": preUrl + '影像/MapServer',
 
     layerList: [{
         layerId: "XZQ",
@@ -45,7 +45,7 @@ var config = {
         url: preUrl + "XZQ/MapServer/0",
         show: true,
         style: {
-            fillColor: "red",
+            fillColor: "#3388ff",
             color: "#3388ff",
             weight: 2,
             opacity: 1,
@@ -134,7 +134,7 @@ var config = {
             { title: "id", field: "FID", statistics: false },
             { title: "所在乡镇", field: "SZX", statistics: true },
             { title: "土地使用权人", field: "TDSYQR", statistics: true },
-            { title: "土地面积（亩）", field: "TDMJ", statistics: false },
+            { title: "土地面积（亩）", field: "TDMJ", statistics: true },
             { title: "建设状况", field: "JSZK", statistics: true },
             { title: "是否一地多企", field: "SFYDDQ", statistics: true },
             { title: "是否规上企业用地", field: "SFGSQYYD", statistics: true },
@@ -195,24 +195,24 @@ var config = {
                 { title: "用地类型", field: "YDLX", statistics: true },
 
             ],
+        }, {
+            layerId: "片区范围",
+            layerName: "片区范围",
+            subtitle: "盘活片区名",
+            url: preUrl + "片区范围/MapServer/0",
+            show: false,
+            style: {
+                color: "green",
+                weight: 2,
+                opacity: 1
+            },
+            columns: [
+                //title: 表格列名，field: 数据库字段名，statistics: 是否统计
+                { title: "id", field: "FID", statistics: false },
+                { title: "盘活片区名", field: "盘活片区名", statistics: true },
+                { title: "行政区名称", field: "行政区名称", statistics: false },
+            ]
         }]
-    }, {
-        layerId: "片区范围",
-        layerName: "片区范围",
-        subtitle: "盘活片区名",
-        url: preUrl + "片区范围/MapServer/0",
-        show: false,
-        style: {
-            color: "#00FA9A",
-            weight: 2,
-            opacity: 1
-        },
-        columns: [
-            //title: 表格列名，field: 数据库字段名，statistics: 是否统计
-            { title: "id", field: "FID", statistics: false },
-            { title: "盘活片区名", field: "盘活片区名", statistics: true },
-            { title: "行政区名称", field: "行政区名称", statistics: false },
-        ]
     }, {
         layerId: "QYWZ",
         layerName: "企业位置",

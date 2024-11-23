@@ -11,16 +11,10 @@ class CustomTable {
     }
 
     //初始化表格
-    initTable(layer, searchConditions, statisticsByConditions) {
-        if (layer) {
-            this.layer = layer;
-            this.searchConditions = searchConditions;
-            this.statisticsByConditions = statisticsByConditions;
-        }
+    initTable() {
 
         $('#main-table').hide()
         $('.table-content .loading-container').show();
-        // this.destroy(); // 先销毁可能存在的旧实例
 
         if (!this.layer) {
             return
@@ -106,23 +100,11 @@ class CustomTable {
         return result
     }
 
-    // 销毁方法
-    destroy() {
-        // 移除已绑定的事件，避免多次绑定
-        $('.table_title_filter,.table_column_filter_colse').off('click');
-        $('#select-all').off('click')
-        $('#select-none').off('click')
-        $('.table_column_filter_comfirm_btn').off('click')
-        $('.table_panel').off('click', '.table_download_btn')
-    }
-
     //给表格添加数据
     renderTable(data) {
         let tableObj = {
             data,
             height: "100%",
-            layout: this.statisticsByConditions ? "fitColumns" : "fitDataFill", // 自动调整列宽 
-            columnFit: true,
             resizableColumns: true,// 允许调整列宽
             paginationSize: 10, // 每页显示的记录数
             paginationSizeSelector: [10, 20, 30, 40],
@@ -148,6 +130,10 @@ class CustomTable {
             // initialSort: this.setDefaultSort(),
             // columns: this.handleColumns(),
             // autoColumns: true,
+        }
+
+        if (Object.keys(data[0]).length < 8) {
+            tableObj.layout = "fitColumns";
         }
 
         if (this.statisticsByConditions)

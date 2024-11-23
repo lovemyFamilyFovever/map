@@ -6,6 +6,7 @@ class Statistics {
         this.metadataFields = null;
         this.init();
     }
+
     init() {
         $(".statistics-items .empty_table").hide();
 
@@ -86,8 +87,7 @@ class Statistics {
             that.layer = sfs.layerGroup.getLayer($(this).attr('data-leafletID'));
 
             that.renderContent($(this).attr('data-leafletID'));
-
-            that.customTable.initTable(that.layer);//实例化自定义图表
+            that.customTable = new CustomTable(that.layer);//实例化自定义图表
             that.getMetadataFields();
 
             $('.statistics-group-wrap-content .dropdown_input').val("");
@@ -298,7 +298,7 @@ class Statistics {
                 };
             }
 
-            that.customTable.initTable(sfs.layerGroup.getLayer(leafletID), uniqueCategories, statisticsParams);//实例化自定义图表
+            that.customTable = new CustomTable(sfs.layerGroup.getLayer(leafletID), uniqueCategories, statisticsParams);//实例化自定义图表
             $('.table-content').show();
         }, 300));
     }

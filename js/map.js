@@ -19,39 +19,35 @@ class MapObj {
 
         this.layerGroup = L.layerGroup().addTo(this.mapObj); // 初始化 layerGroup
 
-
-
-        this.satellite = L.esri.featureLayer({
-            url: config["现状地图"],
-            style: function (feature) {
-                return {
-                    color: "#edf7d2",
-                    weight: 0.5,
-                    opacity: 1,
-                    fillOpacity: 0.5
-                };
-            }
-            // url: "http://localhost:6080/arcgis/rest/services/低效用地/现状数据/MapServer/0"
+        this.satellite = L.tileLayer(config["现状"], {
+            attribution: '&copy; ArcGIS Server',
+            url: preUrl + '现状数据/MapServer/0',
+            type: 'polygon',
+            subtitle: "QSDWMC",
+            layerName: "现状数据"
         })
 
+        this.guihua = L.tileLayer(config["规划"], {
+            attribution: '&copy; ArcGIS Server',
+            url: preUrl + '规划数据/MapServer/0',
+            type: 'polygon',
+            subtitle: "LANDNAME",
+            layerName: "规划数据"
+        })
+
+
         this.image = L.esri.dynamicMapLayer({
-            url: config["影像地图"],
-            // url: 'http://localhost:6080/arcgis/rest/services/低效用地/影像/MapServer',
+            url: config["影像"],
             layers: [0] // 指定图层 ID
         })
 
-        // L.esri.featureLayer({
-        //     //"http://172.17.178.130:6080/arcgis/rest/services/低效用地/"
-        //     url: "http://localhost:6080/arcgis/rest/services/低效用地/现状数据/MapServer"
-        // }).addTo(this.mapObj);
 
         // 加载底图
-        this.switchLayers('vec_type');
+        this.switchLayers('ter_type');
         // 添加控件
         this.addControls();
         //绑定点击事件
         this.bindClickEvent();
-
     }
 
     // 切换右下角工具栏的地图类型
@@ -59,13 +55,14 @@ class MapObj {
 
         this.mapObj.removeLayer(this.satellite);
         this.mapObj.removeLayer(this.image);
+        this.mapObj.removeLayer(this.guihua);
 
         if (type == 'vec_type') {//现状
             this.mapObj.addLayer(this.satellite);
         } else if (type == 'img_type') {//影像
             this.mapObj.addLayer(this.image);
         } else if (type === 'ter_type') {//地形
-            this.mapObj.addLayer(layer);
+            this.mapObj.addLayer(this.guihua);
         }
     }
 
@@ -149,7 +146,7 @@ class MapObj {
             style: function () {
                 return {
                     fillColor: 'blue',       // 填充颜色
-                    fillOpacity: 0.3,        // 填充透明度
+                    fillOpacity: 0.75,        // 填充透明度
                     color: 'red',            // 边界颜色
                     weight: 2,               // 边界宽度
                     opacity: 0.8             // 边界透明度
@@ -159,11 +156,30 @@ class MapObj {
         }).addTo(this.mapObj);
 
         const layerBounds = this.polygonLayer.getBounds();
+
+        // 计算图斑大小（纬度和经度的跨度）
+        const boundsArea = Math.abs(
+            (layerBounds.getNorthEast().lat - layerBounds.getSouthWest().lat) *
+            (layerBounds.getNorthEast().lng - layerBounds.getSouthWest().lng)
+        );
+
+
+        // 动态调整 maxZoom，图斑越小，放大级别越高
+        let maxZoom;
+        if (boundsArea < 0.000001) {
+            maxZoom = 18; // 非常小的图斑，放大到最高级别
+        } else if (boundsArea < 0.00001) {
+            maxZoom = 16; // 小图斑，适度放大
+        } else if (boundsArea < 0.0001) {
+            maxZoom = 14; // 中等图斑，正常放大
+        } else {
+            maxZoom = 12; // 较大图斑，限制放大级别
+        }
+
         this.mapObj.fitBounds(layerBounds, {
             padding: [20, 20], // 地图边缘的内边距，可以根据需要调整
-            maxZoom: 14        // 限制缩放级别，防止过度放大
+            maxZoom: maxZoom        // 限制缩放级别，防止过度放大
         });
-
     }
 
     // 绑定点击事件
@@ -172,6 +188,15 @@ class MapObj {
 
         // 绑定点击事件，收集所有点击到的图层的 feature 数据
         this.mapObj.on('click', function (e) {
+
+            const baseMapType = $('.layer-items a.active').attr('id');
+            that.layerGroup.removeLayer(that.satellite);
+            that.layerGroup.removeLayer(that.guihua);
+            if (baseMapType == 'vec_type') {//现状
+                that.layerGroup.addLayer(that.satellite);
+            } else if (baseMapType === 'ter_type') {//规划
+                that.layerGroup.addLayer(that.guihua);
+            }
 
             if (!$('.attribute-container').hasClass('active')) {
                 return false;
@@ -190,7 +215,13 @@ class MapObj {
                 });
 
                 let queryPromise;
-                let type = layer._layers[0].feature.geometry.type;
+                let type;
+                if (layer._layers == undefined) {
+                    type = layer.options.type;
+                } else {
+                    type = layer._layers[0].feature.geometry.type;
+                }
+
                 // 设置查询参数，返回属性字段，不返回几何信息
                 if (type === 'Point') {
                     // 对于点状要素，使用 nearby 方法
@@ -242,8 +273,8 @@ class MapObj {
                                     });
                                     attributeData.push({
                                         layerId: layer.layerId,
-                                        name: layer.layerName,
-                                        subtitle: layer.subtitle,
+                                        name: layer.layerName || layer.options.layerName,
+                                        subtitle: layer.subtitle || layer.options.subtitle,
                                         children: collectedData
                                     });
                                 }
@@ -293,8 +324,6 @@ class MapObj {
             // 切换地图类型
 
             that.switchLayers(mapType)
-
-
         });
     }
 }
