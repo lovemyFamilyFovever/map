@@ -262,6 +262,7 @@ class Statistics {
         //重置 按钮
         $('.statistics-content-footer .reset').on('click', () => {
             $('.statistics-item .dropdown_input').val("");
+            $('.fuzzy_search_input').val("");
             that.customTable = new CustomTable(that.layer);//实例化自定义图表
         });
 

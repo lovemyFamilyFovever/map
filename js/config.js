@@ -91,10 +91,12 @@ var config = {
             columns: [
                 //title: 表格列名，field: 数据库字段名，statistics: 是否统计
                 { title: "id", field: "FID", statistics: false },
-                { title: "地均单位名称", field: "DJDWMC", statistics: true },
                 { title: "导出面积", field: "DCMJ", statistics: false },
                 { title: "建设面积", field: "JSMJ", statistics: false },
-                { title: "县区代码", field: "县区代码", statistics: true },
+                { title: "单位名称", field: "ZLDWMC", statistics: true },
+                { title: "核对名称", field: "HDMC", statistics: true },
+                { title: "编制", field: "BZ", statistics: true },
+                { title: "MSSM", field: "MSSM", statistics: true },
             ],
         }]
     },

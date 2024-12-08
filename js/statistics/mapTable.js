@@ -31,7 +31,6 @@ class CustomTable {
                 if (error) {
                     console.error("查询失败:", error);
                     this.renderTable([])
-                    alert(data.msg)
                     return;
                 }
                 // 提取所有要素的属性
@@ -132,8 +131,10 @@ class CustomTable {
             // autoColumns: true,
         }
 
-        if (Object.keys(data[0]).length < 8) {
-            tableObj.layout = "fitColumns";
+        if (data.length > 0) {
+            if (Object.keys(data[0]).length < 8) {
+                tableObj.layout = "fitColumns";
+            }
         }
 
         if (this.statisticsByConditions)
@@ -168,7 +169,6 @@ class CustomTable {
                         .run((error, featureCollection) => {
                             if (error) {
                                 console.error("查询失败:", error);
-                                alert(data.msg)
                                 return;
                             }
                             sfs.addPolygonLayer({
@@ -192,7 +192,6 @@ class CustomTable {
                         .run((error, featureCollection) => {
                             if (error) {
                                 console.error("查询失败:", error);
-                                alert(data.msg)
                                 return;
                             }
                             // 提取所有要素的属性
@@ -351,12 +350,15 @@ class CustomTable {
 
     //获取指定列的唯一值
     getColumnUniqueValues(column) {
-        const columns = this.table.getData().map(function (row, index) {
-            if (row[column] !== null && row[column] !== undefined && row[column] !== "") {
-                return row[column];
-            }
-        });
-        return Array.from(new Set(columns));
+        if (this.table !== null) {
+            const columns = this.table.getData().map(function (row, index) {
+                if (row[column] !== null && row[column] !== undefined && row[column] !== "") {
+                    return row[column];
+                }
+            });
+            return Array.from(new Set(columns));
+        }
+        return [];
     }
 
 }

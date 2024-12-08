@@ -126,7 +126,7 @@ $(document).ready(function () {
 
         //关闭图层列表
         $('.layer_content_close').on('click', function () {
-            $('.layer-content').hide()
+            $('.layer-content').removeClass('active')
             $('.layer-container').toggleClass('active')
         })
         // 绑定change事件  切换图层的显示和隐藏
@@ -184,7 +184,7 @@ $(document).ready(function () {
         //点击空白区域隐藏下拉框
         $(document).on('click', function (event) {
             var target = $(event.target);
-            const clickDom = '.dropdown_list,.table_action_btn,.dropdown-input-container,.dropdown_input';
+            const clickDom = '.dropdown_list,.table_action_btn,.dropdown_input';
             // 检查点击的元素是否在 .table-content 内部，且不是 .dropdown_list 内部
             if (!target.closest(clickDom).length) {
                 // 如果不在 .table-content 内部，隐藏  .dropdown_list
