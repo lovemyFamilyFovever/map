@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>openlayers-exercise</title>
+    <link rel="stylesheet" href="reference/ol/ol.css" type="text/css">
+    <link rel="stylesheet" href="css/openlayers-exercise.css" type="text/css">
+    <link rel="stylesheet" href="css/class-style.css" type="text/css">
+    <script src="reference/ol/ol.js"></script>
+    <script src="reference/jq/jquery-3.2.1.js"></script>
+    
+</head>
+<body>
+    <div id="map" class="map"></div>
+    <div id="popup" class="ol-popup" style="display: none">
+        <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+        <div id="popup-content"></div>
+    </div>
+    <div class="operation">
+        <ul>
+            <li>one point
+                <ul>
+                    <button id="add-one-mark">add one point</button>
+                    <button id="icon-one-mark">change one icon</button>
+                    <button id="del-one-mark">delete one point</button>
+                    <button id="click-one-mark">add click event</button>
+                    <button id="show-one-popu">show popu</button>
+                </ul>
+            </li>
+            <li>multiple points
+                <ul>
+                    <button id="add-multiple-mark">add multiple points</button>
+                    <button id="icon-multiple-mark">change multiple icons</button>
+                    <button id="del-multiple-mark">delete multiple points</button>
+                    <button id="click-multiple-mark">multiple click event</button>
+                    <button id="show-multiple-popu">show multiple popu</button>
+                </ul>
+            </li>
+            <li>draw on the map
+                <ul>
+                    <button id="draw-point">draw point</button>
+                    <button id="draw-line">draw line</button>
+                    <button id="draw-polygon">draw polygon</button>
+                    <button id="draw-circle">draw circle</button>
+                    <button id="draw-close">draw close</button>
+                </ul>
+            </li>
+            <li>map animation
+                <ul>
+                    <button id="animate-rotate-left">↻</button>
+                    <button id="animate-rotate-right">↺</button>
+                    <button id="animate-pan">pan</button>
+                    <button id="animate-elastic">elastic</button>
+                    <button id="animate-bounce">bounce</button>
+                    <button id="animate-spin">spin</button>
+                    <button id="animate-fly">fly</button>
+                    <button id="animate-rotate">rotate</button>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <script type="text/javascript" src="js/map.js"></script>
+    <script type="text/javascript" src="js/mark.js"></script>
+    <script type="text/javascript" src="js/manual_draw.js"></script>
+
+    <script type="text/javascript" src="js/function.js"></script>
+</body>
+</html>
